@@ -3,7 +3,6 @@
 **/build
 **/.env
 .git
-apps/web
 apps/ml
 images
 docs

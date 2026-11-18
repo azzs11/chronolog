@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/azzs11/chronolog/actions/workflows/ci.yml/badge.svg)](https://github.com/azzs11/chronolog/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/Node.js-18-339933?logo=node.js)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/Node.js-22-339933?logo=node.js)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org/)
 
 **ChronoLog** is an open, self-hosted log monitoring system that links log events into
@@ -63,8 +63,8 @@ graph TD
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 19, Tailwind CSS, D3.js, Socket.io-client |
-| Backend | Node.js 18, Express, Socket.io, Winston |
+| Frontend | React 19, Vite, TypeScript, Tailwind CSS 3, D3.js, Socket.io-client |
+| Backend | Node.js 22, TypeScript, Express, Socket.io, Winston |
 | ML Service | Python 3.12, FastAPI, scikit-learn |
 | Database | PostgreSQL 15 |
 | Monitoring | Prometheus, Grafana |
@@ -120,7 +120,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ```bash
 npm install                          # at the repo root (npm workspaces)
 npm run build                        # builds packages/engine
-cd apps/api && npm run dev           # nodemon, port 5000
+npm run dev -w chronolog-backend     # tsx watch, port 5000
 ```
 
 ### ML Service
@@ -136,13 +136,11 @@ uv run pytest && uv run ruff check .        # tests and lint
 ### Frontend
 
 ```bash
-cd apps/web
-npm install
-npm start            # CRA dev server, port 3000
+npm run dev -w chronolog-web     # Vite dev server, port 3000
 ```
 
-Set `REACT_APP_API_URL=http://localhost:5000` and `REACT_APP_WS_URL=http://localhost:5000`
-in `apps/web/.env`.
+Set `VITE_API_URL=http://localhost:5000` and `VITE_WS_URL=http://localhost:5000` in
+`apps/web/.env` if your backend is not on port 5000.
 
 ---
 

@@ -4,10 +4,10 @@ WORKDIR /repo
 COPY package.json package-lock.json ./
 COPY packages/engine/package.json packages/engine/
 COPY apps/api/package.json apps/api/
-RUN npm ci
+RUN npm ci -w chronolog-backend -w @chronolog/engine --include-workspace-root=false
 COPY packages/engine packages/engine
 COPY apps/api apps/api
-RUN npm run build
+RUN npm run build -w @chronolog/engine && npm run build -w chronolog-backend
 
 FROM node:22-alpine
 WORKDIR /repo

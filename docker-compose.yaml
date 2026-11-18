@@ -67,10 +67,11 @@ services:
 
   frontend:
     build:
-      context: ./apps/web
+      context: .
+      dockerfile: apps/web/Dockerfile
       args:
-        REACT_APP_API_URL: http://localhost:${BACKEND_PORT:-5050}
-        REACT_APP_WS_URL: http://localhost:${BACKEND_PORT:-5050}
+        VITE_API_URL: http://localhost:${BACKEND_PORT:-5050}
+        VITE_WS_URL: http://localhost:${BACKEND_PORT:-5050}
     container_name: chronolog_frontend
     mem_limit: 64m
     ports:

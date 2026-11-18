@@ -10,9 +10,10 @@ import MLChartsPanel from './components/MLChartsPanel';
 import ToastContainer from './components/Toast';
 import Onboarding from './components/Onboarding';
 import socketService from './services/socketService';
+import { API_URL } from './env';
 import { X } from 'lucide-react';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API = API_URL;
 
 const EMPTY_STATS = {
   total: 0, bySeverity: { critical: 0, error: 0, warning: 0, info: 0, debug: 0 },

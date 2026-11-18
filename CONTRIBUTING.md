@@ -17,7 +17,8 @@ To run each service without Docker, see the "Development" section of the [README
 ## Running tests
 
 ```bash
-npm install && npm test   # at the repo root: builds and tests the engine and the API
+npm ci && npm test        # at the repo root: engine, API and web
+npm run typecheck
 cd apps/ml && uv run pytest && uv run ruff check .
 ```
 
