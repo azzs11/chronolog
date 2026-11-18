@@ -10,7 +10,7 @@ const DEFAULT_ANOMALY_LIMIT = 50;
 /** GET /api/anomalies: recent anomalies */
 router.get('/', validateQueryLimit, async (req: Request, res: Response) => {
   try {
-    const limit = parseInt(queryString(req.query.limit) ?? '') || DEFAULT_ANOMALY_LIMIT;
+    const limit = parseInt(queryString(req.query.limit) ?? '', 10) || DEFAULT_ANOMALY_LIMIT;
     const anomalies = await logRepository.getRecentAnomalies(limit);
     res.json({ status: 'success', data: anomalies, count: anomalies.length });
   } catch (err) {

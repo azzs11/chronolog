@@ -1,5 +1,15 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  test: { globals: true, include: ['tests/**/*.test.ts'] },
+  test: {
+    globals: true,
+    include: ['tests/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: ['src/index.ts', 'src/types.ts'],
+      // Quality gate from the roadmap: 80%+ on the engine.
+      thresholds: { lines: 80, functions: 80, statements: 80, branches: 80 },
+    },
+  },
 });

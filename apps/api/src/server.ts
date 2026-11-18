@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import http from 'http';
+import http from 'node:http';
 import app from './app';
 import { initializeSocket, setLogProcessor, emitLog, emitStats, emitCausalEvent } from './socket/socketHandler';
 import { processLog, setEmitters } from './services/logProcessor';

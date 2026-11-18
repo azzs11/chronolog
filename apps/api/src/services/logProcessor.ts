@@ -10,7 +10,7 @@
  *   5. Persist to DB      (in-memory fallback when Postgres is unavailable)
  *   6. Broadcast via WebSocket + update Prometheus counters
  */
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import type { ChainDetectedEvent } from '@chronolog/engine';
 import { VALID_SEVERITIES } from '../config/constants';
 import * as mlService from './mlService';

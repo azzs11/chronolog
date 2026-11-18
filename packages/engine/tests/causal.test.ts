@@ -100,7 +100,7 @@ describe('analyzeLog — chain depth and blast radius', () => {
     const root  = makeLog({ id: 'R', severity: 'critical', source: 'database', message: 'database pool exhausted', timestamp: new Date(now).toISOString() });
     const child = makeLog({ id: 'C', severity: 'error',    source: 'database', message: 'database connection failed', timestamp: new Date(now + 2000).toISOString() });
 
-    const rootResult  = analyzeLog(root);
+    const _rootResult  = analyzeLog(root);
     const childResult = analyzeLog(child);
 
     if (childResult.causal_parent_id) {
@@ -135,10 +135,8 @@ describe('getActiveCausalChains', () => {
     analyzeLog(makeLog({ id: 'A1', severity: 'critical', source: 'database', message: 'database pool exhausted', timestamp: new Date(now).toISOString() }));
     analyzeLog(makeLog({ id: 'A2', severity: 'error',    source: 'database', message: 'database connection failed', timestamp: new Date(now+2000).toISOString() }));
 
-    const chains = getActiveCausalChains();
-    for (let i = 1; i < chains.length; i++) {
-      expect(chains[i - 1]!.blast_radius_score).toBeGreaterThanOrEqual(chains[i]!.blast_radius_score);
-    }
+    const scores = getActiveCausalChains().map((c) => c.blast_radius_score);
+    expect(scores).toEqual([...scores].sort((a, b) => b - a));
   });
 });
 

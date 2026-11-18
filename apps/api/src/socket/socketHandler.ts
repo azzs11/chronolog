@@ -1,5 +1,5 @@
 import { Server as SocketServer } from 'socket.io';
-import type { Server as HttpServer } from 'http';
+import type { Server as HttpServer } from 'node:http';
 import { activeConnections } from '../middleware/metrics';
 import * as mlService from '../services/mlService';
 import logger from '../config/logger';

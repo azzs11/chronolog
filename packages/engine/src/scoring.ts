@@ -48,8 +48,8 @@ export function computeCausalScore(parent: LogInput, child: LogInput): number {
 
   if (parent.source === child.source) score += BONUS_SAME_SOURCE;
 
-  const errorWeight = SEVERITY_WEIGHTS['error'] as number;
-  const warningWeight = SEVERITY_WEIGHTS['warning'] as number;
+  const errorWeight = SEVERITY_WEIGHTS.error as number;
+  const warningWeight = SEVERITY_WEIGHTS.warning as number;
   if (childWeight >= errorWeight && parentWeight === warningWeight) {
     if (sourceRelationScore(parent.source, child.source) >= RELATED_SOURCE_MIN_SCORE) {
       score += BONUS_WARNING_TO_ERROR;

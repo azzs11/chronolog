@@ -9,7 +9,7 @@ const connectionConfig: PoolConfig = process.env.DATABASE_URL
   ? { connectionString: process.env.DATABASE_URL }
   : {
       host: process.env.POSTGRES_HOST || 'localhost',
-      port: parseInt(process.env.POSTGRES_PORT ?? '') || 5432,
+      port: parseInt(process.env.POSTGRES_PORT ?? '', 10) || 5432,
       database: process.env.POSTGRES_DB || 'chronolog',
       user: process.env.POSTGRES_USER || 'debug_user',
       password: process.env.POSTGRES_PASSWORD || 'debug_secret',

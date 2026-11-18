@@ -100,7 +100,7 @@ describe('GET /api/logs', () => {
   it('supports severity filter', async () => {
     const res = await request(app).get('/api/logs?severity=error');
     expect(res.status).toBe(200);
-    res.body.data.forEach((log: { severity: string }) => expect(log.severity).toBe('error'));
+    for (const log of res.body.data as { severity: string }[]) expect(log.severity).toBe('error');
   });
 });
 

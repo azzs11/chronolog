@@ -105,9 +105,7 @@ describe('getFingerprints', () => {
   });
 
   it('sorts fingerprints by count descending', () => {
-    const fps = getFingerprints();
-    for (let i = 1; i < fps.length; i++) {
-      expect(fps[i - 1]!.count).toBeGreaterThanOrEqual(fps[i]!.count);
-    }
+    const counts = getFingerprints().map((f) => f.count);
+    expect(counts).toEqual([...counts].sort((a, b) => b - a));
   });
 });

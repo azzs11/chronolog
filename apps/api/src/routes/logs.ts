@@ -19,7 +19,7 @@ let generatorActive = false;
 /** GET /api/logs */
 router.get('/', validateQueryLimit, async (req: Request, res: Response) => {
   try {
-    const limit = parseInt(queryString(req.query.limit) ?? '') || DEFAULT_LOG_LIMIT;
+    const limit = parseInt(queryString(req.query.limit) ?? '', 10) || DEFAULT_LOG_LIMIT;
     const logs = await logRepository.getLogs({
       limit,
       severity: queryString(req.query.severity),
@@ -55,7 +55,7 @@ router.get('/stats', async (_req, res) => {
 /** GET /api/logs/anomalies */
 router.get('/anomalies', async (req, res) => {
   try {
-    const limit = parseInt(queryString(req.query.limit) ?? '') || ANOMALY_LIST_LIMIT;
+    const limit = parseInt(queryString(req.query.limit) ?? '', 10) || ANOMALY_LIST_LIMIT;
     const anomalies = await logRepository.getRecentAnomalies(limit);
     res.json({ status: 'success', data: anomalies, count: anomalies.length });
   } catch (err) {
@@ -84,7 +84,7 @@ router.post('/generator/start', generatorLimiter, requireApiKey, validateGenerat
     res.json({ status: 'success', message: 'Generator already running' });
     return;
   }
-  const interval = parseInt(String(req.body?.interval ?? '')) || GENERATOR_DEFAULT_INTERVAL_MS;
+  const interval = parseInt(String(req.body?.interval ?? ''), 10) || GENERATOR_DEFAULT_INTERVAL_MS;
   generatorInterval = setInterval(() => void processLog(generateLogData()), interval);
   generatorActive = true;
   res.json({ status: 'success', message: 'Log generator started', interval });

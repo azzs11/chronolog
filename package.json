@@ -9,6 +9,11 @@
   "scripts": {
     "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web",
     "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web",
-    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web"
+    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web",
+    "lint": "biome lint .",
+    "test:coverage": "npm run build -w @chronolog/engine && npm run test:coverage -w @chronolog/engine"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.0"
   }
 }
