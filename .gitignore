@@ -53,3 +53,5 @@ ml-service/models/*.pkl
 # Temporary files
 *.tmp
 *.temp
+# Claude Code
+CLAUDE.md

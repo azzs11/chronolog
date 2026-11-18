@@ -2,29 +2,31 @@
 
 > Real-time log intelligence with causal chain detection
 
-[![CI](https://github.com/Akchhya1108/smart-debug-console/actions/workflows/ci.yml/badge.svg)](https://github.com/Akchhya1108/smart-debug-console/actions/workflows/ci.yml)
+[![CI](https://github.com/azzs11/chronolog/actions/workflows/ci.yml/badge.svg)](https://github.com/azzs11/chronolog/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-18-339933?logo=node.js)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python)](https://python.org/)
 
-**ChronoLog** is a production-grade log monitoring system that goes beyond classification.
-It automatically detects *causal relationships* between log events — showing you not just
-what broke, but what *caused* it to break and how far the damage spread.
+**ChronoLog** is an open, self-hosted log monitoring system that links log events into
+*causal chains*. It shows you what broke, what probably caused it, and how far the damage spread.
+
+> **Status:** ChronoLog 2.0 is in progress. The current engine uses hand-tuned rules and has
+> only been tested on synthetic logs. Its root-cause accuracy has not been measured yet; benchmark
+> results on public datasets will be published here. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ---
 
-## What Makes It Different
+## How ChronoLog Differs
 
-Every log tool classifies logs. ChronoLog understands them.
+Automated root-cause analysis is not new. Commercial tools already do it well:
+[Datadog Watchdog RCA](https://docs.datadoghq.com/watchdog/)
+has been generally available since 2021, and Datadog's Bits AI SRE investigates alerts on its own.
+ChronoLog aims to be different in four ways:
 
-| Feature | Datadog / Splunk | ChronoLog |
-|---------|-----------------|-----------|
-| Log classification | ✅ | ✅ |
-| Real-time streaming | ✅ | ✅ |
-| Causal chain detection | ❌ | ✅ |
-| Blast radius scoring | ❌ | ✅ |
-| Temporal anomaly fingerprinting | ❌ | ✅ |
-| Root cause surfacing | Manual | ✅ Automatic |
+- **Open:** the engine, the rules and the data pipeline are all MIT-licensed and readable.
+- **Explainable:** every causal link comes with the signals that created it (timing, severity, shared entities, service dependency).
+- **Benchmarked (planned):** root-cause accuracy will be measured on public RCA benchmarks, and every number will link to the script that produced it.
+- **Self-hosted:** one `docker compose up` on your own machine. No log data leaves it.
 
 ---
 
@@ -73,22 +75,22 @@ graph TD
 ## ML Model
 
 - **Algorithm**: Random Forest with TF-IDF (n-grams 1–3)
-- **Training data**: 5,000 synthetic + 200 real-world log patterns per class
-- **Synthetic test accuracy**: 100% (expected — same distribution)
-- **Out-of-distribution accuracy**: ~78% on 200 hand-labeled real log lines
-- **Inference latency**: <1ms P99
+- **Task**: predicts a log's severity level from its message text
+- **Training data**: synthetic logs from `ml-service/src/data_generator.py`
+- **Accuracy**: not reported yet. Scores on synthetic data say little about real logs, so
+  no number is shown until the model is evaluated on real, labelled datasets.
 
-The model performs best on structured service logs. Free-form application logs
-may require fine-tuning on your specific log vocabulary.
+Real logs usually carry their own level, so the roadmap repurposes this model for logs that
+arrive without one.
 
 ---
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/Akchhya1108/smart-debug-console.git
-cd smart-debug-console
-cp .env.example .env
+git clone https://github.com/azzs11/chronolog.git
+cd chronolog
+cp .env.example .env   # then set your own passwords, including GRAFANA_PASSWORD
 docker compose up -d
 ```
 
@@ -99,7 +101,7 @@ Open [http://localhost:3000](http://localhost:3000)
 | App | http://localhost:3000 | — |
 | Backend API | http://localhost:5000 | — |
 | ML Service | http://localhost:5001 | — |
-| Grafana | http://localhost:3001 | admin / admin |
+| Grafana | http://localhost:3001 | `admin` / `GRAFANA_PASSWORD` from `.env` |
 | Prometheus | http://localhost:9090 | — |
 
 > **First run**: the `ml-service` container trains the model during build (`~30s`).
@@ -187,7 +189,7 @@ Copy `.env.example` to `.env` and change values for production.
 |----------|---------|-------------|
 | `POSTGRES_PASSWORD` | `debug_secret` | PostgreSQL password |
 | `ADMIN_API_KEY` | `dev_key_change_in_prod` | Admin endpoint key |
-| `GRAFANA_PASSWORD` | `admin` | Grafana admin password |
+| `GRAFANA_PASSWORD` | none (required) | Grafana admin password. Compose refuses to start without it |
 
 ---
 
@@ -215,12 +217,18 @@ Copy `.env.example` to `.env` and change values for production.
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [roadmap](docs/ROADMAP.md).
+
+---
+
 ## License
 
-MIT — free for personal and commercial use.
+[MIT](LICENSE) — free for personal and commercial use.
 
 ---
 
 ## Author
 
-**Akchhya Singh** — [GitHub](https://github.com/Akchhya1108) · [LinkedIn](https://linkedin.com/in/akchhya-singh11) · akchhya.dev@gmail.com
+**Akchhya Singh** — [GitHub](https://github.com/azzs11) · [LinkedIn](https://linkedin.com/in/akchhya-singh11) · akchhya.dev@gmail.com

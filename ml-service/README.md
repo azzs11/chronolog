@@ -1,10 +1,10 @@
-# 🤖 ML Service - Smart Debug Console
+# 🤖 ML Service - ChronoLog
 
 AI-powered log classification service using Machine Learning.
 
 ## Features
 
-- **Random Forest Classifier** with 88%+ accuracy
+- **Random Forest Classifier** (accuracy not yet measured on real logs; see the roadmap)
 - **TF-IDF Vectorization** for text processing
 - **RESTful API** for real-time predictions
 - **Batch classification** support
@@ -28,7 +28,6 @@ python src/train.py
 This will:
 - Generate 5000 synthetic training samples
 - Train a Random Forest classifier
-- Achieve 88%+ accuracy
 - Save model to `models/` directory
 
 ### 3. Start the ML Service
@@ -94,7 +93,7 @@ GET /api/model/info
 
 ## Model Performance
 
-- **Accuracy:** 88%+
+- **Accuracy:** not reported until it is measured on real, labelled logs (Phase 2 of the roadmap)
 - **Training Samples:** 5000
 - **Classes:** critical, error, warning, info, debug
 - **Algorithm:** Random Forest (100 estimators)
