@@ -1,5 +1,5 @@
 # Build context is the repo root (see docker-compose.yaml) so the npm workspace lockfile is visible.
-FROM node:22-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /repo
 COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/
