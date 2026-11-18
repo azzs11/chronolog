@@ -1,7 +1,7 @@
 {
-  "name": "smart-debug-console-backend",
+  "name": "chronolog-backend",
   "version": "2.0.0",
-  "description": "Smart Debug Console — Causal Log Intelligence Backend",
+  "description": "ChronoLog — Causal Log Intelligence Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

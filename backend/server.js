@@ -19,7 +19,7 @@ onChainDetected(emitCausalEvent);
 connectDB().catch(err => logger.warn('PostgreSQL unavailable — using in-memory fallback', { error: err.message }));
 
 server.listen(PORT, () => {
-  logger.info(`Smart Debug Console v2.0 running on :${PORT}`);
+  logger.info(`ChronoLog v2.0 running on :${PORT}`);
   logger.info(`Prometheus metrics → http://localhost:${PORT}/metrics`);
   logger.info(`Causal graph API  → http://localhost:${PORT}/api/causal/chains`);
 });

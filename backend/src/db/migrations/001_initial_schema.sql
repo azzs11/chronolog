@@ -1,4 +1,4 @@
--- Migration 001: Initial schema for Smart Debug Console
+-- Migration 001: Initial schema for ChronoLog
 -- Run this file manually against your PostgreSQL instance, or mount as docker-entrypoint-initdb.d
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

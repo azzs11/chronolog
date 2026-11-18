@@ -1,6 +1,6 @@
 # ml-service/src/__init__.py
 """
-Smart Debug Console - ML Service
+ChronoLog - ML Service
 AI-powered log classification and analysis
 """
 

@@ -13,7 +13,7 @@ jobs:
       postgres:
         image: postgres:15-alpine
         env:
-          POSTGRES_DB: smart_debug
+          POSTGRES_DB: chronolog
           POSTGRES_USER: debug_user
           POSTGRES_PASSWORD: debug_secret
         ports:
@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         run: cd backend && npm test
         env:
-          DATABASE_URL: postgresql://debug_user:debug_secret@localhost:5432/smart_debug
+          DATABASE_URL: postgresql://debug_user:debug_secret@localhost:5432/chronolog
           ML_SERVICE_URL: http://localhost:5001
           NODE_ENV: test
 

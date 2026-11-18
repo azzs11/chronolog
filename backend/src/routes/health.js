@@ -6,7 +6,7 @@ const { isPgAvailable } = require('../db/client');
 router.get('/', async (req, res) => {
   res.json({
     status:  'success',
-    service: 'smart-debug-console',
+    service: 'chronolog',
     version: '2.0.0',
     features: {
       ml_classification:   mlService.isAvailable(),

@@ -30,7 +30,7 @@ function initializeSocket(server) {
     activeConnections.inc();
 
     socket.emit('connection-success', {
-      message: 'Connected to Smart Debug Console v2',
+      message: 'Connected to ChronoLog v2',
       ml_enabled: mlService.isAvailable(),
       features: ['causal-intelligence', 'anomaly-detection'],
       timestamp: new Date().toISOString()

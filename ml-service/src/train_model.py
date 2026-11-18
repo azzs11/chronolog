@@ -19,7 +19,7 @@ def train_model():
     """Main training function"""
     
     print("="*60)
-    print("🚀 SMART DEBUG CONSOLE - ML MODEL TRAINING")
+    print("🚀 CHRONOLOG - ML MODEL TRAINING")
     print("="*60)
     
     # Step 1: Generate training data

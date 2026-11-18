@@ -284,7 +284,7 @@ def retrain_model():
 
 if __name__ == '__main__':
     print("="*60)
-    print("🤖 SMART DEBUG CONSOLE - ML SERVICE")
+    print("🤖 CHRONOLOG - ML SERVICE")
     print("="*60)
     print(f"🌐 Starting Flask server on {FLASK_HOST}:{FLASK_PORT}")
     print(f"📁 Model path: {MODEL_PATH}")
