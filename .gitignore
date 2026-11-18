@@ -56,3 +56,8 @@ apps/ml/models/*.pkl
 CLAUDE.md
 packages/engine/dist/
 apps/api/dist/
+apps/ml/.venv/
+apps/ml/models/*.json
+.ruff_cache/
+.pytest_cache/
+__pycache__/

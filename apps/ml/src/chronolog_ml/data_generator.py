@@ -1,7 +1,8 @@
-# ml-service/src/data_generator.py
+import contextlib
 import random
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
 
 # ---------------------------------------------------------------------------
 # Real-world log patterns — hard-coded, non-template strings that reflect
@@ -1221,10 +1222,8 @@ class LogDataGenerator:
         pattern    = random.choice(patterns)
         augmentors = _NUMERIC_AUGMENTORS.get(severity, [])
         if augmentors and random.random() < 0.4:
-            try:
+            with contextlib.suppress(Exception):
                 pattern = random.choice(augmentors)(pattern)
-            except Exception:
-                pass
         return {
             "message":   pattern,
             "severity":  severity,

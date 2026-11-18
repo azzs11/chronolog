@@ -5,7 +5,7 @@
 [![CI](https://github.com/azzs11/chronolog/actions/workflows/ci.yml/badge.svg)](https://github.com/azzs11/chronolog/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-18-339933?logo=node.js)](https://nodejs.org/)
-[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python)](https://python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org/)
 
 **ChronoLog** is an open, self-hosted log monitoring system that links log events into
 *causal chains*. It shows you what broke, what probably caused it, and how far the damage spread.
@@ -65,7 +65,7 @@ graph TD
 |-------|-----------|
 | Frontend | React 19, Tailwind CSS, D3.js, Socket.io-client |
 | Backend | Node.js 18, Express, Socket.io, Winston |
-| ML Service | Python 3.10, Flask, scikit-learn |
+| ML Service | Python 3.12, FastAPI, scikit-learn |
 | Database | PostgreSQL 15 |
 | Monitoring | Prometheus, Grafana |
 | Infrastructure | Docker, nginx |
@@ -126,16 +126,11 @@ cd apps/api && npm run dev           # nodemon, port 5000
 ### ML Service
 
 ```bash
-cd apps/ml
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
-
-pip install -r requirements.txt
-python src/train_model.py   # one-time
-python src/app.py           # port 5001
+cd apps/ml                                  # needs uv: https://docs.astral.sh/uv/
+uv sync                                     # Python 3.12 + dependencies
+uv run python -m chronolog_ml.train_model   # one-time
+uv run uvicorn chronolog_ml.app:app --port 5001
+uv run pytest && uv run ruff check .        # tests and lint
 ```
 
 ### Frontend

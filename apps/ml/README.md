@@ -1,115 +1,43 @@
-# 🤖 ML Service - ChronoLog
+# ChronoLog ML service
 
-AI-powered log classification service using Machine Learning.
+FastAPI service that predicts a log's severity from its message text
+(TF-IDF 1-3 grams + Random Forest). It is trained on synthetic logs only; no accuracy
+number is reported until it is measured on real, labelled data (roadmap Phase 2).
 
-## Features
+## Run
 
-- **Random Forest Classifier** (accuracy not yet measured on real logs; see the roadmap)
-- **TF-IDF Vectorization** for text processing
-- **RESTful API** for real-time predictions
-- **Batch classification** support
-- **Feature importance** analysis
-
-## Setup
-
-### 1. Install Dependencies
 ```bash
-cd apps/ml
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+uv sync
+uv run python -m chronolog_ml.train_model        # writes models/*.pkl
+uv run uvicorn chronolog_ml.app:app --port 5001
 ```
 
-### 2. Train the Model
+## Test and lint
+
 ```bash
-python src/train.py
+uv run pytest
+uv run ruff check . && uv run ruff format --check .
 ```
 
-This will:
-- Generate 5000 synthetic training samples
-- Train a Random Forest classifier
-- Save model to `models/` directory
+## Endpoints
 
-### 3. Start the ML Service
-```bash
-python src/app.py
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/health` | Liveness and whether the model is loaded |
+| `GET` | `/metrics` | Prometheus metrics |
+| `POST` | `/api/classify` | `{ "message": "..." }` → predicted severity, confidence, probabilities |
+| `POST` | `/api/classify/batch` | `{ "messages": [...] }` → one prediction per message |
+| `GET` | `/api/model/info` | Classes, feature count, top features |
+| `GET` | `/api/model/metadata` | Training date, sample counts, per-class scores |
+| `POST` | `/api/model/retrain` | Not implemented (returns 501) |
+
+Errors always look like `{ "status": "error", "message": "..." }`. FastAPI also serves
+interactive docs at `/docs`.
+
+## Layout
+
 ```
-
-Service runs on `http://localhost:5001`
-
-## API Endpoints
-
-### Health Check
-```bash
-GET /health
+src/chronolog_ml/   app.py (API) · classifier.py · train_model.py · data_generator.py · config.py
+tests/              classifier and API tests
+models/             trained artifacts (gitignored)
 ```
-
-### Classify Single Log
-```bash
-POST /api/classify
-Content-Type: application/json
-
-{
-  "message": "Error connecting to database"
-}
-```
-
-Response:
-```json
-{
-  "status": "success",
-  "data": {
-    "message": "Error connecting to database",
-    "predicted_severity": "error",
-    "confidence": 0.92,
-    "probabilities": {
-      "critical": 0.05,
-      "error": 0.92,
-      "warning": 0.02,
-      "info": 0.01,
-      "debug": 0.00
-    }
-  }
-}
-```
-
-### Classify Batch
-```bash
-POST /api/classify/batch
-Content-Type: application/json
-
-{
-  "messages": [
-    "System crash detected",
-    "User logged in"
-  ]
-}
-```
-
-### Model Info
-```bash
-GET /api/model/info
-```
-
-## Model Performance
-
-- **Accuracy:** not reported until it is measured on real, labelled logs (Phase 2 of the roadmap)
-- **Training Samples:** 5000
-- **Classes:** critical, error, warning, info, debug
-- **Algorithm:** Random Forest (100 estimators)
-
-## Architecture
-```
-apps/ml/
-├── src/
-│   ├── app.py           # Flask API
-│   ├── classifier.py    # ML model
-│   ├── train.py         # Training script
-│   └── data_generator.py # Synthetic data
-├── models/              # Saved models
-└── requirements.txt     # Dependencies
-```
-
-## Author
-
-Akchhya Singh
