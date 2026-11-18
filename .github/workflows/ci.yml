@@ -44,6 +44,17 @@ jobs:
         working-directory: ${{ matrix.directory }}
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        if: matrix.directory == 'bench'
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build the Node replay runner (needed by the bench integration test)
+        if: matrix.directory == 'bench'
+        working-directory: .
+        run: |
+          npm ci
+          npm run build
       - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true

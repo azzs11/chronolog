@@ -4,12 +4,13 @@
   "workspaces": [
     "packages/*",
     "apps/api",
-    "apps/web"
+    "apps/web",
+    "bench/runner"
   ],
   "scripts": {
-    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web",
-    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web",
-    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web",
+    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web && npm run build -w @chronolog/bench-runner",
+    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web && npm run typecheck -w @chronolog/bench-runner",
+    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web && npm test -w @chronolog/bench-runner",
     "lint": "biome lint .",
     "test:coverage": "npm run build -w @chronolog/engine && npm run test:coverage -w @chronolog/engine"
   },

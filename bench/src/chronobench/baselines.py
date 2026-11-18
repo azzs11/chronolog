@@ -13,7 +13,7 @@ from .adapt import CaseLogs
 ERROR_LEVELS = ("error", "critical")
 
 
-def _complete(scored: list[str], candidates: list[str]) -> list[str]:
+def complete_ranking(scored: list[str], candidates: list[str]) -> list[str]:
     """Scored services first, then the rest alphabetically."""
     seen = set(scored)
     return scored + [s for s in candidates if s not in seen]
@@ -30,7 +30,7 @@ def first_error_ranking(case: CaseLogs) -> list[str]:
     window = case.incident_window()
     errors = window[window["severity"].isin(ERROR_LEVELS)]
     first_seen = errors.drop_duplicates("source", keep="first")  # file order = time order
-    return _complete(list(first_seen["source"]), case.services())
+    return complete_ranking(list(first_seen["source"]), case.services())
 
 
 def most_frequent_error_ranking(case: CaseLogs) -> list[str]:
@@ -38,4 +38,4 @@ def most_frequent_error_ranking(case: CaseLogs) -> list[str]:
     window = case.incident_window()
     counts = Counter(window.loc[window["severity"].isin(ERROR_LEVELS), "source"])
     ordered = sorted(counts, key=lambda s: (-counts[s], s))
-    return _complete(ordered, case.services())
+    return complete_ranking(ordered, case.services())

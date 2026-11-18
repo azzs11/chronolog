@@ -2,8 +2,11 @@
 
 import argparse
 
-from .cases import load_subset, split_of
+from .adapt import load_case_logs
+from .baselines import complete_ranking
+from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
+from .runner import run_chronolog_h
 from .select import write_subset
 
 
@@ -22,6 +25,19 @@ def _cmd_download(args: argparse.Namespace) -> None:
     print(f"{len(cases)} cases ready ({new} newly downloaded)")
 
 
+def _cmd_replay(args: argparse.Namespace) -> None:
+    parsed = parse_case_id(args.case)
+    download_cases([parsed])
+    case = load_case_logs(parsed)
+    result = run_chronolog_h(case)
+    ranking = complete_ranking(result.ranking, case.services())
+    truth = case.case.root_service
+    rank = ranking.index(truth) + 1 if truth in ranking else None
+    print(f"{args.case}: truth={truth} rank={rank} of {len(ranking)}  stats={result.stats}")
+    for service in ranking[:5]:
+        print(f"  {result.scores.get(service, 0):>12.1f}  {service}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="bench", description="ChronoBench")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -33,6 +49,10 @@ def main() -> None:
     download = sub.add_parser("download", help="download logs for a subset")
     download.add_argument("--subset", choices=["small", "full"], default="small")
     download.set_defaults(func=_cmd_download)
+
+    replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
+    replay.add_argument("case")
+    replay.set_defaults(func=_cmd_replay)
 
     args = parser.parse_args()
     args.func(args)

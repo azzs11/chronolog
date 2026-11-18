@@ -80,4 +80,6 @@ def load_case_logs(case: Case) -> CaseLogs:
         }
     )
     logs["severity"] = infer_severity(logs["message"])
-    return CaseLogs(case=case, inject_time=inject_time, logs=logs.reset_index(drop=True))
+    # Replay in time order. The sort is stable, so lines in the same second keep their file order.
+    logs = logs.sort_values("timestamp", kind="stable").reset_index(drop=True)
+    return CaseLogs(case=case, inject_time=inject_time, logs=logs)
