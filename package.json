@@ -1,10 +1,13 @@
 {
   "name": "chronolog",
   "private": true,
-  "workspaces": ["packages/*", "apps/api"],
+  "workspaces": [
+    "packages/*",
+    "apps/api"
+  ],
   "scripts": {
-    "build": "npm run build -w @chronolog/engine",
-    "typecheck": "npm run typecheck -w @chronolog/engine",
-    "test": "npm run build && npm test -w @chronolog/engine && npm test -w chronolog-backend"
+    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend",
+    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend",
+    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend"
   }
 }

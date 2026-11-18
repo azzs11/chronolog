@@ -1,11 +1,8 @@
-const request = require('supertest');
+import request from 'supertest';
+import app from '../src/app';
 
-// Set env before requiring app so dotenv doesn't overwrite test values
-process.env.NODE_ENV    = 'test';
+// ADMIN_API_KEY is read per request, so setting it after the import is fine.
 process.env.ADMIN_API_KEY = 'test-admin-key';
-process.env.CORS_ORIGIN   = 'http://localhost:3000';
-
-const app = require('../src/app');
 
 describe('GET /health', () => {
   it('returns 200 with feature flags', async () => {
@@ -103,7 +100,7 @@ describe('GET /api/logs', () => {
   it('supports severity filter', async () => {
     const res = await request(app).get('/api/logs?severity=error');
     expect(res.status).toBe(200);
-    res.body.data.forEach(log => expect(log.severity).toBe('error'));
+    res.body.data.forEach((log: { severity: string }) => expect(log.severity).toBe('error'));
   });
 });
 

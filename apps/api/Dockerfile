@@ -6,7 +6,8 @@ COPY packages/engine/package.json packages/engine/
 COPY apps/api/package.json apps/api/
 RUN npm ci
 COPY packages/engine packages/engine
-RUN npm run build -w @chronolog/engine
+COPY apps/api apps/api
+RUN npm run build
 
 FROM node:22-alpine
 WORKDIR /repo
@@ -16,8 +17,9 @@ COPY packages/engine/package.json packages/engine/
 COPY apps/api/package.json apps/api/
 RUN npm ci --omit=dev -w apps/api -w @chronolog/engine --include-workspace-root=false
 COPY --from=build /repo/packages/engine/dist packages/engine/dist
-COPY apps/api apps/api
+COPY --from=build /repo/apps/api/dist apps/api/dist
+COPY apps/api/db apps/api/db
 WORKDIR /repo/apps/api
 EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:5000/health || exit 1
-CMD ["node", "server.js"]
+CMD ["node", "dist/server.js"]

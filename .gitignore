@@ -55,3 +55,4 @@ apps/ml/models/*.pkl
 # Claude Code
 CLAUDE.md
 packages/engine/dist/
+apps/api/dist/

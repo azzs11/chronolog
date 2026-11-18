@@ -1,12 +1,10 @@
-process.env.NODE_ENV    = 'test';
-process.env.ADMIN_API_KEY = 'test-key';
-process.env.CORS_ORIGIN   = 'http://localhost:3000';
+import request from 'supertest';
+import app from '../src/app';
 
-const request = require('supertest');
-const app     = require('../src/app');
+process.env.ADMIN_API_KEY = 'test-key';
 
 describe('Log body validation', () => {
-  const post = (body) => request(app).post('/api/logs').send(body);
+  const post = (body: string | object) => request(app).post('/api/logs').send(body);
 
   it('accepts all valid severity values', async () => {
     for (const sev of ['critical', 'error', 'warning', 'info', 'debug']) {
@@ -30,7 +28,7 @@ describe('Log body validation', () => {
   it('rejects missing message', async () => {
     const res = await post({ severity: 'info' });
     expect(res.status).toBe(400);
-    expect(res.body.errors.some(e => e.field === 'message')).toBe(true);
+    expect(res.body.errors.some((e: { field?: string }) => e.field === 'message')).toBe(true);
   });
 
   it('rejects whitespace-only message', async () => {
@@ -41,13 +39,13 @@ describe('Log body validation', () => {
   it('rejects message over 2000 chars', async () => {
     const res = await post({ message: 'a'.repeat(2001) });
     expect(res.status).toBe(400);
-    expect(res.body.errors.some(e => e.field === 'message')).toBe(true);
+    expect(res.body.errors.some((e: { field?: string }) => e.field === 'message')).toBe(true);
   });
 
   it('rejects unknown severity', async () => {
     const res = await post({ message: 'test', severity: 'verbose' });
     expect(res.status).toBe(400);
-    expect(res.body.errors.some(e => e.field === 'severity')).toBe(true);
+    expect(res.body.errors.some((e: { field?: string }) => e.field === 'severity')).toBe(true);
   });
 
   it('accepts missing severity (defaults to info)', async () => {
@@ -59,7 +57,7 @@ describe('Log body validation', () => {
   it('rejects source over 100 chars', async () => {
     const res = await post({ message: 'test', source: 'x'.repeat(101) });
     expect(res.status).toBe(400);
-    expect(res.body.errors.some(e => e.field === 'source')).toBe(true);
+    expect(res.body.errors.some((e: { field?: string }) => e.field === 'source')).toBe(true);
   });
 
   it('accepts source at exactly 100 chars', async () => {
