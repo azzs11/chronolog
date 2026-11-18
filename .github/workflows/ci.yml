@@ -33,17 +33,21 @@ jobs:
         run: npm audit --audit-level=high
 
   python:
-    name: Lint and test (ML service)
+    name: Lint and test (${{ matrix.directory }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: [apps/ml, bench]
     defaults:
       run:
-        working-directory: apps/ml
+        working-directory: ${{ matrix.directory }}
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-          cache-dependency-glob: apps/ml/uv.lock
+          cache-dependency-glob: '**/uv.lock'
       - run: uv sync --frozen
       - run: uv run ruff check .
       - run: uv run ruff format --check .

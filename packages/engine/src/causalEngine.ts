@@ -12,6 +12,7 @@ import {
   CHAIN_ALERT_DEPTH,
   RING_SIZE,
 } from './constants';
+import { EntityMemo } from './entities';
 import { computeBlastRadius, computeCausalScore } from './scoring';
 import {
   noopLogger,
@@ -34,17 +35,24 @@ const round3 = (n: number): number => parseFloat(n.toFixed(3));
 const byTime = (a: CausalLog, b: CausalLog): number =>
   new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
 
+/** Distinct messages remembered by the entity cache. Speed only; never changes results. */
+const DEFAULT_ENTITY_CACHE_SIZE = 10_000;
+
 export interface CausalEngineOptions {
   logger?: Logger;
+  /** Entity cache size. 0 disables the cache (used to prove it does not change results). */
+  entityCacheSize?: number;
 }
 
 export class CausalEngine {
   private recentLogs: CausalLog[] = [];
   private chainListener: (event: ChainDetectedEvent) => void = () => undefined;
   private readonly logger: Logger;
+  private readonly entities: EntityMemo;
 
   constructor(options: CausalEngineOptions = {}) {
     this.logger = options.logger ?? noopLogger;
+    this.entities = new EntityMemo(options.entityCacheSize ?? DEFAULT_ENTITY_CACHE_SIZE);
   }
 
   /** Register the callback for chain-detected events. */
@@ -177,7 +185,7 @@ export class CausalEngine {
     for (const candidate of this.recentLogs) {
       if (candidate.id === newLog.id) continue;
       if (new Date(candidate.timestamp).getTime() < cutoffMs) continue;
-      const score = computeCausalScore(candidate, newLog);
+      const score = computeCausalScore(candidate, newLog, (m) => this.entities.get(m));
       if (score > bestScore) {
         bestScore = score;
         bestParent = candidate;

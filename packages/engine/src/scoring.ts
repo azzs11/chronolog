@@ -10,7 +10,7 @@ import {
   WEIGHT_SEVERITY,
   WEIGHT_TIME,
 } from './constants';
-import { computeEntityOverlap, extractEntities } from './entities';
+import { computeEntityOverlap, type Entities, extractEntities } from './entities';
 import { sourceRelationScore } from './serviceGraph';
 import type { CausalLog, LogInput } from './types';
 
@@ -28,7 +28,11 @@ export function temporalProximityScore(ageSec: number): number {
 }
 
 /** Score (0-1) for "parent caused child". 0 when the parent is not earlier or too old. */
-export function computeCausalScore(parent: LogInput, child: LogInput): number {
+export function computeCausalScore(
+  parent: LogInput,
+  child: LogInput,
+  entitiesOf: (message: string | undefined) => Entities = extractEntities,
+): number {
   const parentTime = new Date(parent.timestamp).getTime();
   const childTime = new Date(child.timestamp).getTime();
   if (parentTime >= childTime) return 0;
@@ -44,7 +48,7 @@ export function computeCausalScore(parent: LogInput, child: LogInput): number {
   else if (childWeight === parentWeight) score += SEVERITY_SAME_LEVEL_SCORE;
 
   score +=
-    computeEntityOverlap(extractEntities(parent.message), extractEntities(child.message)) * WEIGHT_ENTITY;
+    computeEntityOverlap(entitiesOf(parent.message), entitiesOf(child.message)) * WEIGHT_ENTITY;
 
   if (parent.source === child.source) score += BONUS_SAME_SOURCE;
 

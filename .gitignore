@@ -61,3 +61,5 @@ apps/ml/models/*.json
 .ruff_cache/
 .pytest_cache/
 __pycache__/
+bench/data/
+bench/.venv/

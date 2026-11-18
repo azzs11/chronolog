@@ -34,3 +34,27 @@ export function computeEntityOverlap(a: Entities, b: Entities): number {
   const union = new Set([...setA, ...setB]).size;
   return union === 0 ? 0 : intersection / union;
 }
+
+/**
+ * Bounded cache of extractEntities results. Log streams repeat the same messages
+ * constantly and the engine compares each new log with up to RING_SIZE older ones,
+ * so memoising keeps the regex work out of the inner loop. Results are identical
+ * with or without it. When the cache is full it is cleared (deterministic, no LRU state).
+ */
+export class EntityMemo {
+  private readonly cache = new Map<string, Entities>();
+
+  constructor(private readonly maxSize: number) {}
+
+  get(message: string | undefined): Entities {
+    if (this.maxSize <= 0) return extractEntities(message);
+    const key = message || '';
+    let entities = this.cache.get(key);
+    if (!entities) {
+      if (this.cache.size >= this.maxSize) this.cache.clear();
+      entities = extractEntities(key);
+      this.cache.set(key, entities);
+    }
+    return entities;
+  }
+}

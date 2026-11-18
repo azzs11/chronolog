@@ -11,7 +11,7 @@ updates:
     groups:
       npm: { patterns: ['*'] }
   - package-ecosystem: uv
-    directory: /apps/ml
+    directories: [/apps/ml, /bench]
     schedule: { interval: weekly }
     groups:
       python: { patterns: ['*'] }

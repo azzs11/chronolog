@@ -1,0 +1,1802 @@
+{
+ "dataset": "phamquiluan/RCAEval",
+ "revision": "afeacb11bcc94dadfd1c8f483ee4377b2b8b614e",
+ "license": "MIT",
+ "cases": [
+  {
+   "case_id": "re2ob_checkoutservice_cpu_1",
+   "log_bytes": 336876,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_cpu_2",
+   "log_bytes": 191241,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_cpu_3",
+   "log_bytes": 337942,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_delay_1",
+   "log_bytes": 350672,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_delay_2",
+   "log_bytes": 334150,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_delay_3",
+   "log_bytes": 345667,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_disk_1",
+   "log_bytes": 334514,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_disk_2",
+   "log_bytes": 344568,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_disk_3",
+   "log_bytes": 342286,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_loss_1",
+   "log_bytes": 329442,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_loss_2",
+   "log_bytes": 343011,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_loss_3",
+   "log_bytes": 340151,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_mem_1",
+   "log_bytes": 347965,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_mem_2",
+   "log_bytes": 215831,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_mem_3",
+   "log_bytes": 342151,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_socket_1",
+   "log_bytes": 335235,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_socket_2",
+   "log_bytes": 343055,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_checkoutservice_socket_3",
+   "log_bytes": 343151,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_cpu_1",
+   "log_bytes": 342888,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_cpu_2",
+   "log_bytes": 340865,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_cpu_3",
+   "log_bytes": 346455,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_delay_1",
+   "log_bytes": 321294,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_delay_2",
+   "log_bytes": 267671,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_delay_3",
+   "log_bytes": 263430,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_disk_1",
+   "log_bytes": 304701,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_disk_2",
+   "log_bytes": 341284,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_disk_3",
+   "log_bytes": 349053,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_loss_1",
+   "log_bytes": 223888,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_loss_2",
+   "log_bytes": 275031,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_loss_3",
+   "log_bytes": 292616,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_mem_1",
+   "log_bytes": 317390,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_mem_2",
+   "log_bytes": 325203,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_mem_3",
+   "log_bytes": 327596,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_socket_1",
+   "log_bytes": 345019,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_socket_2",
+   "log_bytes": 338446,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_currencyservice_socket_3",
+   "log_bytes": 341726,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_cpu_1",
+   "log_bytes": 337106,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_cpu_2",
+   "log_bytes": 341605,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_cpu_3",
+   "log_bytes": 343005,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_delay_1",
+   "log_bytes": 336154,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_delay_2",
+   "log_bytes": 337914,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_delay_3",
+   "log_bytes": 341234,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_disk_1",
+   "log_bytes": 328129,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_disk_2",
+   "log_bytes": 342285,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_disk_3",
+   "log_bytes": 306482,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_loss_1",
+   "log_bytes": 330952,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_loss_2",
+   "log_bytes": 342632,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_loss_3",
+   "log_bytes": 337142,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_mem_1",
+   "log_bytes": 344893,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_mem_2",
+   "log_bytes": 339833,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_mem_3",
+   "log_bytes": 336164,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_socket_1",
+   "log_bytes": 342384,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_socket_2",
+   "log_bytes": 344795,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_emailservice_socket_3",
+   "log_bytes": 341966,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_cpu_1",
+   "log_bytes": 340440,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_cpu_2",
+   "log_bytes": 341594,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_cpu_3",
+   "log_bytes": 352942,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_delay_1",
+   "log_bytes": 312686,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_delay_2",
+   "log_bytes": 309974,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_delay_3",
+   "log_bytes": 308665,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_disk_1",
+   "log_bytes": 336365,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_disk_2",
+   "log_bytes": 347238,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_disk_3",
+   "log_bytes": 354395,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_loss_1",
+   "log_bytes": 207743,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_loss_2",
+   "log_bytes": 203244,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_loss_3",
+   "log_bytes": 281948,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_mem_1",
+   "log_bytes": 258741,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_mem_2",
+   "log_bytes": 311470,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_mem_3",
+   "log_bytes": 293495,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_socket_1",
+   "log_bytes": 335728,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_socket_2",
+   "log_bytes": 335412,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_productcatalogservice_socket_3",
+   "log_bytes": 339205,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_cpu_1",
+   "log_bytes": 343682,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_cpu_2",
+   "log_bytes": 338464,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_cpu_3",
+   "log_bytes": 341143,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_delay_1",
+   "log_bytes": 334477,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_delay_2",
+   "log_bytes": 331290,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_delay_3",
+   "log_bytes": 338389,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_disk_1",
+   "log_bytes": 333193,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_disk_2",
+   "log_bytes": 342156,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_disk_3",
+   "log_bytes": 347926,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_loss_1",
+   "log_bytes": 248628,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_loss_2",
+   "log_bytes": 311747,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_loss_3",
+   "log_bytes": 304201,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_mem_1",
+   "log_bytes": 340638,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_mem_2",
+   "log_bytes": 325857,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_mem_3",
+   "log_bytes": 326067,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_socket_1",
+   "log_bytes": 235730,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_socket_2",
+   "log_bytes": 336459,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ob_recommendationservice_socket_3",
+   "log_bytes": 337775,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_cpu_1",
+   "log_bytes": 965576,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_cpu_2",
+   "log_bytes": 961639,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_cpu_3",
+   "log_bytes": 970707,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_delay_1",
+   "log_bytes": 930796,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_delay_2",
+   "log_bytes": 933465,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_delay_3",
+   "log_bytes": 923213,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_disk_1",
+   "log_bytes": 979092,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_disk_2",
+   "log_bytes": 984270,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_disk_3",
+   "log_bytes": 981301,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_loss_1",
+   "log_bytes": 949534,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_loss_2",
+   "log_bytes": 959001,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_loss_3",
+   "log_bytes": 947653,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_mem_1",
+   "log_bytes": 988366,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_mem_2",
+   "log_bytes": 959965,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_mem_3",
+   "log_bytes": 970164,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_socket_1",
+   "log_bytes": 1080754,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_socket_2",
+   "log_bytes": 964286,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_carts_socket_3",
+   "log_bytes": 967158,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_cpu_1",
+   "log_bytes": 868007,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_cpu_2",
+   "log_bytes": 836988,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_cpu_3",
+   "log_bytes": 971573,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_delay_1",
+   "log_bytes": 1111561,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_delay_2",
+   "log_bytes": 948578,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_delay_3",
+   "log_bytes": 884699,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_disk_1",
+   "log_bytes": 1038041,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_disk_2",
+   "log_bytes": 964435,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_disk_3",
+   "log_bytes": 963519,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_loss_1",
+   "log_bytes": 636536,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_loss_2",
+   "log_bytes": 662892,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_loss_3",
+   "log_bytes": 684406,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_mem_1",
+   "log_bytes": 973028,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_mem_2",
+   "log_bytes": 972964,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_mem_3",
+   "log_bytes": 971031,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_socket_1",
+   "log_bytes": 1120529,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_socket_2",
+   "log_bytes": 982898,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_catalogue_socket_3",
+   "log_bytes": 968914,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_cpu_1",
+   "log_bytes": 964880,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_cpu_2",
+   "log_bytes": 961393,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_cpu_3",
+   "log_bytes": 965899,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_delay_1",
+   "log_bytes": 1155556,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_delay_2",
+   "log_bytes": 972739,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_delay_3",
+   "log_bytes": 959645,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_disk_1",
+   "log_bytes": 789472,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_disk_2",
+   "log_bytes": 964291,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_disk_3",
+   "log_bytes": 958211,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_loss_1",
+   "log_bytes": 978673,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_loss_2",
+   "log_bytes": 965740,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_loss_3",
+   "log_bytes": 975099,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_mem_1",
+   "log_bytes": 970159,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_mem_2",
+   "log_bytes": 972444,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_mem_3",
+   "log_bytes": 971697,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_socket_1",
+   "log_bytes": 1164519,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_socket_2",
+   "log_bytes": 966771,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_orders_socket_3",
+   "log_bytes": 963556,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_cpu_1",
+   "log_bytes": 972307,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_cpu_2",
+   "log_bytes": 958324,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_cpu_3",
+   "log_bytes": 963127,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_delay_1",
+   "log_bytes": 1152733,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_delay_2",
+   "log_bytes": 969665,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_delay_3",
+   "log_bytes": 966672,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_disk_1",
+   "log_bytes": 1157498,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_disk_2",
+   "log_bytes": 962506,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_disk_3",
+   "log_bytes": 954254,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_loss_1",
+   "log_bytes": 947072,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_loss_2",
+   "log_bytes": 911691,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_loss_3",
+   "log_bytes": 935859,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_mem_1",
+   "log_bytes": 964118,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_mem_2",
+   "log_bytes": 960909,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_mem_3",
+   "log_bytes": 974606,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_socket_1",
+   "log_bytes": 1140624,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_socket_2",
+   "log_bytes": 960846,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_payment_socket_3",
+   "log_bytes": 972810,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_cpu_1",
+   "log_bytes": 892360,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_cpu_2",
+   "log_bytes": 864017,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_cpu_3",
+   "log_bytes": 970987,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_delay_1",
+   "log_bytes": 1105610,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_delay_2",
+   "log_bytes": 947990,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_delay_3",
+   "log_bytes": 942346,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_disk_1",
+   "log_bytes": 1076014,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_disk_2",
+   "log_bytes": 965035,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_disk_3",
+   "log_bytes": 968380,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_loss_1",
+   "log_bytes": 608605,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_loss_2",
+   "log_bytes": 662081,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_loss_3",
+   "log_bytes": 752858,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_mem_1",
+   "log_bytes": 984404,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_mem_2",
+   "log_bytes": 979914,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_mem_3",
+   "log_bytes": 975604,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_socket_1",
+   "log_bytes": 1160458,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_socket_2",
+   "log_bytes": 977231,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2ss_user_socket_3",
+   "log_bytes": 986205,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_cpu_2",
+   "log_bytes": 3351283,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_cpu_3",
+   "log_bytes": 3548142,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_delay_1",
+   "log_bytes": 2672246,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_delay_2",
+   "log_bytes": 2944154,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_delay_3",
+   "log_bytes": 3023976,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_disk_1",
+   "log_bytes": 3099849,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_disk_2",
+   "log_bytes": 2936791,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_disk_3",
+   "log_bytes": 3175094,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_loss_1",
+   "log_bytes": 3707744,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_loss_2",
+   "log_bytes": 3299647,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_loss_3",
+   "log_bytes": 3531120,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_mem_1",
+   "log_bytes": 3858065,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_mem_2",
+   "log_bytes": 3422241,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_mem_3",
+   "log_bytes": 2874324,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_socket_1",
+   "log_bytes": 3392028,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_socket_2",
+   "log_bytes": 3182710,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-auth-service_socket_3",
+   "log_bytes": 3712057,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_cpu_1",
+   "log_bytes": 2921420,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_cpu_2",
+   "log_bytes": 3407419,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_cpu_3",
+   "log_bytes": 3534905,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_delay_1",
+   "log_bytes": 1509539,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_delay_2",
+   "log_bytes": 555124,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_delay_3",
+   "log_bytes": 560534,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_disk_1",
+   "log_bytes": 3927328,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_disk_2",
+   "log_bytes": 563007,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_disk_3",
+   "log_bytes": 567950,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_loss_1",
+   "log_bytes": 3454830,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_loss_2",
+   "log_bytes": 559220,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_loss_3",
+   "log_bytes": 561818,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_mem_1",
+   "log_bytes": 2745403,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_mem_2",
+   "log_bytes": 3005215,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_mem_3",
+   "log_bytes": 2957834,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_socket_1",
+   "log_bytes": 3524378,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_socket_2",
+   "log_bytes": 551581,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-order-service_socket_3",
+   "log_bytes": 3793159,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_cpu_1",
+   "log_bytes": 3201393,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_cpu_2",
+   "log_bytes": 564811,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_cpu_3",
+   "log_bytes": 567679,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_delay_1",
+   "log_bytes": 3193665,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_delay_2",
+   "log_bytes": 3087366,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_delay_3",
+   "log_bytes": 3239955,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_disk_1",
+   "log_bytes": 2706816,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_disk_2",
+   "log_bytes": 3512846,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_disk_3",
+   "log_bytes": 2444069,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_loss_1",
+   "log_bytes": 2044377,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_loss_2",
+   "log_bytes": 3802614,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_loss_3",
+   "log_bytes": 2843669,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_mem_1",
+   "log_bytes": 2929055,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_mem_2",
+   "log_bytes": 2943413,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_mem_3",
+   "log_bytes": 3149223,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_socket_1",
+   "log_bytes": 2674859,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_socket_2",
+   "log_bytes": 2932387,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-route-service_socket_3",
+   "log_bytes": 3197037,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_cpu_1",
+   "log_bytes": 3894484,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_cpu_2",
+   "log_bytes": 3391483,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_cpu_3",
+   "log_bytes": 3600133,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_delay_1",
+   "log_bytes": 3327076,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_delay_2",
+   "log_bytes": 2834343,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_delay_3",
+   "log_bytes": 3088744,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_disk_1",
+   "log_bytes": 3299359,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_disk_2",
+   "log_bytes": 3497712,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_disk_3",
+   "log_bytes": 3761009,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_loss_1",
+   "log_bytes": 4226221,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_loss_2",
+   "log_bytes": 3585026,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_loss_3",
+   "log_bytes": 3731908,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_mem_1",
+   "log_bytes": 2924416,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_mem_2",
+   "log_bytes": 2843561,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_mem_3",
+   "log_bytes": 3251809,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_socket_1",
+   "log_bytes": 1116988,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_socket_2",
+   "log_bytes": 3942336,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-train-service_socket_3",
+   "log_bytes": 2957530,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_cpu_1",
+   "log_bytes": 3334388,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_cpu_2",
+   "log_bytes": 3327164,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_cpu_3",
+   "log_bytes": 3688022,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_delay_1",
+   "log_bytes": 3518465,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_delay_2",
+   "log_bytes": 3428776,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_delay_3",
+   "log_bytes": 3721141,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_disk_1",
+   "log_bytes": 3616058,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_disk_2",
+   "log_bytes": 569658,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_disk_3",
+   "log_bytes": 572015,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_loss_1",
+   "log_bytes": 3735022,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_loss_2",
+   "log_bytes": 4094957,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_loss_3",
+   "log_bytes": 4001842,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_mem_1",
+   "log_bytes": 3262894,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_mem_2",
+   "log_bytes": 3405061,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_mem_3",
+   "log_bytes": 2691878,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_socket_1",
+   "log_bytes": 573885,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_socket_2",
+   "log_bytes": 3073200,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re2tt_ts-travel-service_socket_3",
+   "log_bytes": 3394426,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f3_1",
+   "log_bytes": 129908,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f3_2",
+   "log_bytes": 122791,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f3_3",
+   "log_bytes": 124252,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f4_1",
+   "log_bytes": 151683,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f4_2",
+   "log_bytes": 158229,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f4_3",
+   "log_bytes": 152375,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f5_1",
+   "log_bytes": 116184,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f5_2",
+   "log_bytes": 126608,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_adservice_f5_3",
+   "log_bytes": 122237,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_cartservice_f1_1",
+   "log_bytes": 117073,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_cartservice_f1_2",
+   "log_bytes": 120603,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_cartservice_f1_3",
+   "log_bytes": 120452,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_currencyservice_f1_1",
+   "log_bytes": 88094,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_currencyservice_f1_2",
+   "log_bytes": 92429,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_currencyservice_f1_3",
+   "log_bytes": 86702,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f1_1",
+   "log_bytes": 127951,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f1_2",
+   "log_bytes": 126180,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f1_3",
+   "log_bytes": 119895,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f2_1",
+   "log_bytes": 128884,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f2_2",
+   "log_bytes": 123699,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f2_3",
+   "log_bytes": 128697,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f3_1",
+   "log_bytes": 127910,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f3_2",
+   "log_bytes": 128238,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f3_3",
+   "log_bytes": 127124,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f4_1",
+   "log_bytes": 127754,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f4_2",
+   "log_bytes": 128270,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f4_3",
+   "log_bytes": 125828,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f5_1",
+   "log_bytes": 126741,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f5_2",
+   "log_bytes": 129649,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ob_emailservice_f5_3",
+   "log_bytes": 128438,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f1_1",
+   "log_bytes": 1003956,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f1_2",
+   "log_bytes": 1001489,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f1_3",
+   "log_bytes": 1011171,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f1_4",
+   "log_bytes": 1005082,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f3_1",
+   "log_bytes": 985877,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f3_2",
+   "log_bytes": 988552,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f3_3",
+   "log_bytes": 999156,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f3_4",
+   "log_bytes": 994735,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f4_1",
+   "log_bytes": 1013870,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f4_2",
+   "log_bytes": 1017432,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f4_3",
+   "log_bytes": 1009235,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_carts_f4_4",
+   "log_bytes": 1008944,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f1_1",
+   "log_bytes": 1032895,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f1_2",
+   "log_bytes": 1031010,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f1_3",
+   "log_bytes": 1027759,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f2_1",
+   "log_bytes": 1038086,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f2_2",
+   "log_bytes": 1037607,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f2_3",
+   "log_bytes": 1055811,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f3_1",
+   "log_bytes": 569982,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f3_2",
+   "log_bytes": 578806,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_front-end_f3_3",
+   "log_bytes": 583454,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f1_1",
+   "log_bytes": 982594,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f1_2",
+   "log_bytes": 993888,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f1_3",
+   "log_bytes": 984502,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f3_1",
+   "log_bytes": 959807,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f3_2",
+   "log_bytes": 958304,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f3_3",
+   "log_bytes": 968138,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f4_1",
+   "log_bytes": 623367,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f4_2",
+   "log_bytes": 506072,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3ss_orders_f4_3",
+   "log_bytes": 626884,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f1_1",
+   "log_bytes": 412495,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f1_2",
+   "log_bytes": 404337,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f1_3",
+   "log_bytes": 433361,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f1_4",
+   "log_bytes": 183312,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f2_1",
+   "log_bytes": 465911,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f2_2",
+   "log_bytes": 434364,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f2_3",
+   "log_bytes": 413091,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f2_4",
+   "log_bytes": 188890,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f3_1",
+   "log_bytes": 458476,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f3_2",
+   "log_bytes": 470401,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f3_3",
+   "log_bytes": 477156,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f3_4",
+   "log_bytes": 220011,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f4_1",
+   "log_bytes": 457229,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f4_2",
+   "log_bytes": 480765,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-auth-service_f4_3",
+   "log_bytes": 497910,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f1_1",
+   "log_bytes": 760817,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f1_2",
+   "log_bytes": 835306,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f1_3",
+   "log_bytes": 816484,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f2_1",
+   "log_bytes": 802575,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f2_2",
+   "log_bytes": 773390,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f2_3",
+   "log_bytes": 818243,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_1",
+   "log_bytes": 824003,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_2",
+   "log_bytes": 793363,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_3",
+   "log_bytes": 832583,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_4",
+   "log_bytes": 767268,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_5",
+   "log_bytes": 863115,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f3_6",
+   "log_bytes": 904503,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f4_1",
+   "log_bytes": 761739,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f4_2",
+   "log_bytes": 837978,
+   "inject_time_bytes": 10
+  },
+  {
+   "case_id": "re3tt_ts-route-service_f4_3",
+   "log_bytes": 857093,
+   "inject_time_bytes": 10
+  }
+ ]
+}

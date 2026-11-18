@@ -1,7 +1,7 @@
 export { CausalEngine, type CausalEngineOptions } from './causalEngine';
 export { AnomalyDetector, type AnomalyDetectorOptions } from './anomalyDetector';
 export { computeCausalScore, computeBlastRadius, temporalProximityScore } from './scoring';
-export { extractEntities, computeEntityOverlap } from './entities';
+export { EntityMemo, extractEntities, computeEntityOverlap } from './entities';
 export { SERVICE_DEPS, sourceRelationScore } from './serviceGraph';
 export { sha256Hex } from './sha256';
 export * from './constants';
