@@ -32,3 +32,7 @@ extend-exclude = [".venv"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Long prose strings in the report template.
+"src/chronobench/report.py" = ["E501"]

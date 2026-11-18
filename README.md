@@ -10,9 +10,18 @@
 **ChronoLog** is an open, self-hosted log monitoring system that links log events into
 *causal chains*. It shows you what broke, what probably caused it, and how far the damage spread.
 
-> **Status:** ChronoLog 2.0 is in progress. The current engine uses hand-tuned rules and has
-> only been tested on synthetic logs. Its root-cause accuracy has not been measured yet; benchmark
-> results on public datasets will be published here. See [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Status:** ChronoLog 2.0 is in progress. The current engine (ChronoLog-H) uses hand-tuned rules.
+> It is now measured on real incidents, and the honest result is that it is not good yet.
+> See [Benchmark](#benchmark) and [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Benchmark
+
+On 40 real incidents from [RCAEval](https://github.com/phamquiluan/RCAEval) (RE2 and RE3, logs only), ChronoLog-H
+names the true root-cause service in its top 3 for **32.5%** of cases, against 12.5% for random guessing and
+37.5% for the simple baseline "first service to log an error". With 40 cases the uncertainty is wide
+(95% interval 20–48%), and in 1 case the faulty service writes no logs at all. Every method, interval and
+case is in [RESULTS.md](RESULTS.md), reproduced by one command (`uv run bench all`, see [bench/](bench/)).
+The roadmap's next phases aim to beat these baselines, and the results will be published either way.
 
 ---
 

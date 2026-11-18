@@ -24,6 +24,29 @@ uv run bench download --subset small    # about 36 MB into bench/data/ (gitignor
 uv run pytest && uv run ruff check .
 ```
 
+## Run it
+
+```bash
+npm ci && npm run build                 # once, at the repo root: builds the engine and the Node replay runner
+cd bench && uv run bench all            # download, evaluate every method, write results and ../RESULTS.md
+uv run bench replay <case_id>           # one case: where does ChronoLog-H rank the true service?
+```
+
+`bench all` takes about 4 minutes for the 40-case subset and is deterministic: two runs give byte-identical
+`results/rcaeval-small.json` and `RESULTS.md`. Both are committed.
+
+## Methods
+
+| Method | Definition |
+|---|---|
+| Random | Candidate services in a seeded random order; 5 seeds. |
+| First error | Services in the order they first log an error-level line in the incident window. |
+| Most frequent error | Services by number of error-level lines in the window. |
+| Most logs | Services by number of log lines in the window. A diagnostic added after the first two ChronoLog-H replays showed it ranking the chattiest services first; it shows how much of a score log volume alone explains. It was never used to tune anything. |
+| **ChronoLog-H** | The v1 rules (`packages/engine`): each log is linked to a causal parent. Every in-window log in a chain adds its blast radius to the service that logged the chain's root; services are ranked by that total (`runner/src/ranker.ts`). |
+
+"Error-level" means `error` or `critical` after the log adapter. Ties are broken alphabetically.
+
 ## Rules of the benchmark
 
 - **Frozen split.** A case is a test case if `sha256(case_id) % 100 < 30`. The split never changes and a larger

@@ -39,3 +39,14 @@ def most_frequent_error_ranking(case: CaseLogs) -> list[str]:
     counts = Counter(window.loc[window["severity"].isin(ERROR_LEVELS), "source"])
     ordered = sorted(counts, key=lambda s: (-counts[s], s))
     return complete_ranking(ordered, case.services())
+
+
+def most_logs_ranking(case: CaseLogs) -> list[str]:
+    """Services by number of log lines in the window, most first (ties: alphabetical).
+
+    A diagnostic, not a real method: it shows how much of a score is explained by log volume alone.
+    Added after the first two ChronoLog-H replays showed it ranking the chattiest services first.
+    """
+    counts = case.incident_window()["source"].value_counts()
+    ordered = sorted(counts.index, key=lambda s: (-int(counts[s]), s))
+    return complete_ranking(ordered, case.services())

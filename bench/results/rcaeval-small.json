@@ -1,0 +1,2475 @@
+{
+ "cases": [
+  {
+   "candidates": 10,
+   "case_id": "re2ob_checkoutservice_disk_3",
+   "dataset": "re2",
+   "fault": "disk",
+   "linked_lines": 177826,
+   "log_lines": 179376,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "currencyservice",
+      "frontend",
+      "recommendationservice",
+      "cartservice",
+      "adservice"
+     ]
+    },
+    "first_error": {
+     "rank": 3,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 3,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 7,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 7,
+    "1": 10,
+    "2": 7,
+    "3": 8,
+    "4": 2
+   },
+   "reachable": true,
+   "root_service": "checkoutservice",
+   "split": "test",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_checkoutservice_socket_2",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 175580,
+   "log_lines": 176899,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    },
+    "first_error": {
+     "rank": 3,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 3,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 7,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 7,
+    "1": 10,
+    "2": 7,
+    "3": 8,
+    "4": 2
+   },
+   "reachable": true,
+   "root_service": "checkoutservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_currencyservice_cpu_3",
+   "dataset": "re2",
+   "fault": "cpu",
+   "linked_lines": 175073,
+   "log_lines": 176460,
+   "methods": {
+    "chronolog_h": {
+     "rank": 1,
+     "top": [
+      "currencyservice",
+      "frontend",
+      "cartservice",
+      "adservice",
+      "recommendationservice"
+     ]
+    },
+    "first_error": {
+     "rank": 4,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 5,
+    "1": 6,
+    "2": 3,
+    "3": 10,
+    "4": 10
+   },
+   "reachable": true,
+   "root_service": "currencyservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_currencyservice_disk_2",
+   "dataset": "re2",
+   "fault": "disk",
+   "linked_lines": 172288,
+   "log_lines": 173181,
+   "methods": {
+    "chronolog_h": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "recommendationservice",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "first_error": {
+     "rank": 4,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 5,
+    "1": 6,
+    "2": 3,
+    "3": 10,
+    "4": 10
+   },
+   "reachable": true,
+   "root_service": "currencyservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_emailservice_cpu_2",
+   "dataset": "re2",
+   "fault": "cpu",
+   "linked_lines": 177817,
+   "log_lines": 179964,
+   "methods": {
+    "chronolog_h": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "adservice",
+      "recommendationservice"
+     ]
+    },
+    "first_error": {
+     "rank": 5,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 5,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 6,
+    "1": 8,
+    "2": 4,
+    "3": 6,
+    "4": 9
+   },
+   "reachable": true,
+   "root_service": "emailservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re2ob_productcatalogservice_loss_1",
+   "dataset": "re2",
+   "fault": "loss",
+   "linked_lines": 117285,
+   "log_lines": 117601,
+   "methods": {
+    "chronolog_h": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    },
+    "first_error": {
+     "rank": 1,
+     "top": [
+      "productcatalogservice",
+      "frontend",
+      "recommendationservice",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "productcatalogservice",
+      "recommendationservice",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 10,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 7,
+    "1": 4,
+    "2": 1,
+    "3": 7,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "productcatalogservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_productcatalogservice_socket_1",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 167373,
+   "log_lines": 168357,
+   "methods": {
+    "chronolog_h": {
+     "rank": null,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "adservice",
+      "recommendationservice"
+     ]
+    },
+    "first_error": {
+     "rank": null,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": null,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": null,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": null,
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "reachable": false,
+   "root_service": "productcatalogservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ob_recommendationservice_disk_1",
+   "dataset": "re2",
+   "fault": "disk",
+   "linked_lines": 169779,
+   "log_lines": 170150,
+   "methods": {
+    "chronolog_h": {
+     "rank": 5,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "adservice",
+      "recommendationservice"
+     ]
+    },
+    "first_error": {
+     "rank": 8,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 8,
+     "top": [
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice",
+      "emailservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 1,
+    "1": 4,
+    "2": 6,
+    "3": 7,
+    "4": 4
+   },
+   "reachable": true,
+   "root_service": "recommendationservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ss_carts_disk_1",
+   "dataset": "re2",
+   "fault": "disk",
+   "linked_lines": 88129,
+   "log_lines": 88166,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "front-end",
+      "user",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 7,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 7,
+    "2": 10,
+    "3": 4,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "carts",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re2ss_carts_loss_1",
+   "dataset": "re2",
+   "fault": "loss",
+   "linked_lines": 84454,
+   "log_lines": 84486,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "front-end",
+      "user",
+      "payment",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "orders",
+      "front-end",
+      "carts-db"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "front-end",
+      "orders",
+      "carts-db"
+     ]
+    },
+    "most_logs": {
+     "rank": 8,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 9,
+    "1": 7,
+    "2": 11,
+    "3": 4,
+    "4": 5
+   },
+   "reachable": true,
+   "root_service": "carts",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ss_carts_socket_1",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 88654,
+   "log_lines": 88689,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "carts-db",
+      "catalogue"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 7,
+    "2": 10,
+    "3": 4,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "carts",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re2ss_catalogue_loss_1",
+   "dataset": "re2",
+   "fault": "loss",
+   "linked_lines": 57301,
+   "log_lines": 57320,
+   "methods": {
+    "chronolog_h": {
+     "rank": 2,
+     "top": [
+      "user",
+      "catalogue",
+      "front-end",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 5,
+     "top": [
+      "queue-master",
+      "carts",
+      "catalogue-db",
+      "front-end",
+      "catalogue"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 3,
+     "top": [
+      "queue-master",
+      "front-end",
+      "catalogue",
+      "carts",
+      "catalogue-db"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "payment"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 4,
+    "1": 11,
+    "2": 5,
+    "3": 8,
+    "4": 1
+   },
+   "reachable": true,
+   "root_service": "catalogue",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ss_catalogue_mem_2",
+   "dataset": "re2",
+   "fault": "mem",
+   "linked_lines": 86471,
+   "log_lines": 86549,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 7,
+    "1": 10,
+    "2": 7,
+    "3": 8,
+    "4": 2
+   },
+   "reachable": true,
+   "root_service": "catalogue",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re2ss_orders_delay_1",
+   "dataset": "re2",
+   "fault": "delay",
+   "linked_lines": 88547,
+   "log_lines": 88610,
+   "methods": {
+    "chronolog_h": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "user",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "first_error": {
+     "rank": 6,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 6,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "carts-db",
+      "catalogue"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 8,
+    "2": 4,
+    "3": 6,
+    "4": 10
+   },
+   "reachable": true,
+   "root_service": "orders",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re2ss_payment_socket_3",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 87207,
+   "log_lines": 87216,
+   "methods": {
+    "chronolog_h": {
+     "rank": 6,
+     "top": [
+      "catalogue",
+      "carts",
+      "carts-db",
+      "front-end",
+      "orders"
+     ]
+    },
+    "first_error": {
+     "rank": 7,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 7,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 4,
+    "1": 5,
+    "2": 1,
+    "3": 2,
+    "4": 7
+   },
+   "reachable": true,
+   "root_service": "payment",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re2ss_user_socket_2",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 85702,
+   "log_lines": 85726,
+   "methods": {
+    "chronolog_h": {
+     "rank": 2,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 10,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 10,
+     "top": [
+      "queue-master",
+      "carts",
+      "carts-db",
+      "catalogue",
+      "front-end"
+     ]
+    },
+    "most_logs": {
+     "rank": 2,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 2,
+    "1": 10,
+    "2": 9,
+    "3": 10,
+    "4": 4
+   },
+   "reachable": true,
+   "root_service": "user",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 45,
+   "case_id": "re2tt_ts-auth-service_delay_3",
+   "dataset": "re2",
+   "fault": "delay",
+   "linked_lines": 213232,
+   "log_lines": 279367,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-route-service",
+      "ts-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 6,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 6,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 8,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 15,
+    "1": 5,
+    "2": 44,
+    "3": 6,
+    "4": 39
+   },
+   "reachable": true,
+   "root_service": "ts-auth-service",
+   "split": "test",
+   "system": "tt"
+  },
+  {
+   "candidates": 45,
+   "case_id": "re2tt_ts-auth-service_mem_1",
+   "dataset": "re2",
+   "fault": "mem",
+   "linked_lines": 199646,
+   "log_lines": 270107,
+   "methods": {
+    "chronolog_h": {
+     "rank": 9,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-route-service",
+      "ts-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 6,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 6,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 8,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 15,
+    "1": 5,
+    "2": 44,
+    "3": 6,
+    "4": 39
+   },
+   "reachable": true,
+   "root_service": "ts-auth-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 39,
+   "case_id": "re2tt_ts-order-service_delay_2",
+   "dataset": "re2",
+   "fault": "delay",
+   "linked_lines": 57305,
+   "log_lines": 57359,
+   "methods": {
+    "chronolog_h": {
+     "rank": 25,
+     "top": [
+      "ts-travel2-service",
+      "ts-auth-service",
+      "ts-ui-dashboard",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 23,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 23,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-auth-service",
+      "ts-route-service",
+      "ts-ui-dashboard"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 18,
+    "1": 13,
+    "2": 19,
+    "3": 24,
+    "4": 7
+   },
+   "reachable": true,
+   "root_service": "ts-order-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 39,
+   "case_id": "re2tt_ts-order-service_socket_2",
+   "dataset": "re2",
+   "fault": "socket",
+   "linked_lines": 57749,
+   "log_lines": 57769,
+   "methods": {
+    "chronolog_h": {
+     "rank": 26,
+     "top": [
+      "ts-travel-service",
+      "ts-route-service",
+      "ts-ui-dashboard",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 23,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 23,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-auth-service",
+      "ts-route-service",
+      "ts-ui-dashboard"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 18,
+    "1": 13,
+    "2": 19,
+    "3": 24,
+    "4": 7
+   },
+   "reachable": true,
+   "root_service": "ts-order-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 40,
+   "case_id": "re2tt_ts-route-service_cpu_3",
+   "dataset": "re2",
+   "fault": "cpu",
+   "linked_lines": 58722,
+   "log_lines": 58882,
+   "methods": {
+    "chronolog_h": {
+     "rank": 5,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-travel2-service",
+      "ts-ui-dashboard",
+      "ts-auth-service",
+      "ts-route-service"
+     ]
+    },
+    "first_error": {
+     "rank": 30,
+     "top": [
+      "ts-config-service",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 30,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-config-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-auth-service",
+      "ts-route-service",
+      "ts-ui-dashboard"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 5,
+    "1": 10,
+    "2": 7,
+    "3": 25,
+    "4": 23
+   },
+   "reachable": true,
+   "root_service": "ts-route-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 46,
+   "case_id": "re2tt_ts-train-service_delay_2",
+   "dataset": "re2",
+   "fault": "delay",
+   "linked_lines": 203242,
+   "log_lines": 241117,
+   "methods": {
+    "chronolog_h": {
+     "rank": 43,
+     "top": [
+      "ts-travel2-service",
+      "ts-basic-service",
+      "ts-route-service",
+      "ts-seat-service",
+      "ts-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 40,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 40,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 46,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 28,
+    "1": 9,
+    "2": 28,
+    "3": 36,
+    "4": 29
+   },
+   "reachable": true,
+   "root_service": "ts-train-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 46,
+   "case_id": "re2tt_ts-travel-service_delay_1",
+   "dataset": "re2",
+   "fault": "delay",
+   "linked_lines": 198302,
+   "log_lines": 245246,
+   "methods": {
+    "chronolog_h": {
+     "rank": 1,
+     "top": [
+      "ts-travel-service",
+      "ts-basic-service",
+      "ts-seat-service",
+      "ts-route-service",
+      "ts-travel2-service"
+     ]
+    },
+    "first_error": {
+     "rank": 5,
+     "top": [
+      "ts-security-service",
+      "ts-preserve-service",
+      "ts-config-service",
+      "ts-seat-service",
+      "ts-travel-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 5,
+     "top": [
+      "ts-security-service",
+      "ts-config-service",
+      "ts-preserve-service",
+      "ts-seat-service",
+      "ts-travel-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 35,
+    "1": 23,
+    "2": 36,
+    "3": 11,
+    "4": 26
+   },
+   "reachable": true,
+   "root_service": "ts-travel-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 45,
+   "case_id": "re2tt_ts-travel-service_disk_1",
+   "dataset": "re2",
+   "fault": "disk",
+   "linked_lines": 212309,
+   "log_lines": 274182,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "ts-basic-service",
+      "ts-seat-service",
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    },
+    "first_error": {
+     "rank": 41,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 41,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service",
+      "ts-auth-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 4,
+     "top": [
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 34,
+    "1": 23,
+    "2": 36,
+    "3": 21,
+    "4": 26
+   },
+   "reachable": true,
+   "root_service": "ts-travel-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re3ob_adservice_f3_3",
+   "dataset": "re3",
+   "fault": "f3",
+   "linked_lines": 69658,
+   "log_lines": 69664,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "shippingservice",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 7,
+    "2": 10,
+    "3": 4,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "adservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re3ob_adservice_f4_3",
+   "dataset": "re3",
+   "fault": "f4",
+   "linked_lines": 77746,
+   "log_lines": 77788,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "adservice",
+      "cartservice",
+      "recommendationservice"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 1,
+     "top": [
+      "adservice",
+      "frontend",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 3,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "adservice",
+      "cartservice",
+      "recommendationservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 7,
+    "2": 10,
+    "3": 4,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "adservice",
+   "split": "test",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re3ob_adservice_f5_2",
+   "dataset": "re3",
+   "fault": "f5",
+   "linked_lines": 70289,
+   "log_lines": 70322,
+   "methods": {
+    "chronolog_h": {
+     "rank": 5,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "adservice",
+      "cartservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "shippingservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 7,
+    "2": 10,
+    "3": 4,
+    "4": 3
+   },
+   "reachable": true,
+   "root_service": "adservice",
+   "split": "test",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re3ob_cartservice_f1_1",
+   "dataset": "re3",
+   "fault": "f1",
+   "linked_lines": 64990,
+   "log_lines": 65025,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "adservice",
+      "checkoutservice"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "cartservice",
+      "adservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "frontend",
+      "cartservice",
+      "adservice",
+      "checkoutservice",
+      "currencyservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 3,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 3,
+    "1": 9,
+    "2": 9,
+    "3": 1,
+    "4": 8
+   },
+   "reachable": true,
+   "root_service": "cartservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 10,
+   "case_id": "re3ob_emailservice_f2_2",
+   "dataset": "re3",
+   "fault": "f2",
+   "linked_lines": 70543,
+   "log_lines": 70587,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "currencyservice",
+      "frontend",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    },
+    "first_error": {
+     "rank": 7,
+     "top": [
+      "checkoutservice",
+      "paymentservice",
+      "frontend",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 7,
+     "top": [
+      "checkoutservice",
+      "frontend",
+      "paymentservice",
+      "adservice",
+      "cartservice"
+     ]
+    },
+    "most_logs": {
+     "rank": 9,
+     "top": [
+      "frontend",
+      "currencyservice",
+      "cartservice",
+      "recommendationservice",
+      "adservice"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 6,
+    "1": 8,
+    "2": 4,
+    "3": 6,
+    "4": 9
+   },
+   "reachable": true,
+   "root_service": "emailservice",
+   "split": "train",
+   "system": "ob"
+  },
+  {
+   "candidates": 12,
+   "case_id": "re3ss_carts_f3_4",
+   "dataset": "re3",
+   "fault": "f3",
+   "linked_lines": 85537,
+   "log_lines": 85649,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "first_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "orders",
+      "front-end",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "front-end",
+      "orders",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_logs": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "orders"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 10,
+    "1": 3,
+    "2": 12,
+    "3": 4,
+    "4": 6
+   },
+   "reachable": true,
+   "root_service": "carts",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 12,
+   "case_id": "re3ss_carts_f4_1",
+   "dataset": "re3",
+   "fault": "f4",
+   "linked_lines": 83994,
+   "log_lines": 84024,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "user",
+      "front-end",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "first_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "orders",
+      "front-end",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "queue-master",
+      "front-end",
+      "orders",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_logs": {
+     "rank": 5,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "catalogue",
+      "carts"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 10,
+    "1": 3,
+    "2": 12,
+    "3": 4,
+    "4": 6
+   },
+   "reachable": true,
+   "root_service": "carts",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re3ss_front-end_f1_2",
+   "dataset": "re3",
+   "fault": "f1",
+   "linked_lines": 85855,
+   "log_lines": 85886,
+   "methods": {
+    "chronolog_h": {
+     "rank": 1,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "payment",
+      "carts"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "front-end",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "front-end",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "most_logs": {
+     "rank": 1,
+     "top": [
+      "front-end",
+      "user",
+      "queue-master",
+      "carts",
+      "catalogue"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 6,
+    "1": 6,
+    "2": 3,
+    "3": 11,
+    "4": 11
+   },
+   "reachable": true,
+   "root_service": "front-end",
+   "split": "train",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re3ss_front-end_f3_3",
+   "dataset": "re3",
+   "fault": "f3",
+   "linked_lines": 48108,
+   "log_lines": 48110,
+   "methods": {
+    "chronolog_h": {
+     "rank": 2,
+     "top": [
+      "catalogue",
+      "front-end",
+      "carts",
+      "carts-db",
+      "orders"
+     ]
+    },
+    "first_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "front-end",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 2,
+     "top": [
+      "queue-master",
+      "front-end",
+      "carts",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "most_logs": {
+     "rank": 1,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "payment",
+      "queue-master"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 6,
+    "1": 6,
+    "2": 3,
+    "3": 11,
+    "4": 11
+   },
+   "reachable": true,
+   "root_service": "front-end",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 11,
+   "case_id": "re3ss_orders_f4_3",
+   "dataset": "re3",
+   "fault": "f4",
+   "linked_lines": 51551,
+   "log_lines": 51587,
+   "methods": {
+    "chronolog_h": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "carts",
+      "user",
+      "carts-db",
+      "catalogue"
+     ]
+    },
+    "first_error": {
+     "rank": 3,
+     "top": [
+      "queue-master",
+      "front-end",
+      "orders",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 3,
+     "top": [
+      "front-end",
+      "queue-master",
+      "orders",
+      "carts",
+      "carts-db"
+     ]
+    },
+    "most_logs": {
+     "rank": 6,
+     "top": [
+      "front-end",
+      "user",
+      "catalogue",
+      "payment",
+      "carts"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 8,
+    "1": 8,
+    "2": 4,
+    "3": 6,
+    "4": 10
+   },
+   "reachable": true,
+   "root_service": "orders",
+   "split": "test",
+   "system": "ss"
+  },
+  {
+   "candidates": 48,
+   "case_id": "re3tt_ts-auth-service_f2_3",
+   "dataset": "re3",
+   "fault": "f2",
+   "linked_lines": 39425,
+   "log_lines": 39812,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-ui-dashboard",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo",
+      "ts-assurance-service"
+     ]
+    },
+    "first_error": {
+     "rank": 8,
+     "top": [
+      "ts-order-service",
+      "ts-order-other-service",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 8,
+     "top": [
+      "ts-order-other-service",
+      "ts-order-service",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 1,
+     "top": [
+      "ts-auth-service",
+      "ts-ui-dashboard",
+      "ts-travel2-service",
+      "ts-basic-service",
+      "ts-seat-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 14,
+    "1": 5,
+    "2": 47,
+    "3": 20,
+    "4": 42
+   },
+   "reachable": true,
+   "root_service": "ts-auth-service",
+   "split": "test",
+   "system": "tt"
+  },
+  {
+   "candidates": 47,
+   "case_id": "re3tt_ts-auth-service_f3_2",
+   "dataset": "re3",
+   "fault": "f3",
+   "linked_lines": 44128,
+   "log_lines": 44846,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "ts-route-service",
+      "ts-seat-service",
+      "ts-travel-service",
+      "ts-auth-service",
+      "ts-admin-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 11,
+     "top": [
+      "ts-order-service",
+      "ts-order-other-service",
+      "ts-travel2-service",
+      "ts-admin-travel-service",
+      "ts-travel-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 11,
+     "top": [
+      "ts-admin-basic-info-service",
+      "ts-travel2-service",
+      "ts-admin-travel-service",
+      "ts-travel-service",
+      "ts-food-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 1,
+     "top": [
+      "ts-auth-service",
+      "ts-ui-dashboard",
+      "ts-travel2-service",
+      "ts-admin-basic-info-service",
+      "ts-basic-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 14,
+    "1": 5,
+    "2": 46,
+    "3": 20,
+    "4": 41
+   },
+   "reachable": true,
+   "root_service": "ts-auth-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 45,
+   "case_id": "re3tt_ts-auth-service_f4_3",
+   "dataset": "re3",
+   "fault": "f4",
+   "linked_lines": 43421,
+   "log_lines": 44021,
+   "methods": {
+    "chronolog_h": {
+     "rank": 10,
+     "top": [
+      "ts-basic-service",
+      "ts-ui-dashboard",
+      "ts-seat-service",
+      "ts-admin-basic-info-service",
+      "ts-preserve-service"
+     ]
+    },
+    "first_error": {
+     "rank": 8,
+     "top": [
+      "ts-order-other-service",
+      "ts-order-service",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 8,
+     "top": [
+      "ts-order-other-service",
+      "ts-order-service",
+      "ts-admin-basic-info-service",
+      "ts-admin-travel-service",
+      "ts-assurance-mongo"
+     ]
+    },
+    "most_logs": {
+     "rank": 1,
+     "top": [
+      "ts-auth-service",
+      "ts-ui-dashboard",
+      "ts-basic-service",
+      "ts-travel2-service",
+      "ts-travel-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 15,
+    "1": 5,
+    "2": 44,
+    "3": 6,
+    "4": 39
+   },
+   "reachable": true,
+   "root_service": "ts-auth-service",
+   "split": "train",
+   "system": "tt"
+  },
+  {
+   "candidates": 48,
+   "case_id": "re3tt_ts-route-service_f1_1",
+   "dataset": "re3",
+   "fault": "f1",
+   "linked_lines": 69973,
+   "log_lines": 71657,
+   "methods": {
+    "chronolog_h": {
+     "rank": 3,
+     "top": [
+      "ts-travel2-service",
+      "ts-seat-service",
+      "ts-route-service",
+      "ts-basic-service",
+      "ts-travel-service"
+     ]
+    },
+    "first_error": {
+     "rank": 1,
+     "top": [
+      "ts-route-service",
+      "ts-travel-service",
+      "ts-travel2-service",
+      "ts-admin-travel-service",
+      "ts-food-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 3,
+     "top": [
+      "ts-travel-service",
+      "ts-admin-travel-service",
+      "ts-route-service",
+      "ts-travel2-service",
+      "ts-food-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 5,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-basic-service",
+      "ts-seat-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 29,
+    "1": 6,
+    "2": 4,
+    "3": 24,
+    "4": 38
+   },
+   "reachable": true,
+   "root_service": "ts-route-service",
+   "split": "test",
+   "system": "tt"
+  },
+  {
+   "candidates": 48,
+   "case_id": "re3tt_ts-route-service_f2_3",
+   "dataset": "re3",
+   "fault": "f2",
+   "linked_lines": 69958,
+   "log_lines": 71323,
+   "methods": {
+    "chronolog_h": {
+     "rank": 7,
+     "top": [
+      "ts-travel2-service",
+      "ts-auth-service",
+      "ts-travel-service",
+      "ts-order-other-service",
+      "ts-basic-service"
+     ]
+    },
+    "first_error": {
+     "rank": 1,
+     "top": [
+      "ts-route-service",
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-admin-travel-service",
+      "ts-food-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 4,
+     "top": [
+      "ts-travel-service",
+      "ts-admin-travel-service",
+      "ts-travel2-service",
+      "ts-route-service",
+      "ts-food-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 5,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-basic-service",
+      "ts-seat-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 2,
+    "1": 11,
+    "2": 2,
+    "3": 31,
+    "4": 34
+   },
+   "reachable": true,
+   "root_service": "ts-route-service",
+   "split": "test",
+   "system": "tt"
+  },
+  {
+   "candidates": 49,
+   "case_id": "re3tt_ts-route-service_f4_3",
+   "dataset": "re3",
+   "fault": "f4",
+   "linked_lines": 68685,
+   "log_lines": 69900,
+   "methods": {
+    "chronolog_h": {
+     "rank": 4,
+     "top": [
+      "ts-travel2-service",
+      "ts-admin-basic-info-service",
+      "ts-order-service",
+      "ts-route-service",
+      "ts-ui-dashboard"
+     ]
+    },
+    "first_error": {
+     "rank": 38,
+     "top": [
+      "ts-basic-service",
+      "ts-ticketinfo-service",
+      "ts-travel-service",
+      "ts-travel2-service",
+      "ts-food-service"
+     ]
+    },
+    "most_frequent_error": {
+     "rank": 38,
+     "top": [
+      "ts-travel-service",
+      "ts-admin-travel-service",
+      "ts-travel2-service",
+      "ts-food-service",
+      "ts-basic-service"
+     ]
+    },
+    "most_logs": {
+     "rank": 5,
+     "top": [
+      "ts-travel2-service",
+      "ts-travel-service",
+      "ts-basic-service",
+      "ts-seat-service",
+      "ts-route-service"
+     ]
+    }
+   },
+   "random_ranks": {
+    "0": 12,
+    "1": 13,
+    "2": 11,
+    "3": 47,
+    "4": 15
+   },
+   "reachable": true,
+   "root_service": "ts-route-service",
+   "split": "train",
+   "system": "tt"
+  }
+ ],
+ "meta": {
+  "adapter_version": 1,
+  "avg_k": 5,
+  "bench_version": "2.0.0",
+  "benchmark": "ChronoBench",
+  "bootstrap_resamples": 1000,
+  "code_fingerprint": "fcbd0cfe572400d9",
+  "dataset": "phamquiluan/RCAEval",
+  "dataset_revision": "afeacb11bcc94dadfd1c8f483ee4377b2b8b614e",
+  "ks": [
+   1,
+   3,
+   5
+  ],
+  "methods": [
+   "random",
+   "first_error",
+   "most_frequent_error",
+   "most_logs",
+   "chronolog_h"
+  ],
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "subset": "small",
+  "test_percent": 30
+ }
+}

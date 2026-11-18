@@ -1,11 +1,16 @@
 """Command line entry point: ``uv run bench <command>``."""
 
 import argparse
+import json
+import time
+from pathlib import Path
 
 from .adapt import load_case_logs
 from .baselines import complete_ranking
 from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
+from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
+from .report import render_report
 from .runner import run_chronolog_h
 from .select import write_subset
 
@@ -23,6 +28,39 @@ def _cmd_download(args: argparse.Namespace) -> None:
     cases = load_subset(args.subset)
     new = download_cases(cases)
     print(f"{len(cases)} cases ready ({new} newly downloaded)")
+
+
+RESULTS_DIR = Path(__file__).resolve().parents[2] / "results"
+ROOT_RESULTS_MD = Path(__file__).resolve().parents[3] / "RESULTS.md"
+
+
+def _results_json(subset: str) -> Path:
+    return RESULTS_DIR / f"rcaeval-{subset}.json"
+
+
+def _report_path(subset: str) -> Path:
+    return ROOT_RESULTS_MD if subset == "small" else RESULTS_DIR / f"RESULTS-{subset}.md"
+
+
+def _cmd_run(args: argparse.Namespace) -> None:
+    cases = load_subset(args.subset)
+    download_cases(cases)
+    started = time.perf_counter()
+    results = build_results(args.subset, evaluate_cases(cases, workers=args.workers))
+    RESULTS_DIR.mkdir(exist_ok=True)
+    _results_json(args.subset).write_text(json.dumps(results, indent=1, sort_keys=True) + "\n")
+    print(f"Evaluated {len(cases)} cases in {time.perf_counter() - started:.0f}s")
+
+
+def _cmd_report(args: argparse.Namespace) -> None:
+    results = json.loads(_results_json(args.subset).read_text())
+    _report_path(args.subset).write_text(render_report(results))
+    print(f"Wrote {_report_path(args.subset)}")
+
+
+def _cmd_all(args: argparse.Namespace) -> None:
+    _cmd_run(args)
+    _cmd_report(args)
 
 
 def _cmd_replay(args: argparse.Namespace) -> None:
@@ -49,6 +87,16 @@ def main() -> None:
     download = sub.add_parser("download", help="download logs for a subset")
     download.add_argument("--subset", choices=["small", "full"], default="small")
     download.set_defaults(func=_cmd_download)
+
+    for name, func, helptext in [
+        ("run", _cmd_run, "evaluate every method on a subset and write the results JSON"),
+        ("report", _cmd_report, "render RESULTS.md from the results JSON"),
+        ("all", _cmd_all, "run, then report"),
+    ]:
+        command = sub.add_parser(name, help=helptext)
+        command.add_argument("--subset", choices=["small", "full"], default="small")
+        command.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+        command.set_defaults(func=func)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")
