@@ -1,8 +1,12 @@
-process.env.NODE_ENV = 'test';
+import { CausalEngine, type LogInput } from '../src';
 
-const { analyzeLog, getActiveCausalChains, getChainById, getGraphData, _reset } = require('../src/services/causalEngine');
+const engine = new CausalEngine();
+const analyzeLog = (log: LogInput) => engine.analyzeLog(log);
+const getActiveCausalChains = () => engine.getActiveCausalChains();
+const getChainById = (id: string) => engine.getChainById(id);
+const getGraphData = () => engine.getGraphData();
 
-beforeEach(() => _reset());
+beforeEach(() => engine.reset());
 
 const makeLog = (overrides = {}) => ({
   id:        `log-${Math.random().toString(36).slice(2)}`,
@@ -133,7 +137,7 @@ describe('getActiveCausalChains', () => {
 
     const chains = getActiveCausalChains();
     for (let i = 1; i < chains.length; i++) {
-      expect(chains[i - 1].blast_radius_score).toBeGreaterThanOrEqual(chains[i].blast_radius_score);
+      expect(chains[i - 1]!.blast_radius_score).toBeGreaterThanOrEqual(chains[i]!.blast_radius_score);
     }
   });
 });

@@ -118,9 +118,9 @@ Open [http://localhost:3000](http://localhost:3000)
 ### Backend
 
 ```bash
-cd apps/api
-npm install
-npm run dev          # nodemon, port 5000
+npm install                          # at the repo root (npm workspaces)
+npm run build                        # builds packages/engine
+cd apps/api && npm run dev           # nodemon, port 5000
 ```
 
 ### ML Service

@@ -37,7 +37,9 @@ services:
       retries: 3
 
   backend:
-    build: ./apps/api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
     container_name: chronolog_backend
     mem_limit: 256m
     ports:

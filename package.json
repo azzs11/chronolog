@@ -1,0 +1,10 @@
+{
+  "name": "chronolog",
+  "private": true,
+  "workspaces": ["packages/*", "apps/api"],
+  "scripts": {
+    "build": "npm run build -w @chronolog/engine",
+    "typecheck": "npm run typecheck -w @chronolog/engine",
+    "test": "npm run build && npm test -w @chronolog/engine && npm test -w chronolog-backend"
+  }
+}

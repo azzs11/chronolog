@@ -1,8 +1,10 @@
-process.env.NODE_ENV = 'test';
+import { AnomalyDetector, type AnomalyInput } from '../src';
 
-const { analyze, getFingerprints, _reset } = require('../src/services/anomalyDetector');
+const detector = new AnomalyDetector({ clock: () => new Date('2026-01-01T00:00:00Z') });
+const analyze = (log: AnomalyInput) => detector.analyze(log);
+const getFingerprints = () => detector.getFingerprints();
 
-beforeEach(() => _reset());
+beforeEach(() => detector.reset());
 
 const makeLog = (severity = 'info', source = 'api', offset = 0) => ({
   id:        `log-${Math.random().toString(36).slice(2)}`,
@@ -105,7 +107,7 @@ describe('getFingerprints', () => {
   it('sorts fingerprints by count descending', () => {
     const fps = getFingerprints();
     for (let i = 1; i < fps.length; i++) {
-      expect(fps[i - 1].count).toBeGreaterThanOrEqual(fps[i].count);
+      expect(fps[i - 1]!.count).toBeGreaterThanOrEqual(fps[i]!.count);
     }
   });
 });

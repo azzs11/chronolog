@@ -54,3 +54,4 @@ apps/ml/models/*.pkl
 *.temp
 # Claude Code
 CLAUDE.md
+packages/engine/dist/
