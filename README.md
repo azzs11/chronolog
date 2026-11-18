@@ -91,18 +91,22 @@ arrive without one.
 git clone https://github.com/azzs11/chronolog.git
 cd chronolog
 cp .env.example .env   # then set your own passwords, including GRAFANA_PASSWORD
-docker compose up -d
+docker compose up -d                        # app only: 4 containers
+docker compose --profile monitoring up -d   # also Prometheus + Grafana
+docker compose down                         # stop and remove everything
 ```
+
+Each container has a memory cap (about 1.1 GB for the app, 1.6 GB with monitoring).
 
 Open [http://localhost:3000](http://localhost:3000)
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
 | App | http://localhost:3000 | — |
-| Backend API | http://localhost:5000 | — |
+| Backend API | http://localhost:5050 (`BACKEND_PORT`) | — |
 | ML Service | http://localhost:5001 | — |
-| Grafana | http://localhost:3001 | `admin` / `GRAFANA_PASSWORD` from `.env` |
-| Prometheus | http://localhost:9090 | — |
+| Grafana (monitoring profile) | http://localhost:3001 | `admin` / `GRAFANA_PASSWORD` from `.env` |
+| Prometheus (monitoring profile) | http://localhost:9090 | — |
 
 > **First run**: the `ml-service` container trains the model during build (`~30s`).
 > Subsequent starts use the cached image and are instant.

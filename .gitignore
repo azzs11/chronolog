@@ -12,7 +12,6 @@ ml-service/__pycache__/
 .env
 backend/.env
 frontend/.env
-frontend/package-lock.json
 ml-service/.env
 # Ignore everything outside project
 ../
