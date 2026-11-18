@@ -1,7 +1,7 @@
 """
 ML Classifier Tests — pytest
 
-Run with:  cd ml-service && python -m pytest src/tests/ -v
+Run with:  cd apps/ml && python -m pytest src/tests/ -v
 
 These tests load the trained model from disk. If models/log_classifier.pkl
 does not exist, run `python src/train_model.py` first.

@@ -17,8 +17,8 @@ To run each service without Docker, see the "Development" section of the [README
 ## Running tests
 
 ```bash
-cd backend && npm test
-cd ml-service && pytest
+cd apps/api && npm test
+cd apps/ml && pytest
 ```
 
 ## Ground rules

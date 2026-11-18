@@ -76,7 +76,7 @@ graph TD
 
 - **Algorithm**: Random Forest with TF-IDF (n-grams 1–3)
 - **Task**: predicts a log's severity level from its message text
-- **Training data**: synthetic logs from `ml-service/src/data_generator.py`
+- **Training data**: synthetic logs from `apps/ml/src/data_generator.py`
 - **Accuracy**: not reported yet. Scores on synthetic data say little about real logs, so
   no number is shown until the model is evaluated on real, labelled datasets.
 
@@ -118,7 +118,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ### Backend
 
 ```bash
-cd backend
+cd apps/api
 npm install
 npm run dev          # nodemon, port 5000
 ```
@@ -126,7 +126,7 @@ npm run dev          # nodemon, port 5000
 ### ML Service
 
 ```bash
-cd ml-service
+cd apps/ml
 python -m venv venv
 # Windows:
 venv\Scripts\activate
@@ -141,13 +141,13 @@ python src/app.py           # port 5001
 ### Frontend
 
 ```bash
-cd frontend
+cd apps/web
 npm install
 npm start            # CRA dev server, port 3000
 ```
 
 Set `REACT_APP_API_URL=http://localhost:5000` and `REACT_APP_WS_URL=http://localhost:5000`
-in `frontend/.env`.
+in `apps/web/.env`.
 
 ---
 

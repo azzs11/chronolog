@@ -14,7 +14,7 @@ AI-powered log classification service using Machine Learning.
 
 ### 1. Install Dependencies
 ```bash
-cd ml-service
+cd apps/ml
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -100,7 +100,7 @@ GET /api/model/info
 
 ## Architecture
 ```
-ml-service/
+apps/ml/
 ├── src/
 │   ├── app.py           # Flask API
 │   ├── classifier.py    # ML model

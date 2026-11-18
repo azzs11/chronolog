@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-debug_secret}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./apps/api/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     healthcheck:
@@ -22,7 +22,7 @@ services:
     restart: on-failure
 
   ml-service:
-    build: ./ml-service
+    build: ./apps/ml
     container_name: chronolog_ml
     mem_limit: 512m
     ports:
@@ -37,7 +37,7 @@ services:
       retries: 3
 
   backend:
-    build: ./backend
+    build: ./apps/api
     container_name: chronolog_backend
     mem_limit: 256m
     ports:
@@ -65,7 +65,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./apps/web
       args:
         REACT_APP_API_URL: http://localhost:${BACKEND_PORT:-5050}
         REACT_APP_WS_URL: http://localhost:${BACKEND_PORT:-5050}
