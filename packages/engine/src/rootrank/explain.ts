@@ -8,10 +8,15 @@ const LIKELY_FROM = 0.6;
 const POSSIBLE_FROM = 0.3;
 const MAX_TEMPLATE_CHARS = 90;
 
-/** A word for how strongly the model favours a candidate. The weight is relative, not a probability. */
-export function confidenceWord(weight: number): 'likely' | 'possible' | 'unlikely' {
+/**
+ * A word for how strongly the model favours a candidate. The weight is relative to the other
+ * candidates, not a probability, so the word depends on rank: the leader is never called
+ * "unlikely" (it is the model's best guess), and it is only "likely" when it clearly stands out.
+ * Calibrating these words against measured hit rates is still to do.
+ */
+export function confidenceWord(weight: number, rank = Number.POSITIVE_INFINITY): 'likely' | 'possible' | 'unlikely' {
   if (weight >= LIKELY_FROM) return 'likely';
-  if (weight >= POSSIBLE_FROM) return 'possible';
+  if (weight >= POSSIBLE_FROM || rank === 1) return 'possible';
   return 'unlikely';
 }
 

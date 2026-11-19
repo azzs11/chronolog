@@ -10,3 +10,4 @@ export { ROOTRANK_V1 } from './modelV1';
 export { learnServiceGraph, MIN_CORRELATION, MIN_MENTIONS, type LearnedGraph } from './learnedGraph';
 export { confidenceWord, evidenceSentences, formatDelay } from './explain';
 export { TemplateStream, type AddResult, type StreamLine, type TemplateGroup } from './templateStream';
+export { BURST_BUCKET_S, findErrorBursts, MERGE_GAP_BUCKETS, MIN_BURST_ERRORS, type Burst, type BurstLine } from './bursts';

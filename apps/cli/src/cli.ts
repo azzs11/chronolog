@@ -91,7 +91,7 @@ export function formatReport(result: RankResult, top: number, skipped: number): 
   if (skipped > 0) out.push(`Skipped ${skipped} lines that were not log lines.`);
   out.push('');
   for (const cause of result.candidates.slice(0, top)) {
-    out.push(`${cause.rank}. ${cause.service}   ${confidenceWord(cause.weight)}, ${cause.weight.toFixed(2)}`);
+    out.push(`${cause.rank}. ${cause.service}   ${confidenceWord(cause.weight, cause.rank)}, ${cause.weight.toFixed(2)}`);
     for (const sentence of evidenceSentences(cause)) out.push(`     - ${sentence}`);
   }
   if (result.candidates.length > top) out.push(`\n(${result.candidates.length - top} more services not shown; use --top)`);
