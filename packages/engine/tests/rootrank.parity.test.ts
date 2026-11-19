@@ -6,6 +6,7 @@ import {
   estimateIncidentStart,
   FEATURE_NAMES,
   inferSeverity,
+  learnServiceGraph,
   predict,
   rankRootCauses,
   ROOTRANK_V1,
@@ -30,6 +31,11 @@ interface GoldenCase {
     features: number[][];
     scores: number[];
     estimated_start: number | null;
+    graph: {
+      services: string[];
+      mentions: Array<{ from: string; to: string; count: number }>;
+      correlations: Array<{ a: string; b: string; corr: number }>;
+    };
   };
 }
 
@@ -86,6 +92,16 @@ describe.each(golden.cases)('RootRank parity on $case_id', (c) => {
     expect(rankRootCauses(lines, undefined, model).incidentStart).toBe(c.expected.estimated_start);
   });
 
+  it('learns the same service graph as Python', () => {
+    const graph = learnServiceGraph(lines);
+    expect(graph.services).toEqual(c.expected.graph.services);
+    expect(graph.mentions).toEqual(c.expected.graph.mentions);
+    expect(graph.correlations.map((e) => [e.a, e.b])).toEqual(c.expected.graph.correlations.map((e) => [e.a, e.b]));
+    graph.correlations.forEach((e, i) => {
+      expect(close(e.corr, (c.expected.graph.correlations[i] as { corr: number }).corr)).toBe(true);
+    });
+  });
+
   it('scores every service like LightGBM and ranks them in the same order', () => {
     const ranked = rankRootCauses(lines, c.incident_start, model);
     ranked.candidates.forEach((cause) => {
@@ -120,5 +136,6 @@ describe('the parity fixture exercises the signals', () => {
     expect(any('mentions', (v) => v > 0)).toBe(true);
     expect(any('in_degree', (v) => v > 0)).toBe(true);
     for (const c of golden.cases) expect(new Set(c.expected.scores).size).toBeGreaterThan(1);
+    expect(golden.cases.some((c) => c.expected.graph.correlations.length > 0)).toBe(true);
   });
 });

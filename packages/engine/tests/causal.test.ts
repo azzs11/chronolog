@@ -155,6 +155,17 @@ describe('getChainById', () => {
   });
 });
 
+describe('getGraphData: root marking', () => {
+  it('marks the first log of a chain as the root, and its children as not roots', () => {
+    const now = Date.now();
+    analyzeLog(makeLog({ id: 'R', severity: 'critical', source: 'database', message: 'database pool exhausted', timestamp: new Date(now).toISOString() }));
+    analyzeLog(makeLog({ id: 'C', severity: 'error', source: 'database', message: 'database connection failed', timestamp: new Date(now + 2000).toISOString() }));
+    const nodes = getGraphData().nodes;
+    expect(nodes.find((n) => n.id === 'R')?.isRoot).toBe(true);
+    expect(nodes.find((n) => n.id === 'C')?.isRoot).toBe(false);
+  });
+});
+
 describe('getGraphData', () => {
   it('returns valid nodes and edges structure', () => {
     const now = Date.now();

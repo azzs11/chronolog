@@ -1,3 +1,4 @@
+import { extent } from './extent';
 import { type PreparedLine, computeFeatures, FEATURE_NAMES } from './features';
 import { predict, type TreeModel } from './model';
 import { inferSeverity } from './severity';
@@ -16,7 +17,7 @@ export class WindowTooShortError extends Error {
 
 /** Softmax of the scores: relative weights that sum to 1 (not calibrated probabilities). */
 function softmax(scores: number[]): number[] {
-  const top = Math.max(...scores);
+  const top = extent(scores).max;
   const exps = scores.map((s) => Math.exp(s - top));
   const total = exps.reduce((a, b) => a + b, 0);
   return exps.map((e) => e / total);

@@ -7,3 +7,5 @@ export { inferSeverity } from './severity';
 export { assignTemplates, maskMessage, MAX_TEMPLATE_TOKENS, type TemplateTable } from './templates';
 export type { CauseEvidence, NovelTemplate, RankedCause, RankResult, RcaLine } from './types';
 export { ROOTRANK_V1 } from './modelV1';
+export { learnServiceGraph, MIN_CORRELATION, MIN_MENTIONS, type LearnedGraph } from './learnedGraph';
+export { confidenceWord, evidenceSentences, formatDelay } from './explain';

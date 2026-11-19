@@ -7,6 +7,7 @@
  * MISSING_TIME_FACTOR x the window length, so "never" sorts last. Rank features compare services
  * within one case.
  */
+import { extent } from './extent';
 
 const BUCKET_S = 10; // width of a rate bucket
 const SPIKE_SIGMAS = 3; // a bucket spikes above baseline mean + 3 standard deviations
@@ -62,7 +63,7 @@ export interface FeatureResult {
 const escapeRegExp = (text: string): string => text.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
 
 /** Template id -> indices of the services whose name the template contains (whole-name match). */
-function mentionTable(services: string[], templates: Map<number, string>): Map<number, number[]> {
+export function mentionTable(services: string[], templates: Map<number, string>): Map<number, number[]> {
   const patterns = services.map((s) => new RegExp(`(?<![\\w-])${escapeRegExp(s.toLowerCase())}(?![\\w-])`));
   const table = new Map<number, number[]>();
   for (const [id, text] of templates) {
@@ -178,9 +179,9 @@ export function computeFeatures(
   const services = [...new Set(lines.map((l) => l.service))].sort();
   if (services.length === 0) return { services, rows: [], details: [] };
   const inject = incidentStart;
-  const stamps = lines.map((l) => l.timestamp);
-  const baselineSeconds = Math.max(inject - Math.min(...stamps), 1);
-  const windowSeconds = Math.max(Math.max(...stamps) - inject + 1, 1);
+  const span = extent(lines.map((l) => l.timestamp));
+  const baselineSeconds = Math.max(inject - span.min, 1);
+  const windowSeconds = Math.max(span.max - inject + 1, 1);
   const missing = MISSING_TIME_FACTOR * windowSeconds;
   const st = serviceStats(lines, services, inject);
   const n = services.length;
@@ -219,7 +220,7 @@ export function computeFeatures(
     const baseSet = st.baseTemplates[i] as Set<number>;
     const window = [...(st.winTemplates[i] as Map<number, NovelDetail>).values()];
     const novel = window.filter((t) => !baseSet.has(t.templateId));
-    const firstNovel = novel.length > 0 ? Math.min(...novel.map((t) => t.firstSeen)) : Number.POSITIVE_INFINITY;
+    const firstNovel = novel.length > 0 ? extent(novel.map((t) => t.firstSeen)).min : Number.POSITIVE_INFINITY;
     const rateWin = (st.nWin[i] as number) / windowSeconds;
     const rateBase = (st.nBase[i] as number) / baselineSeconds;
     col('t_first_error')[i] = since(st.firstError[i] as number);

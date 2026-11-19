@@ -141,6 +141,10 @@ export class CausalEngine {
   getGraphData(): GraphData {
     const nodes = new Map<string, GraphNode>();
     const edges: { from: string; to: string }[] = [];
+    // A root log has no causal_root_id of its own (that field names the root of a *child*), so a
+    // log is a root when other logs name it as theirs.
+    const rootIds = new Set(this.recentLogs.map((l) => l.causal_root_id).filter((id): id is string => Boolean(id)));
+    const isRoot = (log: CausalLog): boolean => rootIds.has(log.id) || log.id === log.causal_root_id;
 
     for (const log of this.recentLogs) {
       if (!log.causal_root_id && !log.causal_parent_id) continue;
@@ -151,7 +155,7 @@ export class CausalEngine {
           severity: log.severity,
           source: log.source,
           depth: log.causal_chain_depth ?? 0,
-          isRoot: log.id === log.causal_root_id,
+          isRoot: isRoot(log),
           blastRadius: log.blast_radius_score ?? 0,
         });
       }
@@ -164,7 +168,7 @@ export class CausalEngine {
             severity: parent.severity,
             source: parent.source,
             depth: parent.causal_chain_depth ?? 0,
-            isRoot: parent.id === parent.causal_root_id,
+            isRoot: isRoot(parent),
             blastRadius: parent.blast_radius_score ?? 0,
           });
         }
