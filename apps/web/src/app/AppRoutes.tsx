@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import InboxView from '../features/incidents/InboxView';
 import LiveView from '../features/live/LiveView';
 import Shell from './Shell';
 
@@ -15,7 +16,8 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<Shell />}>
-        <Route index element={<Navigate to="/live" replace />} />
+        <Route index element={<Navigate to="/incidents" replace />} />
+        <Route path="incidents/:id?" element={<InboxView />} />
         <Route path="live" element={<LiveView />} />
         <Route path="root-cause" element={<Suspense fallback={loading}><RootRankView /></Suspense>} />
         <Route path="playground" element={<Suspense fallback={loading}><PlaygroundPage /></Suspense>} />

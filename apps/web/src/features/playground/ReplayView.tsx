@@ -68,7 +68,7 @@ export default function ReplayView({ load = loadReplays }: { load?: () => Promis
           <p className="text-xs text-text-muted">
             {SYSTEM_NAMES[replay.system]}, {replay.services} services, {totalLines(replay).toLocaleString()} log lines read.
           </p>
-          <Timeline replay={replay} highlight={revealed ? replay.truth : undefined} />
+          <Timeline timeline={replay.timeline} highlight={revealed ? replay.truth : undefined} />
           <label className="flex items-center gap-2 text-sm text-text-secondary">
             <input type="checkbox" checked={giveStart} onChange={(e) => setGiveStart(e.target.checked)} />
             Tell ChronoLog when it broke

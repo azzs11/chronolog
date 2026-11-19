@@ -10,7 +10,7 @@ const THEMES: ReadonlyArray<{ value: Theme; label: string; icon: typeof Sun }> =
 ];
 
 const linkClass = ({ isActive }: { isActive: boolean }): string =>
-  `flex flex-1 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-xs md:flex-none md:flex-row md:gap-3 md:px-3 md:py-2 md:text-sm ${
+  `flex-1 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-xs md:flex-none md:flex-row md:gap-3 md:px-3 md:py-2 md:text-sm ${
     isActive ? 'bg-bg-elevated text-text-primary' : 'text-text-secondary hover:bg-bg-surface hover:text-text-primary'
   }`;
 
@@ -37,8 +37,8 @@ export default function Shell() {
         className="order-last flex shrink-0 justify-around border-t border-border-dim bg-bg-surface p-1 md:order-first md:w-56 md:flex-col md:justify-start md:gap-1 md:border-r md:border-t-0 md:p-3"
       >
         <span className="hidden px-3 pb-3 pt-1 text-xl font-semibold md:block">ChronoLog</span>
-        {NAV_ITEMS.map(({ path, label, icon: Icon }) => (
-          <NavLink key={path} to={path} className={linkClass}>
+        {NAV_ITEMS.map(({ path, label, icon: Icon, hideOnPhone }) => (
+          <NavLink key={path} to={path} className={(state) => `${hideOnPhone ? 'hidden md:flex' : 'flex'} ${linkClass(state)}`}>
             <Icon size={18} aria-hidden="true" />
             <span>{label}</span>
           </NavLink>

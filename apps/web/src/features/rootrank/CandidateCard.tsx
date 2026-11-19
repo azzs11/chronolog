@@ -3,7 +3,7 @@ import { confidenceWord, evidenceSentences } from './format';
 
 /** One ranked service: its rank, a word and number for how strongly it is favoured, and the evidence. */
 export default function CandidateCard({ cause, highlight }: { cause: RankedCause; highlight?: boolean }) {
-  const word = confidenceWord(cause.weight);
+  const word = confidenceWord(cause.weight, cause.rank);
   return (
     <li className={`card ${highlight ? 'border-l-4 border-l-accent' : ''}`} data-testid="candidate">
       <div className="flex items-center gap-3">

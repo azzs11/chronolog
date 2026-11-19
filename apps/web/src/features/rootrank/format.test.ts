@@ -16,6 +16,12 @@ describe('confidenceWord', () => {
     expect(confidenceWord(0.45)).toBe('possible');
     expect(confidenceWord(0.1)).toBe('unlikely');
   });
+
+  it('never calls the leader unlikely: it is the best guess, however spread out the weights are', () => {
+    expect(confidenceWord(0.27, 1)).toBe('possible');
+    expect(confidenceWord(0.27, 2)).toBe('unlikely');
+    expect(confidenceWord(0.72, 1)).toBe('likely');
+  });
 });
 
 describe('formatDelay', () => {

@@ -11,12 +11,15 @@ export interface Replay {
   rankEstimated: number | null;
   given: ReplayResult;
   estimated: ReplayResult;
-  timeline: {
-    bucketSeconds: number;
-    /** Seconds from the true incident start to the first bucket (negative: the window starts before it). */
-    startOffset: number;
-    services: Array<{ name: string; lines: number[]; errors: number[] }>;
-  };
+  timeline: TimelineData;
+}
+
+/** Log volume per service over time, in fixed-width buckets. */
+export interface TimelineData {
+  bucketSeconds: number;
+  /** Seconds from the incident start to the first bucket (negative: the window starts before it). */
+  startOffset: number;
+  services: Array<{ name: string; lines: number[]; errors: number[] }>;
 }
 
 export interface ReplayResult {
