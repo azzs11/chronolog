@@ -16,11 +16,17 @@
 
 ## Benchmark
 
-On 40 real incidents from [RCAEval](https://github.com/phamquiluan/RCAEval) (RE2 and RE3, logs only), ChronoLog-H
-names the true root-cause service in its top 3 for **32.5%** of cases, against 12.5% for random guessing and
-37.5% for the simple baseline "first service to log an error". With 40 cases the uncertainty is wide
-(95% interval 20–48%), and in 1 case the faulty service writes no logs at all. Every method, interval and
-case is in [RESULTS.md](RESULTS.md), reproduced by one command (`uv run bench all`, see [bench/](bench/)).
+On all 359 real incidents in [RCAEval](https://github.com/phamquiluan/RCAEval) (RE2 and RE3, logs only), ChronoLog-H
+names the true root-cause service in its top 3 for **26.5%** of cases (95% interval 22–31%). Random guessing gets 10.7%.
+The simple baseline "first service to log an error" gets 28.1% (23–33%), so **ChronoLog-H is better than chance but
+not distinguishable from that trivial baseline**. On the 131 held-out test cases the figures are 29.0% and 27.5%.
+In 26 cases the faulty service writes no logs at all, so no log-based method can name it. Every method, interval,
+system and fault type is in [bench/results/RESULTS-full.md](bench/results/RESULTS-full.md); a faster 40-case subset
+is in [RESULTS.md](RESULTS.md). Both are reproduced by one command (`uv run bench all`, see [bench/](bench/)).
+Anomaly detection was scored too, on the first 2 million lines of Loghub HDFS and BGL
+([bench/results/RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). The current rules are weak there:
+F1 is 1.5% on HDFS (block-level anomalies hide in event sequences, not severity) and 19.1% on BGL, where a
+plain "flag error and critical lines" rule gets 67.9%. Run it with `uv run bench anomaly`.
 The roadmap's next phases aim to beat these baselines, and the results will be published either way.
 
 ---
