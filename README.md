@@ -23,6 +23,14 @@ not distinguishable from that trivial baseline**. On the 131 held-out test cases
 In 26 cases the faulty service writes no logs at all, so no log-based method can name it. Every method, interval,
 system and fault type is in [bench/results/RESULTS-full.md](bench/results/RESULTS-full.md); a faster 40-case subset
 is in [RESULTS.md](RESULTS.md). Both are reproduced by one command (`uv run bench all`, see [bench/](bench/)).
+A first learned ranker, **RootRank** (LightGBM lambdarank over log features such as novel templates, error
+timing and which services other services name), reaches **52.6%** AC@3 (95% interval 48–57%, 5 seeds) on all 359
+cases when whole root services are held out of training, against 26.5% for ChronoLog-H. Splitting by case id
+instead would give a higher number, because RCAEval has several instances of the same fault on the same service
+and the model can recognise the service; the strict figure is the one to quote. Leaving one whole system out gives
+53.5%. Details, other splits and the most used features are in
+[bench/results/RESULTS-rootrank.md](bench/results/RESULTS-rootrank.md); run it with `uv run bench rootrank`.
+RootRank is not yet part of the running app.
 Anomaly detection was scored too, on the first 2 million lines of Loghub HDFS and BGL
 ([bench/results/RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). The current rules are weak there:
 F1 is 1.5% on HDFS (block-level anomalies hide in event sequences, not severity) and 19.1% on BGL, where a
