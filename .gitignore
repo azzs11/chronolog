@@ -67,3 +67,4 @@ bench/.venv/
 
 packages/engine/coverage/
 apps/web/dist-demo/
+apps/cli/dist/
