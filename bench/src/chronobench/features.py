@@ -8,6 +8,7 @@ values do.
 """
 
 import re
+import warnings
 from dataclasses import dataclass
 
 import numpy as np
@@ -260,8 +261,9 @@ def _baseline_correlation(sp: _Split) -> np.ndarray:
         volume[index[service], int(b)] = count
     if len(sp.services) < 2:
         return np.zeros((len(sp.services), len(sp.services)))
-    with np.errstate(all="ignore"):
-        corr = np.nan_to_num(np.corrcoef(volume))  # silent services have no variance: 0
+    with np.errstate(all="ignore"), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # silent services have no variance
+        corr = np.nan_to_num(np.corrcoef(volume))
     np.fill_diagonal(corr, 0.0)
     return corr
 

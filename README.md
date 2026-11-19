@@ -35,6 +35,10 @@ because changed code logs messages never seen before), while on the 269 resource
 delay, packet loss, socket) it gets **36.8%**, against 20.8% for "first service to log an error". The ablation shows one
 signal, templates a service never logged before, carries almost all of the gain
 ([bench/results/RESULTS-ablation.md](bench/results/RESULTS-ablation.md), `uv run bench ablate`).
+RootRank holds up on messy logs: with a model trained on clean logs and held-out cases degraded, 40% of log lines
+dropped at random costs 1.3 points of AC@3 (51.3%), and ±2 s of clock skew per service costs 0.4
+([bench/results/RESULTS-robustness.md](bench/results/RESULTS-robustness.md), `uv run bench robustness`).
+Adding ChronoLog-H's own score as a feature makes RootRank worse (49.1%), so the hand-written rules are not used in it.
 RootRank is not yet part of the running app.
 Anomaly detection was scored too, on the first 2 million lines of Loghub HDFS and BGL
 ([bench/results/RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). The current rules are weak there:

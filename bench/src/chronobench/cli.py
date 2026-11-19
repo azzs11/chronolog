@@ -16,6 +16,8 @@ from .download import download_cases
 from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
 from .hscores import compute_hscores, load_hscores
 from .report import render_report
+from .robustness import run_robustness
+from .robustness_report import render_robustness_report
 from .rootrank import feature_table, run_rootrank
 from .rootrank_report import render_rootrank_report
 from .runner import run_chronolog_h
@@ -131,6 +133,18 @@ def _cmd_ablate(args: argparse.Namespace) -> None:
     print(f"Ablation done in {time.perf_counter() - started:.0f}s (ChronoLog-H score: {complete})")
 
 
+def _cmd_robustness(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    cases = load_subset("full")
+    clean = feature_table(cases, args.workers)
+    rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
+    result = run_robustness(clean, rounds, args.workers)
+    text = json.dumps(result, indent=1, sort_keys=True) + "\n"
+    (RESULTS_DIR / "robustness.json").write_text(text)
+    (RESULTS_DIR / "RESULTS-robustness.md").write_text(render_robustness_report(result))
+    print(f"Robustness done in {time.perf_counter() - started:.0f}s")
+
+
 def _cmd_replay(args: argparse.Namespace) -> None:
     parsed = parse_case_id(args.case)
     download_cases([parsed])
@@ -185,6 +199,10 @@ def main() -> None:
     ablate = sub.add_parser("ablate", help="ablation and breakdowns for RootRank")
     ablate.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     ablate.set_defaults(func=_cmd_ablate)
+
+    robustness = sub.add_parser("robustness", help="RootRank under dropped logs and clock skew")
+    robustness.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    robustness.set_defaults(func=_cmd_robustness)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")
