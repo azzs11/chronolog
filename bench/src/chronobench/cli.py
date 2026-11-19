@@ -6,6 +6,8 @@ import time
 from pathlib import Path
 
 from .adapt import load_case_logs
+from .anomaly_eval import build_anomaly_results
+from .anomaly_report import render_anomaly_report
 from .baselines import complete_ranking
 from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
@@ -63,6 +65,17 @@ def _cmd_all(args: argparse.Namespace) -> None:
     _cmd_report(args)
 
 
+def _cmd_anomaly(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    results = build_anomaly_results()
+    RESULTS_DIR.mkdir(exist_ok=True)
+    (RESULTS_DIR / "loghub-anomaly.json").write_text(
+        json.dumps(results, indent=1, sort_keys=True) + "\n"
+    )
+    (RESULTS_DIR / "RESULTS-anomaly.md").write_text(render_anomaly_report(results))
+    print(f"Anomaly benchmark done in {time.perf_counter() - started:.0f}s")
+
+
 def _cmd_replay(args: argparse.Namespace) -> None:
     parsed = parse_case_id(args.case)
     download_cases([parsed])
@@ -97,6 +110,9 @@ def main() -> None:
         command.add_argument("--subset", choices=["small", "full"], default="small")
         command.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
         command.set_defaults(func=func)
+
+    anomaly = sub.add_parser("anomaly", help="score the anomaly detector on Loghub HDFS and BGL")
+    anomaly.set_defaults(func=_cmd_anomaly)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")

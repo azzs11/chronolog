@@ -1,0 +1,129 @@
+{
+ "datasets": {
+  "BGL": {
+   "anomalous_units": 579,
+   "base_rate": 0.11816326530612245,
+   "chronolog_h_flagged_line_rate": 0.0053995,
+   "lines": 2000000,
+   "methods": {
+    "always_anomalous": {
+     "episodes": 123,
+     "episodes_detected": 123,
+     "f1": 0.21135243657601752,
+     "fn": 0,
+     "fp": 4321,
+     "median_delay_s": 0.0,
+     "precision": 0.11816326530612245,
+     "recall": 1.0,
+     "tp": 579
+    },
+    "chronolog_h": {
+     "episodes": 123,
+     "episodes_detected": 75,
+     "f1": 0.19089316987740804,
+     "fn": 470,
+     "fp": 454,
+     "median_delay_s": 0.0,
+     "precision": 0.1936056838365897,
+     "recall": 0.18825561312607944,
+     "tp": 109
+    },
+    "random_same_budget": {
+     "episodes": 123.0,
+     "episodes_detected": 59.4,
+     "f1": 0.37475111927095,
+     "fn": 133.2,
+     "fp": 1354.2,
+     "median_delay_s": 2.6,
+     "precision": 0.24764908063528077,
+     "recall": 0.7699481865284974,
+     "tp": 445.8
+    },
+    "severity_rule": {
+     "episodes": 123,
+     "episodes_detected": 123,
+     "f1": 0.6791788856304986,
+     "fn": 0,
+     "fp": 547,
+     "median_delay_s": 0.0,
+     "precision": 0.5142095914742452,
+     "recall": 1.0,
+     "tp": 579
+    }
+   },
+   "units": 4900
+  },
+  "HDFS": {
+   "anomalous_units": 5350,
+   "base_rate": 0.049515488629948076,
+   "chronolog_h_flagged_line_rate": 0.0003255,
+   "lines": 2000000,
+   "methods": {
+    "always_anomalous": {
+     "episodes": 5350,
+     "episodes_detected": 5350,
+     "f1": 0.09435875728634796,
+     "fn": 0,
+     "fp": 102697,
+     "median_delay_s": 0.0,
+     "precision": 0.049515488629948076,
+     "recall": 1.0,
+     "tp": 5350
+    },
+    "chronolog_h": {
+     "episodes": 5350,
+     "episodes_detected": 45,
+     "f1": 0.015050167224080266,
+     "fn": 5305,
+     "fp": 585,
+     "median_delay_s": 0.0,
+     "precision": 0.07142857142857142,
+     "recall": 0.008411214953271028,
+     "tp": 45
+    },
+    "random_same_budget": {
+     "episodes": 5350.0,
+     "episodes_detected": 19.6,
+     "f1": 0.006542783371635488,
+     "fn": 5330.4,
+     "fp": 621.6,
+     "median_delay_s": 0.0,
+     "precision": 0.030570689059438928,
+     "recall": 0.003663551401869159,
+     "tp": 19.6
+    },
+    "severity_rule": {
+     "episodes": 5350,
+     "episodes_detected": 0,
+     "f1": 0.0,
+     "fn": 5350,
+     "fp": 0,
+     "median_delay_s": null,
+     "precision": 0.0,
+     "recall": 0.0,
+     "tp": 0
+    }
+   },
+   "units": 108047
+  }
+ },
+ "setup": {
+  "bgl_window_s": 60,
+  "code_fingerprint": "fd7aee3af66af012",
+  "dataset": "Loghub HDFS_v1 and BGL (Zenodo record 8196385)",
+  "methods": [
+   "always_anomalous",
+   "random_same_budget",
+   "severity_rule",
+   "chronolog_h"
+  ],
+  "prefix_lines": 2000000,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ }
+}

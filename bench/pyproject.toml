@@ -36,3 +36,5 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.ruff.lint.per-file-ignores]
 # Long prose strings in the report template.
 "src/chronobench/report.py" = ["E501"]
+"src/chronobench/anomaly_report.py" = ["E501"]
+"tests/test_anomaly_eval.py" = ["E501"]
