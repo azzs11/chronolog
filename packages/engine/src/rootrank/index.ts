@@ -9,3 +9,4 @@ export type { CauseEvidence, NovelTemplate, RankedCause, RankResult, RcaLine } f
 export { ROOTRANK_V1 } from './modelV1';
 export { learnServiceGraph, MIN_CORRELATION, MIN_MENTIONS, type LearnedGraph } from './learnedGraph';
 export { confidenceWord, evidenceSentences, formatDelay } from './explain';
+export { TemplateStream, type AddResult, type StreamLine, type TemplateGroup } from './templateStream';

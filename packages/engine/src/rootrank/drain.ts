@@ -63,6 +63,11 @@ export class Drain {
     return match.id;
   }
 
+  /** The current template text of one cluster (it generalises as more messages arrive). */
+  templateOf(id: number): string | undefined {
+    return this.clusters.get(id)?.template();
+  }
+
   /** Final template text per cluster id. */
   templates(): Map<number, string> {
     return new Map([...this.clusters.values()].map((c) => [c.id, c.template()]));
