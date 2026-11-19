@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .metrics import BOOTSTRAP_RESAMPLES, BOOTSTRAP_SEED, KS
+from .metrics import KS, cluster_bootstrap, group_of, paired_difference_ci
 
 BASELINES = ("random", "first_error", "most_frequent_error", "chronolog_h")
 LABELS = {
@@ -21,24 +21,19 @@ def _hits(ranks: list[int | None], k: int) -> np.ndarray:
     return np.array([r is not None and r <= k for r in ranks], dtype=float)
 
 
-def _interval(per_case: np.ndarray) -> tuple[float, float]:
-    rng = np.random.default_rng(BOOTSTRAP_SEED)
-    means = [rng.choice(per_case, len(per_case)).mean() for _ in range(BOOTSTRAP_RESAMPLES)]
-    return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
-
-
-def rootrank_row(ranks_by_seed: dict[str, list[int | None]]) -> dict[str, str]:
-    """Mean over seeds, the spread over seeds, and a bootstrap interval over cases."""
+def rootrank_row(ranks_by_seed: dict[str, list[int | None]], groups: list[str]) -> dict[str, str]:
+    """Mean over seeds, the spread over seeds, and a cluster bootstrap interval."""
     row = {}
     for k in KS:
         per_seed = np.array([_hits(r, k) for r in ranks_by_seed.values()])
         seeds_mean = per_seed.mean(axis=1)
-        low, high = _interval(per_seed.mean(axis=0))
+        low, high = cluster_bootstrap(per_seed.mean(axis=0), groups)
         row[f"AC@{k}"] = f"{100 * seeds_mean.mean():.1f}% ± {100 * seeds_mean.std():.1f} ({100 * low:.0f}-{100 * high:.0f})"
     return row
 
 
 def baseline_row(cases: list[dict], method: str) -> dict[str, str]:
+    groups = [group_of(c["case_id"]) for c in cases]
     row = {}
     for k in KS:
         if method == "random":
@@ -46,9 +41,21 @@ def baseline_row(cases: list[dict], method: str) -> dict[str, str]:
             row[f"AC@{k}"] = f"{100 * np.mean(per_seed):.1f}% ± {100 * np.std(per_seed):.1f}"
             continue
         hits = _hits([c["methods"][method]["rank"] for c in cases], k)
-        low, high = _interval(hits)
+        low, high = cluster_bootstrap(hits, groups)
         row[f"AC@{k}"] = f"{100 * hits.mean():.1f}% ({100 * low:.0f}-{100 * high:.0f})"
     return row
+
+
+def difference_table(cases: list[dict], ranks_by_seed: dict[str, list[int | None]], groups: list[str]) -> str:
+    """AC@3 of RootRank minus each baseline, with a paired cluster-bootstrap interval."""
+    rootrank = np.array([_hits(r, 3) for r in ranks_by_seed.values()]).mean(axis=0)
+    rows = ["| RootRank minus | AC@3 difference | 95% interval |", "|---|---|---|"]
+    for method in ("first_error", "most_frequent_error", "chronolog_h"):
+        other = _hits([c["methods"][method]["rank"] for c in cases], 3)
+        low, high = paired_difference_ci(rootrank, other, groups)
+        diff = rootrank.mean() - other.mean()
+        rows.append(f"| {LABELS[method]} | {100 * diff:+.1f} pts | {100 * low:+.1f} to {100 * high:+.1f} |")
+    return "\n".join(rows)
 
 
 def _table(rows: dict[str, dict[str, str]]) -> str:
@@ -72,15 +79,20 @@ def render_rootrank_report(result: dict, rcaeval: dict) -> str:
         "On the train split this measured AC@3 0.70 with case-id folds against 0.48 with whole services held out. "
         "The headline therefore holds out whole (system, root service) groups.",
         "- **Numbers:** RootRank is mean ± standard deviation over 5 seeds, with a 95% bootstrap interval "
-        "over cases in brackets. Other methods are deterministic. Cases whose root service writes no logs "
+        "in brackets that resamples whole (system, root service) groups. Other methods are deterministic. Cases whose root service writes no logs "
         "count as misses for every method.\n",
     ]
     for kind, title in VARIANTS.items():
         ids = result[kind]["case_ids"]
         cases = [by_id[i] for i in ids]
         rows = {m: baseline_row(cases, m) for m in BASELINES}
-        rows["rootrank"] = rootrank_row({s: r for s, r in result[kind]["ranks_by_seed"].items()})
+        groups = [group_of(i) for i in ids]
+        rows["rootrank"] = rootrank_row(result[kind]["ranks_by_seed"], groups)
         parts += [f"## {title}: {len(ids)} cases\n", _table(rows) + "\n"]
+        parts += [
+            "Paired difference on the same cases (an interval that excludes 0 means RootRank is better):\n",
+            difference_table(cases, result[kind]["ranks_by_seed"], groups) + "\n",
+        ]
     top = sorted(result["importance"].items(), key=lambda kv: -kv[1])[:8]
     parts += ["## Most used features (share of split gain, frozen-split models)\n"]
     parts += [f"- `{name}`: {100 * share:.1f}%" for name, share in top]

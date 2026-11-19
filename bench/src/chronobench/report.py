@@ -4,7 +4,7 @@ import statistics
 from collections import defaultdict
 
 from .cases import SYSTEMS
-from .metrics import AVG_K, KS, bootstrap_ci, summarise
+from .metrics import AVG_K, KS, bootstrap_ci, group_of, summarise
 
 LABELS = {
     "random": "Random (5 seeds)",
@@ -45,7 +45,8 @@ def _row(cases: list[dict], method: str, seeds: list[int]) -> list[str]:
     for key in METRIC_COLUMNS:
         text = pct(summary[key])
         if key.startswith("ac@"):
-            low, high = bootstrap_ci(ranks, int(key[3:]))
+            groups = [group_of(c["case_id"]) for c in cases]
+            low, high = bootstrap_ci(ranks, int(key[3:]), groups=groups)
             text += f" ({low * 100:.0f}–{high * 100:.0f})"
         cells.append(text)
     return cells
@@ -157,7 +158,7 @@ def render_report(results: dict) -> str:
         f"- **Code:** log adapter v{meta['adapter_version']}, code fingerprint `{meta['code_fingerprint']}`. "
         "A different fingerprint means the rules changed and these numbers are not comparable.",
         "- **Random:** mean ± standard deviation over "
-        f"{len(seeds)} seeds. Other methods are deterministic; the bracket is a 95% bootstrap interval over cases.",
+        f"{len(seeds)} seeds. Other methods are deterministic; the bracket is a 95% bootstrap interval that resamples whole (system, root service) groups, because instances of one fault on one service are near-copies.",
         "",
         f"## All {len(cases)} cases",
         "",

@@ -7,17 +7,17 @@ How often does each method name the true root-cause service in its top 1, 3 and 
 - **Data:** [phamquiluan/RCAEval](https://huggingface.co/datasets/phamquiluan/RCAEval) (MIT), revision `afeacb11bcc9`, subset `small`: 40 cases (13 test, 27 train), logs only.
 - **Reachable cases:** 39 of 40. In the others the faulty service writes no logs, so no log-based method can name it. They stay in the tables as misses (⚠ below).
 - **Code:** log adapter v1, code fingerprint `fcbd0cfe572400d9`. A different fingerprint means the rules changed and these numbers are not comparable.
-- **Random:** mean ± standard deviation over 5 seeds. Other methods are deterministic; the bracket is a 95% bootstrap interval over cases.
+- **Random:** mean ± standard deviation over 5 seeds. Other methods are deterministic; the bracket is a 95% bootstrap interval that resamples whole (system, root service) groups, because instances of one fault on one service are near-copies.
 
 ## All 40 cases
 
 | Method | AC@1 | AC@3 | AC@5 | Avg@5 | MRR |
 |---|---|---|---|---|---|
 | Random (5 seeds) | 2.5% ± 1.6 | 12.5% ± 7.7 | 27.5% ± 4.2 | 14.1% ± 4.5 | 16.7% ± 1.5 |
-| First error | 7.5% (0–15) | 37.5% (22–52) | 57.5% (42–72) | 36.5% | 29.7% |
-| Most frequent error | 2.5% (0–8) | 37.5% (22–52) | 57.5% (42–72) | 35.0% | 26.5% |
-| Most logs (diagnostic) | 12.5% (2–25) | 25.0% (12–40) | 50.0% (35–65) | 29.5% | 29.6% |
-| **ChronoLog-H** (current rules) | 7.5% (0–15) | 32.5% (20–48) | 57.5% (42–72) | 33.0% | 28.1% |
+| First error | 7.5% (0–19) | 37.5% (18–56) | 57.5% (35–77) | 36.5% | 29.7% |
+| Most frequent error | 2.5% (0–8) | 37.5% (19–56) | 57.5% (35–77) | 35.0% | 26.5% |
+| Most logs (diagnostic) | 12.5% (0–28) | 25.0% (8–42) | 50.0% (30–71) | 29.5% | 29.6% |
+| **ChronoLog-H** (current rules) | 7.5% (0–17) | 32.5% (17–50) | 57.5% (33–79) | 33.0% | 28.1% |
 
 ## Held-out test cases only (n=13)
 
@@ -26,10 +26,10 @@ The frozen split (`sha256(case_id) % 100 < 30`). No method here was tuned on any
 | Method | AC@1 | AC@3 | AC@5 | Avg@5 | MRR |
 |---|---|---|---|---|---|
 | Random (5 seeds) | 1.5% ± 3.1 | 15.4% ± 6.9 | 33.8% ± 6.2 | 17.5% ± 5.1 | 18.4% ± 2.4 |
-| First error | 15.4% (0–38) | 61.5% (38–85) | 69.2% (46–92) | 52.3% | 41.9% |
-| Most frequent error | 7.7% (0–23) | 53.8% (31–77) | 69.2% (46–92) | 46.2% | 34.9% |
-| Most logs (diagnostic) | 15.4% (0–38) | 30.8% (8–62) | 46.2% (23–69) | 29.2% | 32.6% |
-| **ChronoLog-H** (current rules) | 0.0% (0–0) | 30.8% (8–54) | 53.8% (23–77) | 29.2% | 25.2% |
+| First error | 15.4% (0–46) | 61.5% (33–92) | 69.2% (36–93) | 52.3% | 41.9% |
+| Most frequent error | 7.7% (0–23) | 53.8% (29–80) | 69.2% (36–93) | 46.2% | 34.9% |
+| Most logs (diagnostic) | 15.4% (0–36) | 30.8% (8–54) | 46.2% (18–73) | 29.2% | 32.6% |
+| **ChronoLog-H** (current rules) | 0.0% (0–0) | 30.8% (8–54) | 53.8% (20–85) | 29.2% | 25.2% |
 
 ## AC@3 by system
 

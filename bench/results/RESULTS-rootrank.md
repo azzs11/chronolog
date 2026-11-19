@@ -6,37 +6,61 @@ Does a learned ranker beat the hand-written rules (ChronoLog-H) and the trivial 
 
 - **Data:** all 359 RCAEval RE2/RE3 cases, logs only. Features come from logs alone (see `features.py`); `23` features, LightGBM lambdarank, 25 rounds (chosen on the train split only).
 - **Why three evaluations:** RCAEval has several instances of the same fault on the same service. Splitting by case id puts those siblings on both sides, which lets a model recognise the service. On the train split this measured AC@3 0.70 with case-id folds against 0.48 with whole services held out. The headline therefore holds out whole (system, root service) groups.
-- **Numbers:** RootRank is mean ± standard deviation over 5 seeds, with a 95% bootstrap interval over cases in brackets. Other methods are deterministic. Cases whose root service writes no logs count as misses for every method.
+- **Numbers:** RootRank is mean ± standard deviation over 5 seeds, with a 95% bootstrap interval in brackets that resamples whole (system, root service) groups. Other methods are deterministic. Cases whose root service writes no logs count as misses for every method.
 
 ## Unseen root service (headline): 359 cases
 
 | Method | AC@1 | AC@3 | AC@5 |
 |---|---|---|---|
 | Random (5 seeds) | 2.4% ± 1.6 | 10.7% ± 4.8 | 26.7% ± 4.3 |
-| First error | 7.2% (5-10) | 28.1% (23-33) | 48.2% (43-53) |
-| Most frequent error | 2.8% (1-5) | 25.3% (21-30) | 47.9% (43-53) |
-| ChronoLog-H (hand rules) | 7.8% (5-11) | 26.5% (22-31) | 47.6% (42-53) |
-| **RootRank** (LightGBM lambdarank) | 37.2% ± 1.7 (32-41) | 52.6% ± 1.9 (48-57) | 67.7% ± 1.4 (64-72) |
+| First error | 7.2% (2-16) | 28.1% (16-41) | 48.2% (29-67) |
+| Most frequent error | 2.8% (1-6) | 25.3% (14-39) | 47.9% (29-67) |
+| ChronoLog-H (hand rules) | 7.8% (3-14) | 26.5% (14-40) | 47.6% (28-68) |
+| **RootRank** (LightGBM lambdarank) | 37.2% ± 1.7 (27-47) | 52.6% ± 1.9 (43-61) | 67.7% ± 1.4 (58-76) |
+
+Paired difference on the same cases (an interval that excludes 0 means RootRank is better):
+
+| RootRank minus | AC@3 difference | 95% interval |
+|---|---|---|
+| First error | +24.5 pts | +10.6 to +36.6 |
+| Most frequent error | +27.3 pts | +13.6 to +38.7 |
+| ChronoLog-H (hand rules) | +26.2 pts | +10.5 to +40.3 |
 
 ## Unseen system (leave one system out): 359 cases
 
 | Method | AC@1 | AC@3 | AC@5 |
 |---|---|---|---|
 | Random (5 seeds) | 2.4% ± 1.6 | 10.7% ± 4.8 | 26.7% ± 4.3 |
-| First error | 7.2% (5-10) | 28.1% (23-33) | 48.2% (43-53) |
-| Most frequent error | 2.8% (1-5) | 25.3% (21-30) | 47.9% (43-53) |
-| ChronoLog-H (hand rules) | 7.8% (5-11) | 26.5% (22-31) | 47.6% (42-53) |
-| **RootRank** (LightGBM lambdarank) | 38.2% ± 1.6 (33-43) | 53.5% ± 1.3 (48-58) | 64.9% ± 1.0 (60-69) |
+| First error | 7.2% (2-16) | 28.1% (16-41) | 48.2% (29-67) |
+| Most frequent error | 2.8% (1-6) | 25.3% (14-39) | 47.9% (29-67) |
+| ChronoLog-H (hand rules) | 7.8% (3-14) | 26.5% (14-40) | 47.6% (28-68) |
+| **RootRank** (LightGBM lambdarank) | 38.2% ± 1.6 (25-50) | 53.5% ± 1.3 (39-67) | 64.9% ± 1.0 (53-76) |
+
+Paired difference on the same cases (an interval that excludes 0 means RootRank is better):
+
+| RootRank minus | AC@3 difference | 95% interval |
+|---|---|---|
+| First error | +25.4 pts | +11.5 to +37.1 |
+| Most frequent error | +28.2 pts | +13.4 to +39.8 |
+| ChronoLog-H (hand rules) | +27.1 pts | +6.9 to +45.6 |
 
 ## Frozen test split (siblings may be in train: optimistic): 131 cases
 
 | Method | AC@1 | AC@3 | AC@5 |
 |---|---|---|---|
 | Random (5 seeds) | 1.7% ± 0.9 | 9.9% ± 4.7 | 25.8% ± 3.7 |
-| First error | 6.1% (2-11) | 27.5% (20-35) | 49.6% (40-59) |
-| Most frequent error | 2.3% (0-5) | 22.9% (15-30) | 49.6% (40-59) |
-| ChronoLog-H (hand rules) | 5.3% (2-9) | 29.0% (21-37) | 48.9% (40-57) |
-| **RootRank** (LightGBM lambdarank) | 45.2% ± 1.0 (37-54) | 62.9% ± 0.8 (55-71) | 73.3% ± 1.1 (65-80) |
+| First error | 6.1% (0-17) | 27.5% (13-42) | 49.6% (29-70) |
+| Most frequent error | 2.3% (0-6) | 22.9% (11-39) | 49.6% (29-70) |
+| ChronoLog-H (hand rules) | 5.3% (1-10) | 29.0% (15-43) | 48.9% (26-70) |
+| **RootRank** (LightGBM lambdarank) | 45.2% ± 1.0 (30-59) | 62.9% ± 0.8 (50-75) | 73.3% ± 1.1 (59-86) |
+
+Paired difference on the same cases (an interval that excludes 0 means RootRank is better):
+
+| RootRank minus | AC@3 difference | 95% interval |
+|---|---|---|
+| First error | +35.4 pts | +23.8 to +46.5 |
+| Most frequent error | +40.0 pts | +28.2 to +49.2 |
+| ChronoLog-H (hand rules) | +33.9 pts | +18.8 to +50.1 |
 
 ## Most used features (share of split gain, frozen-split models)
 

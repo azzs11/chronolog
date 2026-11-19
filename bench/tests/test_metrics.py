@@ -41,3 +41,35 @@ def test_bootstrap_interval_contains_the_estimate_and_is_reproducible():
     assert low <= ac_at_k(ranks, 3) <= high
     assert (low, high) == bootstrap_ci(ranks, 3)
     assert bootstrap_ci([1, 1, 1, 1], 1) == (1.0, 1.0)
+
+
+def test_cluster_bootstrap_is_wider_than_case_bootstrap_when_groups_are_alike():
+    from chronobench.metrics import bootstrap_ci, group_of
+
+    # 10 groups of 6 near-identical cases: a group is either all hits or all misses
+    ranks = [1] * 30 + [None] * 30
+    ids = [f"re2ob_svc{g}_cpu_{i}" for g in range(10) for i in range(6)]
+    groups = [group_of(i) for i in ids]
+    flat = bootstrap_ci(ranks, 3)
+    clustered = bootstrap_ci(ranks, 3, groups=groups)
+    assert (clustered[1] - clustered[0]) > (flat[1] - flat[0])
+    assert clustered[0] <= 0.5 <= clustered[1]
+
+
+def test_group_of_keys_on_system_and_service():
+    from chronobench.metrics import group_of
+
+    assert group_of("re2tt_ts-order-service_delay_2") == "tt/ts-order-service"
+    assert group_of("re3ob_cartservice_f2_1") == "ob/cartservice"
+
+
+def test_paired_difference_excludes_zero_for_a_consistently_better_method():
+    import numpy as np
+
+    from chronobench.metrics import paired_difference_ci
+
+    groups = [f"g{i // 4}" for i in range(40)]
+    a = np.ones(40)
+    b = np.array([1.0, 0.0, 0.0, 0.0] * 10)  # a always hits, b hits one case in four
+    low, high = paired_difference_ci(a, b, groups)
+    assert 0 < low <= 0.75 <= high
