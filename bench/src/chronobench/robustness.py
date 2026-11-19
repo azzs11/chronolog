@@ -8,6 +8,8 @@ Perturbations (all seeded by case id and seed, so runs repeat exactly):
   drop p   each log line is removed independently with probability p.
   skew s   each service's clock is shifted by a whole number of seconds drawn uniformly from
            -s..+s (timestamps are whole seconds), then lines are re-sorted by time.
+  gap      a burst of lost logs, as in a collector outage: every line in a window of g seconds at a
+           random place is removed, either for all services or for one random service.
 The injection time is unchanged, so skewed lines can cross it.
 """
 
@@ -27,22 +29,40 @@ from .metrics import ac_at_k, hit_ranks
 from .rootrank import CV_FOLDS, SEEDS, fit, fold_of, n_folds, rankings, ranks_for
 from .templates import TemplatedCase, template_case
 
+# name -> (drop probability, skew seconds, gap seconds, gap scope)
 SCENARIOS = {
-    "clean": (0.0, 0),
-    "10% of lines dropped": (0.1, 0),
-    "20% of lines dropped": (0.2, 0),
-    "40% of lines dropped": (0.4, 0),
-    "clock skew of up to 2 s per service": (0.0, 2),
-    "20% dropped and 2 s skew": (0.2, 2),
+    "clean": (0.0, 0, 0, "all"),
+    "10% of lines dropped": (0.1, 0, 0, "all"),
+    "20% of lines dropped": (0.2, 0, 0, "all"),
+    "40% of lines dropped": (0.4, 0, 0, "all"),
+    "clock skew of up to 2 s per service": (0.0, 2, 0, "all"),
+    "20% dropped and 2 s skew": (0.2, 2, 0, "all"),
+    "60 s gap, all services": (0.0, 0, 60, "all"),
+    "120 s gap, one random service": (0.0, 0, 120, "service"),
 }
 
 
-def perturb(frame: pd.DataFrame, drop: float, skew_s: int, key: str) -> pd.DataFrame:
-    """Drop lines and shift service clocks, deterministically for a given key."""
+def perturb(
+    frame: pd.DataFrame,
+    drop: float,
+    skew_s: int,
+    key: str,
+    gap_s: int = 0,
+    gap_scope: str = "all",
+) -> pd.DataFrame:
+    """Drop lines, open a gap and shift service clocks, deterministically for a given key."""
     rng = np.random.default_rng(int(hashlib.sha256(key.encode()).hexdigest()[:8], 16))
     out = frame
     if drop > 0:
         out = out[rng.random(len(out)) >= drop]
+    if gap_s > 0:
+        first, last = int(out["timestamp"].min()), int(out["timestamp"].max())
+        begin = int(rng.integers(first, max(last - gap_s, first) + 1))
+        inside = (out["timestamp"] >= begin) & (out["timestamp"] < begin + gap_s)
+        if gap_scope == "service":
+            services = sorted(out["source"].unique())
+            inside &= out["source"] == services[int(rng.integers(0, len(services)))]
+        out = out[~inside]
     if skew_s > 0:
         services = sorted(frame["source"].unique())
         offsets = dict(zip(services, rng.integers(-skew_s, skew_s + 1, len(services)), strict=True))
@@ -51,10 +71,12 @@ def perturb(frame: pd.DataFrame, drop: float, skew_s: int, key: str) -> pd.DataF
     return out.reset_index(drop=True)
 
 
-def _job(case_id: str, drop: float, skew_s: int, seed: int) -> tuple[pd.DataFrame, int | None]:
+def _job(
+    case_id: str, drop: float, skew_s: int, gap_s: int, gap_scope: str, seed: int
+) -> tuple[pd.DataFrame, int | None]:
     case: Case = parse_case_id(case_id)
     tc = template_case(case)
-    frame = perturb(tc.frame, drop, skew_s, f"{case_id}:{seed}")
+    frame = perturb(tc.frame, drop, skew_s, f"{case_id}:{seed}", gap_s, gap_scope)
     degraded = TemplatedCase(case, tc.inject_time, frame, tc.templates)
     features = case_features(degraded)[FEATURES]
     features.insert(0, "label", (features.index == case.root_service).astype(int))
@@ -66,9 +88,13 @@ def _job(case_id: str, drop: float, skew_s: int, seed: int) -> tuple[pd.DataFram
 
 
 def degraded_tables(
-    case_ids: Sequence[str], drop: float, skew_s: int, seed: int, workers: int
+    case_ids: Sequence[str],
+    scenario: tuple[float, int, int, str],
+    seed: int,
+    workers: int,
 ) -> tuple[pd.DataFrame, dict[str, int | None]]:
-    job = partial(_job, drop=drop, skew_s=skew_s, seed=seed)
+    drop, skew_s, gap_s, gap_scope = scenario
+    job = partial(_job, drop=drop, skew_s=skew_s, gap_s=gap_s, gap_scope=gap_scope, seed=seed)
     with ProcessPoolExecutor(max_workers=workers) as pool:
         results = list(pool.map(job, case_ids, chunksize=8))
     table = pd.concat([r[0] for r in results], ignore_index=True)
@@ -99,13 +125,13 @@ def run_robustness(clean: pd.DataFrame, rounds: int, workers: int) -> dict:
     case_ids = sorted(clean["case_id"].unique())
     models = _fold_models(clean, rounds)
     result: dict = {"rounds": rounds, "cases": len(case_ids), "scenarios": {}}
-    for name, (drop, skew) in SCENARIOS.items():
+    for name, scenario in SCENARIOS.items():
         rr, fe = {}, {}
-        deterministic = drop == 0 and skew == 0  # nothing random: one table serves every seed
+        deterministic = scenario[0] == 0 and scenario[1] == 0 and scenario[2] == 0  # nothing random
         table = first = None
         for seed in SEEDS:
             if table is None or not deterministic:
-                table, first = degraded_tables(case_ids, drop, skew, seed, workers)
+                table, first = degraded_tables(case_ids, scenario, seed, workers)
             # the seed still sets the fold partition and the model, even when the logs are identical
             rr[str(seed)] = _rootrank_ranks(models, table, seed)
             fe[str(seed)] = [first[c] for c in case_ids]

@@ -16,7 +16,11 @@ def render_robustness_report(result: dict) -> str:
         "|---|---|---|---|---|---|",
     ]
     for name, s in scenarios.items():
-        delta = "" if name == "clean" else f"{100 * (summarise(s['rootrank'], 3)[0] - clean_rr):+.1f} pts"
+        delta = (
+            ""
+            if name == "clean"
+            else f"{100 * (summarise(s['rootrank'], 3)[0] - clean_rr):+.1f} pts"
+        )
         rows.append(
             f"| {name} | {_cell(s['rootrank'], 3)} | {delta} | {_cell(s['first_error'], 3)} "
             f"| {_cell(s['rootrank'], 1)} | {_cell(s['rootrank'], 5)} |"
@@ -31,7 +35,11 @@ def render_robustness_report(result: dict) -> str:
             "- **Dropped lines:** each log line is removed independently with the given probability.",
             "- **Clock skew:** each service's clock is shifted by a whole number of seconds drawn uniformly from -2..+2 "
             "(timestamps are whole seconds); lines are then re-sorted by time. The injection time is unchanged.",
-            "- The seed changes which lines drop and which offsets are drawn. Mean ± standard deviation over 5 seeds. "
+            "- **Gaps (bursty loss):** every line in a window of 60 s at a random place is removed for all services, or every "
+            "line of one random service in a window of 120 s (a collector outage; the faulty service itself can go silent). "
+            "The gap falls at a random place, so it often misses the moment that matters; a gap that hides the faulty "
+            "service exactly when it breaks would cost more than these numbers show.",
+            "- The seed changes which lines drop, which offsets are drawn and where a gap falls. Mean ± standard deviation over 5 seeds. "
             "First-error is degraded the same way. ChronoLog-H is not rerun here (each replay takes minutes).\n",
             "## AC@3 under degradation\n",
             "\n".join(rows) + "\n",

@@ -126,8 +126,11 @@ def build_anomaly_results() -> dict:
     return {
         "setup": {
             "dataset": "Loghub HDFS_v1 and BGL (Zenodo record 8196385)",
-            "prefix_lines": PREFIX_LINES, "bgl_window_s": WINDOW_S, "seeds": list(SEEDS),
-            "code_fingerprint": code_fingerprint(runner_files=None), "methods": list(METHODS),
+            "prefix_lines": PREFIX_LINES,
+            "bgl_window_s": WINDOW_S,
+            "seeds": list(SEEDS),
+            "code_fingerprint": code_fingerprint("anomaly"),
+            "methods": list(METHODS),
         },  # fmt: skip
         "datasets": {name: evaluate_dataset(load(name)) for name in ("HDFS", "BGL")},
     }

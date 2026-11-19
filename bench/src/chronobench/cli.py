@@ -14,9 +14,13 @@ from .autostart import run_autostart
 from .autostart_report import render_autostart_report
 from .baselines import complete_ranking
 from .cases import load_subset, parse_case_id, split_of
+from .codefault_check import code_fault_check
 from .download import download_cases
 from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
+from .facts import write_facts
 from .hscores import compute_hscores, load_hscores
+from .playground import render_playground_report, run_playground
+from .replays import export_replays
 from .report import render_report
 from .robustness import run_robustness
 from .robustness_report import render_robustness_report
@@ -25,6 +29,15 @@ from .rootrank_export import export_all
 from .rootrank_report import render_rootrank_report
 from .runner import run_chronolog_h
 from .select import write_subset
+from .servicegraph import (
+    CORR_BUCKET_S,
+    MIN_CORRELATION,
+    MIN_MENTIONS,
+    TRUE_EDGES,
+    learn_graph,
+    pooled_scores,
+)
+from .servicegraph_report import render_servicegraph_report
 from .templates import template_cases
 
 
@@ -130,6 +143,7 @@ def _cmd_ablate(args: argparse.Namespace) -> None:
         table = add_hscore_features(table, scores)
     rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
     result = run_ablation(table, rounds, complete)
+    result["code_fault_check"] = code_fault_check(cases)
     (RESULTS_DIR / "ablation.json").write_text(json.dumps(result, indent=1, sort_keys=True) + "\n")
     rcaeval = json.loads(_results_json("full").read_text())
     (RESULTS_DIR / "RESULTS-ablation.md").write_text(render_ablation_report(result, rcaeval))
@@ -167,6 +181,49 @@ def _cmd_autostart(args: argparse.Namespace) -> None:
     (RESULTS_DIR / "autostart.json").write_text(text)
     (RESULTS_DIR / "RESULTS-autostart.md").write_text(render_autostart_report(result))
     print(f"Autostart done in {time.perf_counter() - started:.0f}s")
+
+
+def _cmd_facts(_args: argparse.Namespace) -> None:
+    facts = write_facts()
+    print("Wrote the web app's benchmark facts:", ", ".join(f"{k}={v}" for k, v in facts.items()))
+
+
+def _cmd_graph(_args: argparse.Namespace) -> None:
+    from .templates import template_case
+
+    cases = [c for c in load_subset("full") if c.system in TRUE_EDGES]
+    per_case = [(c.system, learn_graph(template_case(c))) for c in cases]
+    result = {
+        "scores": pooled_scores(per_case),
+        "min_mentions": MIN_MENTIONS,
+        "min_correlation": MIN_CORRELATION,
+        "bucket_s": CORR_BUCKET_S,
+    }
+    text = json.dumps(result, indent=1, sort_keys=True) + "\n"
+    (RESULTS_DIR / "servicegraph.json").write_text(text)
+    (RESULTS_DIR / "RESULTS-graph.md").write_text(render_servicegraph_report(result))
+    print(f"Scored the learned graph on {len(per_case)} cases")
+
+
+def _cmd_playground(_args: argparse.Namespace) -> None:
+    result = run_playground()
+    text = json.dumps(result, indent=1, sort_keys=True) + "\n"
+    (RESULTS_DIR / "playground.json").write_text(text)
+    (RESULTS_DIR / "RESULTS-playground.md").write_text(render_playground_report(result))
+    print(f"Playground benchmark done: {result['overall']['runs']} simulated incidents")
+
+
+def _cmd_export_replays(args: argparse.Namespace) -> None:
+    cases = load_subset("full")
+    table = feature_table(cases, args.workers)
+    rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
+    revision = json.loads(_results_json("full").read_text())["meta"]["dataset_revision"]
+    done = export_replays(table, cases, rounds, revision)
+    for r in done:
+        print(
+            f"{r['caseId']}: truth={r['truth']} rank(start given)={r['rankGiven']} "
+            f"rank(estimated)={r['rankEstimated']} of {r['services']}"
+        )
 
 
 def _cmd_replay(args: argparse.Namespace) -> None:
@@ -235,6 +292,19 @@ def main() -> None:
     autostart = sub.add_parser("autostart", help="RootRank with an estimated incident start")
     autostart.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     autostart.set_defaults(func=_cmd_autostart)
+
+    facts = sub.add_parser("export-facts", help="write the benchmark numbers the web app shows")
+    facts.set_defaults(func=_cmd_facts)
+
+    graph = sub.add_parser("graph", help="score the learned service graph vs the real one")
+    graph.set_defaults(func=_cmd_graph)
+
+    playground = sub.add_parser("playground", help="RootRank on the playground's simulated faults")
+    playground.set_defaults(func=_cmd_playground)
+
+    export_r = sub.add_parser("export-replays", help="precompute the playground's replays")
+    export_r.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    export_r.set_defaults(func=_cmd_export_replays)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")

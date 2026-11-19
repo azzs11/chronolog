@@ -28,7 +28,9 @@ def rootrank_row(ranks_by_seed: dict[str, list[int | None]], groups: list[str]) 
         per_seed = np.array([_hits(r, k) for r in ranks_by_seed.values()])
         seeds_mean = per_seed.mean(axis=1)
         low, high = cluster_bootstrap(per_seed.mean(axis=0), groups)
-        row[f"AC@{k}"] = f"{100 * seeds_mean.mean():.1f}% ± {100 * seeds_mean.std():.1f} ({100 * low:.0f}-{100 * high:.0f})"
+        row[f"AC@{k}"] = (
+            f"{100 * seeds_mean.mean():.1f}% ± {100 * seeds_mean.std():.1f} ({100 * low:.0f}-{100 * high:.0f})"
+        )
     return row
 
 
@@ -46,7 +48,9 @@ def baseline_row(cases: list[dict], method: str) -> dict[str, str]:
     return row
 
 
-def difference_table(cases: list[dict], ranks_by_seed: dict[str, list[int | None]], groups: list[str]) -> str:
+def difference_table(
+    cases: list[dict], ranks_by_seed: dict[str, list[int | None]], groups: list[str]
+) -> str:
     """AC@3 of RootRank minus each baseline, with a paired cluster-bootstrap interval."""
     rootrank = np.array([_hits(r, 3) for r in ranks_by_seed.values()]).mean(axis=0)
     rows = ["| RootRank minus | AC@3 difference | 95% interval |", "|---|---|---|"]
@@ -54,7 +58,9 @@ def difference_table(cases: list[dict], ranks_by_seed: dict[str, list[int | None
         other = _hits([c["methods"][method]["rank"] for c in cases], 3)
         low, high = paired_difference_ci(rootrank, other, groups)
         diff = rootrank.mean() - other.mean()
-        rows.append(f"| {LABELS[method]} | {100 * diff:+.1f} pts | {100 * low:+.1f} to {100 * high:+.1f} |")
+        rows.append(
+            f"| {LABELS[method]} | {100 * diff:+.1f} pts | {100 * low:+.1f} to {100 * high:+.1f} |"
+        )
     return "\n".join(rows)
 
 

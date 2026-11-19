@@ -75,25 +75,31 @@ def evaluate_cases(cases: list[Case], workers: int = DEFAULT_WORKERS) -> list[di
         return list(pool.map(_evaluate_by_id, cases))
 
 
-RCA_RUNNER_FILES = ("ranker.ts", "replay.ts")
+# Each fingerprint hashes exactly the files that define a method's output, listed by name, so an
+# unrelated edit (a new export, a new feature in the engine) cannot invalidate published results.
+ENGINE_SRC = REPO_ROOT / "packages" / "engine" / "src"
+RUNNER_SRC = REPO_ROOT / "bench" / "runner" / "src"
+FINGERPRINT_FILES = {
+    "rca": [
+        *(ENGINE_SRC / n for n in (
+            "causalEngine.ts", "constants.ts", "entities.ts", "scoring.ts",
+            "serviceGraph.ts", "sha256.ts", "types.ts",
+        )),
+        *(RUNNER_SRC / n for n in ("ranker.ts", "replay.ts")),
+        Path(__file__).with_name("adapt.py"),
+    ],
+    "anomaly": [
+        *(ENGINE_SRC / n for n in ("anomalyDetector.ts", "constants.ts", "sha256.ts", "types.ts")),
+        *(RUNNER_SRC / n for n in ("anomaly.ts", "anomaly-replay.ts")),
+        Path(__file__).with_name("loghub.py"),
+    ],
+}  # fmt: skip
 
 
-def code_fingerprint(runner_files: tuple[str, ...] | None = RCA_RUNNER_FILES) -> str:
-    """Hash of the code that defines a method's output, so results name the rules they used.
-
-    The RCA results depend only on the engine, the RCA runner files and the log adapter. Pass
-    ``runner_files=None`` to include every runner file (the anomaly benchmark does).
-    """
-    runner_dir = REPO_ROOT / "bench" / "runner" / "src"
-    runner = sorted(runner_dir.glob("*.ts")) if runner_files is None else [
-        runner_dir / name for name in runner_files
-    ]
-    files = sorted(
-        [*(REPO_ROOT / "packages" / "engine" / "src").glob("*.ts"), *runner,
-         Path(__file__).with_name("adapt.py")]
-    )  # fmt: skip
+def code_fingerprint(kind: str = "rca") -> str:
+    """Hash of the code that defines a method's output, so results name the rules they used."""
     digest = hashlib.sha256()
-    for path in files:
+    for path in sorted(FINGERPRINT_FILES[kind]):
         digest.update(path.name.encode())
         digest.update(path.read_bytes())
     return digest.hexdigest()[:16]

@@ -15,7 +15,10 @@ def _pct(mean: float, std: float) -> str:
 
 def _ablation_table(variants: dict) -> str:
     full = variants["all features"]["ac3"]
-    rows = ["| Variant | Features | AC@1 | AC@3 | AC@5 | AC@3 vs all features |", "|---|---|---|---|---|---|"]
+    rows = [
+        "| Variant | Features | AC@1 | AC@3 | AC@5 | AC@3 vs all features |",
+        "|---|---|---|---|---|---|",
+    ]
     for name, v in variants.items():
         delta = "" if name == "all features" else f"{100 * (v['ac3'] - full):+.1f} pts"
         rows.append(
@@ -36,19 +39,50 @@ def fault_kind(case: dict) -> str:
 
 def _breakdown(result: dict, cases: dict, key, order: list[str]) -> str:
     ids = result["case_ids"]
-    per_seed = np.array([_hits(r, 3) for r in result["variants"]["all features"]["ranks_by_seed"].values()])
+    per_seed = np.array(
+        [_hits(r, 3) for r in result["variants"]["all features"]["ranks_by_seed"].values()]
+    )
     rootrank = per_seed.mean(axis=0)
-    first = np.array([cases[i]["methods"]["first_error"]["rank"] is not None
-                      and cases[i]["methods"]["first_error"]["rank"] <= 3 for i in ids], dtype=float)
-    hand = np.array([cases[i]["methods"]["chronolog_h"]["rank"] is not None
-                     and cases[i]["methods"]["chronolog_h"]["rank"] <= 3 for i in ids], dtype=float)
+    first = np.array(
+        [
+            cases[i]["methods"]["first_error"]["rank"] is not None
+            and cases[i]["methods"]["first_error"]["rank"] <= 3
+            for i in ids
+        ],
+        dtype=float,
+    )
+    hand = np.array(
+        [
+            cases[i]["methods"]["chronolog_h"]["rank"] is not None
+            and cases[i]["methods"]["chronolog_h"]["rank"] <= 3
+            for i in ids
+        ],
+        dtype=float,
+    )
     groups = np.array([key(cases[i]) for i in ids])
     rows = ["| Group | Cases | First error | ChronoLog-H | RootRank |", "|---|---|---|---|---|"]
     for g in order:
         m = groups == g
         if m.any():
-            rows.append(f"| {g} | {int(m.sum())} | {100 * first[m].mean():.1f}% | {100 * hand[m].mean():.1f}% | {100 * rootrank[m].mean():.1f}% |")
+            rows.append(
+                f"| {g} | {int(m.sum())} | {100 * first[m].mean():.1f}% | {100 * hand[m].mean():.1f}% | {100 * rootrank[m].mean():.1f}% |"
+            )
     return "\n".join(rows)
+
+
+def _code_fault_note(check: dict | None) -> str:
+    text = "RootRank solves the Train Ticket code faults perfectly. "
+    if check is None:
+        return text + "\n"
+    return (
+        text
+        + f"The reason, measured: in {check['restart_like']} of {check['cases']} code-fault cases the faulty service "
+        "logs shutdown or startup lines it never logged before, so these faults were injected by restarting or "
+        f"redeploying the service. The faulty service logs a median of {check['median_novel_root']:.0f} new messages "
+        f"during the incident, against {check['median_novel_other']:.1f} for each other service. RootRank is detecting a "
+        "restart, which is a real signal in production too but an artifact of how this benchmark injects these faults. "
+        "Resource faults leave far fewer traces in logs, so that row is the harder and more honest number.\n"
+    )
 
 
 def render_ablation_report(result: dict, rcaeval: dict) -> str:
@@ -66,9 +100,7 @@ def render_ablation_report(result: dict, rcaeval: dict) -> str:
         "## Ablation: AC@3 with feature groups removed or kept alone\n",
         _ablation_table(variants) + "\n",
         "## AC@3 by fault kind\n",
-        "RootRank solves the Train Ticket code faults perfectly. The likely reason (not verified) is that a code fault "
-        "runs changed code, which logs messages the service never logged before, and the novel-template features see that at once. "
-        "Resource faults leave far fewer traces in logs, and this is the harder and more honest number.\n",
+        _code_fault_note(result.get("code_fault_check")),
         _breakdown(result, cases, fault_kind, ["code fault (f1-f5)", "resource fault"]) + "\n",
         "## AC@3 by system\n",
         _breakdown(result, cases, lambda c: c["system"], ["ob", "ss", "tt"]) + "\n",

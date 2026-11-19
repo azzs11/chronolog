@@ -42,3 +42,15 @@ def test_summarise_reports_mean_and_spread_over_seeds():
     ranks = {"0": [1, 5, None], "1": [1, 2, 9]}
     mean, std = summarise(ranks, 3)
     assert abs(mean - (1 / 3 + 2 / 3) / 2) < 1e-9 and std > 0
+
+
+def test_a_gap_removes_a_contiguous_window_for_everyone_or_for_one_service():
+    frame = _frame()
+    everyone = perturb(frame, 0.0, 0, "case:1", gap_s=300, gap_scope="all")
+    removed = set(frame["timestamp"]) - set(everyone["timestamp"])
+    assert len(frame) - len(everyone) > 0
+    assert max(removed) - min(removed) <= 300  # one contiguous window
+    one = perturb(frame, 0.0, 0, "case:1", gap_s=300, gap_scope="service")
+    lost = frame.groupby("source").size() - one.groupby("source").size()
+    assert (lost > 0).sum() == 1  # only one service lost lines
+    assert perturb(frame, 0.0, 0, "case:1", gap_s=300).equals(everyone)  # repeatable

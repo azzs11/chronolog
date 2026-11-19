@@ -17,7 +17,10 @@ def _delay(x: float | None) -> str:
 
 
 def _table(result: dict) -> str:
-    rows = ["| Method | Precision | Recall | F1 | Episodes detected | Median delay |", "|---|---|---|---|---|---|"]
+    rows = [
+        "| Method | Precision | Recall | F1 | Episodes detected | Median delay |",
+        "|---|---|---|---|---|---|",
+    ]
     for key, label in LABELS.items():
         m = result["methods"][key]
         found = f"{m['episodes_detected']:.0f} of {m['episodes']:.0f}"
