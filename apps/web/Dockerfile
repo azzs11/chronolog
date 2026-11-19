@@ -5,6 +5,7 @@ COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/
 RUN npm ci -w chronolog-web --include-workspace-root=false
 COPY apps/web apps/web
+COPY packages/engine/src packages/engine/src
 ARG VITE_API_URL
 ARG VITE_WS_URL
 WORKDIR /repo/apps/web

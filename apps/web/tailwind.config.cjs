@@ -19,9 +19,9 @@ module.exports = {
         'border-dim':     '#d4c9ba',
       },
       fontFamily: {
-        sans:    ['Inter', 'system-ui', 'sans-serif'],
-        mono:    ['"JetBrains Mono"', 'Menlo', 'monospace'],
-        display: ['Fraunces', 'Georgia', 'serif'],
+        sans:    ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+        display: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
       },
       boxShadow: {
         'glow-teal':  '0 4px 16px rgba(13,61,46,0.15)',

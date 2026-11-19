@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   LayoutDashboard, Radio, GitCommit, AlertTriangle,
-  Brain, Settings, ChevronLeft, ChevronRight, Target
+  Brain, Settings, ChevronLeft, ChevronRight, Target, FlaskConical
 } from 'lucide-react';
 
 // Colors for the always-dark sidebar surface
@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { id: 'live-logs',      label: 'Live Logs',      icon: Radio },
   { id: 'causal-graph',   label: 'Causal Graph',   icon: GitCommit,      badge: 'NEW' },
   { id: 'root-cause',     label: 'Root Cause',     icon: Target,         badge: 'NEW' },
+  { id: 'playground',     label: 'Playground',     icon: FlaskConical,   badge: 'NEW' },
   { id: 'anomalies',      label: 'Anomalies',      icon: AlertTriangle },
   { id: 'ml-performance', label: 'ML Performance', icon: Brain },
   { id: 'settings',       label: 'Settings',       icon: Settings },

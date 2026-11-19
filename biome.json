@@ -4,7 +4,7 @@
     "includes": [
       "**",
       "!**/node_modules",
-      "!**/dist",
+      "!**/dist", "!**/dist-demo",
       "!**/.venv",
       "!**/coverage",
       "!apps/ml",

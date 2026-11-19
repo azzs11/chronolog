@@ -44,7 +44,7 @@ describe('RootRankView', () => {
     await waitFor(() => expect(screen.getAllByTestId('candidate')).toHaveLength(5));
     expect(screen.getByText('likely, 0.70')).toBeInTheDocument();
     expect(screen.getByText(/estimated from the biggest change/)).toBeInTheDocument();
-    expect(screen.getByText(/52\.6%/)).toBeInTheDocument();
+    expect(screen.getByText(/45\.0%/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /show all 6 services/i }));
     expect(screen.getAllByTestId('candidate')).toHaveLength(6);
   });
@@ -66,6 +66,18 @@ describe('RootRankView', () => {
     await waitFor(() => expect(axios.post).toHaveBeenCalled());
     const sent = vi.mocked(axios.post).mock.calls[0]?.[1] as { incident_start: number };
     expect(sent.incident_start).toBe(new Date('2026-11-19T10:00').getTime() / 1000);
+  });
+
+  it('injects a test incident with the admin key, ranks it, and says what the answer was', async () => {
+    sessionStorage.setItem('adminKey', 'k');
+    vi.mocked(axios.post)
+      .mockResolvedValueOnce({ data: { data: { truth: { service: 'db', fault: 'disk' }, seed: 1, lines: 9000, incidentStart: '2026-11-19T10:00:00Z' } } })
+      .mockResolvedValueOnce({ data: { data: { ...data, candidates: ['api', 'db', 'cache'].map((s, i) => candidate(s, i + 1, 0.3)) } } });
+    render(<RootRankView />);
+    fireEvent.click(screen.getByRole('button', { name: /inject a test incident/i }));
+    expect(await screen.findByText(/a simulated incident was injected/i)).toHaveTextContent('db had a disk fault. ChronoLog ranked it #2 of 3');
+    expect(vi.mocked(axios.post).mock.calls[0]?.[2]).toEqual({ headers: { 'X-API-Key': 'k' } });
+    sessionStorage.clear();
   });
 
   it("shows the server's own explanation when there is no incident", async () => {

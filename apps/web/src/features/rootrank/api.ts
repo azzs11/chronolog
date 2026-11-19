@@ -58,3 +58,23 @@ export async function rankRootCauses(params: RankParams): Promise<RankData> {
     throw new RankError(message);
   }
 }
+
+export interface InjectedIncident {
+  truth: { service: string; fault: string };
+  seed: number;
+  lines: number;
+  incidentStart: string;
+}
+
+/** Backfill a simulated incident with a known cause (demo helper; needs the admin API key). */
+export async function injectIncident(adminKey: string): Promise<InjectedIncident> {
+  try {
+    const response = await axios.post<{ data: InjectedIncident }>(`${API_URL}/api/rca/incident`, {}, { headers: { 'X-API-Key': adminKey } });
+    return response.data.data;
+  } catch (err) {
+    const message = axios.isAxiosError(err)
+      ? ((err.response?.data as { message?: string } | undefined)?.message ?? err.message)
+      : String(err);
+    throw new RankError(message);
+  }
+}

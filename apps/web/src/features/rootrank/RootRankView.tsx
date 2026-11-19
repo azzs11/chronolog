@@ -1,33 +1,11 @@
 import { useState } from 'react';
-import { type RankData, RankError, rankRootCauses } from './api';
+import { type InjectedIncident, type RankData, RankError, injectIncident, rankRootCauses } from './api';
 import { BENCHMARK } from './benchmarkFacts';
-import { confidenceWord, evidenceSentences, startSourceText } from './format';
+import CandidateCard from './CandidateCard';
+import { startSourceText } from './format';
 
 const WINDOWS = [5, 15, 60] as const;
 const SHOWN_AT_FIRST = 5;
-
-function Candidate({ cause }: { cause: RankData['candidates'][number] }) {
-  const word = confidenceWord(cause.weight);
-  return (
-    <li className="card" data-testid="candidate">
-      <div className="flex items-center gap-3">
-        <span className="text-lg font-bold text-accent-secondary w-6">{cause.rank}</span>
-        <span className="font-mono text-text-primary flex-1">{cause.service}</span>
-        <span className="text-sm text-text-secondary">
-          {word}, {cause.weight.toFixed(2)}
-        </span>
-      </div>
-      <div className="h-1.5 rounded bg-bg-base mt-2" aria-hidden="true">
-        <div className="h-1.5 rounded bg-indigo-500" style={{ width: `${Math.round(cause.weight * 100)}%` }} />
-      </div>
-      <ul className="mt-3 space-y-1 text-sm text-text-secondary list-disc pl-5">
-        {evidenceSentences(cause).map((sentence) => (
-          <li key={sentence}>{sentence}</li>
-        ))}
-      </ul>
-    </li>
-  );
-}
 
 function Result({ data }: { data: RankData }) {
   const [showAll, setShowAll] = useState(false);
@@ -46,7 +24,7 @@ function Result({ data }: { data: RankData }) {
       ))}
       <ol className="space-y-3">
         {shown.map((cause) => (
-          <Candidate key={cause.service} cause={cause} />
+          <CandidateCard key={cause.service} cause={cause} />
         ))}
       </ol>
       {data.candidates.length > SHOWN_AT_FIRST && (
@@ -55,10 +33,12 @@ function Result({ data }: { data: RankData }) {
         </button>
       )}
       <p className="text-xs text-text-muted">
-        How much to trust this: on {BENCHMARK.dataset}, RootRank had the true service in its top 3 for {BENCHMARK.top3AllIncidents} of
-        incidents ({BENCHMARK.top3ResourceFaults} for cpu, memory, disk, delay, loss and socket faults), against{' '}
-        {BENCHMARK.top3HandRules} for ChronoLog&apos;s older rules. The weights compare candidates with each other and are
-        not probabilities. Evidence: {BENCHMARK.evidenceFile}.
+        How much to trust this: on {BENCHMARK.dataset}, RootRank had the true service in its top 3 for{' '}
+        {data.startSource === 'given' ? BENCHMARK.top3TrueStart : BENCHMARK.top3EstimatedStart} of incidents when the start
+        was {data.startSource === 'given' ? 'given' : 'estimated from the logs, as here'} ({BENCHMARK.top3ResourceFaults} for
+        cpu, memory, disk, delay, loss and socket faults with the true start), against {BENCHMARK.top3HandRules} for
+        ChronoLog&apos;s older rules. The weights compare candidates with each other and are not probabilities.
+        Evidence: {BENCHMARK.evidenceFile}.
       </p>
     </div>
   );
@@ -70,6 +50,7 @@ export default function RootRankView() {
   const [data, setData] = useState<RankData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [injected, setInjected] = useState<InjectedIncident | null>(null);
 
   const run = async () => {
     setIsLoading(true);
@@ -77,6 +58,23 @@ export default function RootRankView() {
     try {
       const incidentStart = startText ? new Date(startText).getTime() / 1000 : undefined;
       setData(await rankRootCauses({ lookbackMinutes: lookback, incidentStart }));
+    } catch (err) {
+      setData(null);
+      setError(err instanceof RankError ? err.message : 'Could not reach the server.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const tryTestIncident = async () => {
+    const key = sessionStorage.getItem('adminKey') || window.prompt('Enter the admin API key:');
+    if (!key) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const incident = await injectIncident(key);
+      setInjected(incident);
+      setData(await rankRootCauses({ lookbackMinutes: WINDOWS[1] }));
     } catch (err) {
       setData(null);
       setError(err instanceof RankError ? err.message : 'Could not reach the server.');
@@ -121,6 +119,9 @@ export default function RootRankView() {
         <button type="button" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50" onClick={run} disabled={isLoading}>
           {isLoading ? 'Ranking…' : 'Rank root causes'}
         </button>
+        <button type="button" className="rounded border border-border-dim px-4 py-2 text-sm text-text-primary disabled:opacity-50" onClick={tryTestIncident} disabled={isLoading}>
+          Inject a test incident
+        </button>
       </div>
       {error && (
         <p className="text-sm text-amber-400" role="alert">
@@ -130,6 +131,12 @@ export default function RootRankView() {
       {!data && !error && !isLoading && (
         <p className="text-sm text-text-muted">
           Nothing ranked yet. Start the log generator or send logs, wait for some errors, then rank.
+        </p>
+      )}
+      {injected && data && (
+        <p className="text-sm text-text-secondary" role="status">
+          A simulated incident was injected: <span className="font-mono">{injected.truth.service}</span> had a {injected.truth.fault} fault. ChronoLog
+          ranked it #{data.candidates.findIndex((c) => c.service === injected.truth.service) + 1} of {data.candidates.length}.
         </p>
       )}
       {data && <Result data={data} />}

@@ -8,6 +8,7 @@ import CausalGraph from './components/CausalGraph';
 import AnomalyTimeline from './components/AnomalyTimeline';
 import MLChartsPanel from './components/MLChartsPanel';
 import RootRankView from './features/rootrank/RootRankView';
+import PlaygroundPage from './features/playground/PlaygroundPage';
 import ToastContainer from './components/Toast';
 import Onboarding from './components/Onboarding';
 import socketService from './services/socketService';
@@ -329,6 +330,8 @@ function App() {
           )}
 
           {activeView === 'root-cause' && <RootRankView />}
+
+          {activeView === 'playground' && <PlaygroundPage />}
 
           {activeView === 'anomalies' && (
             <div className="space-y-4">
