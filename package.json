@@ -5,14 +5,16 @@
     "packages/*",
     "apps/api",
     "apps/web",
-    "bench/runner"
+    "bench/runner",
+    "apps/cli"
   ],
   "scripts": {
-    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web && npm run build -w @chronolog/bench-runner",
-    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web && npm run typecheck -w @chronolog/bench-runner",
-    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web && npm test -w @chronolog/bench-runner",
+    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web && npm run build -w @chronolog/bench-runner && npm run build -w chronolog-cli",
+    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web && npm run typecheck -w @chronolog/bench-runner && npm run typecheck -w chronolog-cli",
+    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web && npm test -w @chronolog/bench-runner && npm test -w chronolog-cli",
     "lint": "biome lint .",
-    "test:coverage": "npm run build -w @chronolog/engine && npm run test:coverage -w @chronolog/engine"
+    "test:coverage": "npm run build -w @chronolog/engine && npm run test:coverage -w @chronolog/engine",
+    "build:demo": "npm run build:demo -w chronolog-web"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0"

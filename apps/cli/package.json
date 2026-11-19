@@ -1,0 +1,21 @@
+{
+  "name": "chronolog-cli",
+  "version": "2.0.0",
+  "description": "Rank the services most likely to have caused an incident, from log files",
+  "private": true,
+  "bin": { "chronolog": "dist/cli.js" },
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@chronolog/engine": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^5.1.1"
+  }
+}
