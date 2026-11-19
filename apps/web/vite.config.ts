@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
@@ -6,7 +7,7 @@ import { defineConfig } from 'vitest/config';
 const engine = fileURLToPath(new URL('../../packages/engine/src/index.ts', import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: { alias: { '@chronolog/engine': engine } },
   server: { port: 3000 },
   test: {

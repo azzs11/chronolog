@@ -21,7 +21,7 @@ export default function Timeline({ replay, highlight }: { replay: Replay; highli
           const peak = Math.max(...service.lines, 1);
           return (
             <g key={service.name}>
-              <text x={LABEL_WIDTH - 6} y={row * ROW_HEIGHT + ROW_HEIGHT - 1} textAnchor="end" fontSize={ROW_HEIGHT + 1} fill={highlight === service.name ? '#10b981' : '#9ca3af'} fontWeight={highlight === service.name ? 700 : 400}>
+              <text x={LABEL_WIDTH - 6} y={row * ROW_HEIGHT + ROW_HEIGHT - 1} textAnchor="end" fontSize={ROW_HEIGHT + 1} style={{ fill: highlight === service.name ? 'var(--accent)' : 'var(--text-muted)' }} fontWeight={highlight === service.name ? 700 : 400}>
                 {service.name}
               </text>
               {service.lines.map((count, col) => {
@@ -34,7 +34,7 @@ export default function Timeline({ replay, highlight }: { replay: Replay; highli
                     y={row * ROW_HEIGHT}
                     width={CELL_WIDTH - 1}
                     height={ROW_HEIGHT - 1}
-                    fill={hasErrors ? '#ef4444' : '#6366f1'}
+                    style={{ fill: hasErrors ? 'var(--sev-error)' : 'var(--accent)' }}
                     opacity={hasErrors ? 0.9 : 0.08 + 0.85 * (count / peak)}
                   />
                 );
@@ -42,7 +42,7 @@ export default function Timeline({ replay, highlight }: { replay: Replay; highli
             </g>
           );
         })}
-        <line x1={startX} x2={startX} y1={0} y2={services.length * ROW_HEIGHT} stroke="#f59e0b" strokeDasharray="3 2" />
+        <line x1={startX} x2={startX} y1={0} y2={services.length * ROW_HEIGHT} style={{ stroke: 'var(--sev-warning)' }} strokeDasharray="3 2" />
       </svg>
     </div>
   );

@@ -8,7 +8,7 @@ type Tab = 'simulated' | 'real';
 export default function PlaygroundPage() {
   const [tab, setTab] = useState<Tab>('simulated');
   const tabClass = (t: Tab): string =>
-    `px-3 py-2 text-sm border-b-2 ${tab === t ? 'border-indigo-500 text-text-primary' : 'border-transparent text-text-secondary'}`;
+    `px-3 py-2 text-sm border-b-2 ${tab === t ? 'border-accent text-text-primary' : 'border-transparent text-text-secondary'}`;
   return (
     <div className="space-y-4">
       <div role="tablist" aria-label="Playground mode" className="flex gap-2 border-b border-border-dim">

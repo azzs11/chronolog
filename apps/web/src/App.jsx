@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import './App.css';
 import axios from 'axios';
 import TopBar from './components/TopBar';
 import SideNav from './components/SideNav';

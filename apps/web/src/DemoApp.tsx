@@ -1,3 +1,4 @@
+import { usePreferences } from './app/preferences';
 import PlaygroundPage from './features/playground/PlaygroundPage';
 
 const REPO_URL = 'https://github.com/azzs11/chronolog';
@@ -7,6 +8,7 @@ const REPO_URL = 'https://github.com/azzs11/chronolog';
  * Everything, including the engine, runs in the visitor's browser.
  */
 export default function DemoApp() {
+  usePreferences(); // applies the saved or system theme
   return (
     <div className="min-h-screen bg-bg-base text-text-primary">
       <header className="border-b border-border-dim px-4 py-3 flex items-center justify-between">

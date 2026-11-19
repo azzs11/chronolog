@@ -18,7 +18,7 @@ function Result({ data }: { data: RankData }) {
         of normal traffic.
       </p>
       {data.warnings.map((w) => (
-        <p key={w} className="text-sm text-amber-400" role="status">
+        <p key={w} className="text-sm text-sev-warning" role="status">
           {w}
         </p>
       ))}
@@ -92,7 +92,7 @@ export default function RootRankView() {
           service with how it normally behaves and ranks them. If you know when it began, say so; otherwise it estimates.
         </p>
       </div>
-      <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end gap-3">
         <label className="text-sm text-text-secondary">
           Look back
           <select
@@ -116,7 +116,7 @@ export default function RootRankView() {
             onChange={(e) => setStartText(e.target.value)}
           />
         </label>
-        <button type="button" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50" onClick={run} disabled={isLoading}>
+        <button type="button" className="rounded-md bg-accent-solid px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-50" onClick={run} disabled={isLoading}>
           {isLoading ? 'Ranking…' : 'Rank root causes'}
         </button>
         <button type="button" className="rounded border border-border-dim px-4 py-2 text-sm text-text-primary disabled:opacity-50" onClick={tryTestIncident} disabled={isLoading}>
@@ -124,7 +124,7 @@ export default function RootRankView() {
         </button>
       </div>
       {error && (
-        <p className="text-sm text-amber-400" role="alert">
+        <p className="text-sm text-sev-warning" role="alert">
           {error}
         </p>
       )}

@@ -26,7 +26,7 @@ export default function ReplayView({ load = loadReplays }: { load?: () => Promis
     load().then(setBundle, () => setFailed(true));
   }, [load]);
 
-  if (failed) return <p className="text-sm text-amber-400" role="alert">Could not load the real incidents.</p>;
+  if (failed) return <p className="text-sm text-sev-warning" role="alert">Could not load the real incidents.</p>;
   if (!bundle) return <p className="text-sm text-text-muted">Loading real incidents…</p>;
   if (bundle.cases.length === 0) return <p className="text-sm text-text-muted">No real incidents are bundled in this build.</p>;
 
@@ -55,7 +55,7 @@ export default function ReplayView({ load = loadReplays }: { load?: () => Promis
             key={c.caseId}
             type="button"
             aria-pressed={index === i}
-            className={`rounded border px-3 py-1.5 text-sm ${index === i ? 'border-indigo-500 text-text-primary' : 'border-border-dim text-text-secondary'}`}
+            className={`rounded border px-3 py-1.5 text-sm ${index === i ? 'border-accent text-text-primary' : 'border-border-dim text-text-secondary'}`}
             onClick={() => pick(i)}
           >
             {SYSTEM_NAMES[c.system]} #{i + 1}

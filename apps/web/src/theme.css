@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/*
+ * ChronoLog design tokens: the one place colour, type and spacing are decided.
+ *
+ * A calm "control room": a dark neutral base and ONE accent (teal). Severity colours are signals
+ * (pills, dots, edge marks), never backgrounds. 1 px borders, no shadows, no gradients.
+ * Dark is the default; `data-theme="light"` or the system preference switches it. Every text and
+ * signal colour passes WCAG AA (4.5:1) on all three surfaces in both themes; src/theme.test.ts
+ * checks that from this file, so a token edit that breaks contrast fails the tests.
+ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-base: #0e1112;
+  --bg-surface: #15191b;
+  --bg-elevated: #1d2225;
+  --border-dim: #262d30;
+  --border-strong: #5a666b; /* input and control outlines: 3:1 against the base */
+  --text-primary: #e9eef0;
+  --text-secondary: #a9b4b9;
+  --text-muted: #8a959a;
+  --accent: #2dd4bf; /* accent as text or an icon */
+  --accent-solid: #14b8a6; /* accent as a button fill */
+  --accent-fg: #042f2a; /* text on the solid accent */
+  --sev-critical: #fb7185;
+  --sev-error: #fb923c;
+  --sev-warning: #fbbf24;
+  --sev-info: #a5b4bc;
+  --sev-debug: #8a959a;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg-base: #f6f7f8;
+  --bg-surface: #ffffff;
+  --bg-elevated: #eceff1;
+  --border-dim: #d5dadc;
+  --border-strong: #7b878d;
+  --text-primary: #14191b;
+  --text-secondary: #47535a;
+  --text-muted: #5b676d;
+  --accent: #0f766e;
+  --accent-solid: #0f766e;
+  --accent-fg: #ffffff;
+  --sev-critical: #be123c;
+  --sev-error: #a84a08;
+  --sev-warning: #92400e;
+  --sev-info: #475569;
+  --sev-debug: #5b676d;
+}
+
+/* No saved choice: follow the system. The values repeat [data-theme="light"] (a test keeps them equal). */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg-base: #f6f7f8;
+    --bg-surface: #ffffff;
+    --bg-elevated: #eceff1;
+    --border-dim: #d5dadc;
+    --border-strong: #7b878d;
+    --text-primary: #14191b;
+    --text-secondary: #47535a;
+    --text-muted: #5b676d;
+    --accent: #0f766e;
+    --accent-solid: #0f766e;
+    --accent-fg: #ffffff;
+    --sev-critical: #be123c;
+    --sev-error: #a84a08;
+    --sev-warning: #92400e;
+    --sev-info: #475569;
+    --sev-debug: #5b676d;
+  }
+}
+
+/* Density: how much space rows and controls take. Comfortable by default. */
+:root {
+  --row-y: 8px;
+  --gap: 12px;
+  --motion: 150ms;
+}
+[data-density="compact"] {
+  --row-y: 3px;
+  --gap: 8px;
+}
+
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border-dim: var(--border-dim);
+  --color-border-strong: var(--border-strong);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-fg: var(--accent-fg);
+  --color-sev-critical: var(--sev-critical);
+  --color-sev-error: var(--sev-error);
+  --color-sev-warning: var(--sev-warning);
+  --color-sev-info: var(--sev-info);
+  --color-sev-debug: var(--sev-debug);
+
+  /* Names the older views use, mapped onto the same tokens. */
+  --color-accent-primary: var(--accent);
+  --color-accent-secondary: var(--accent);
+  --color-accent-success: var(--accent);
+  --color-accent-warning: var(--sev-warning);
+  --color-accent-danger: var(--sev-error);
+  --color-accent-critical: var(--sev-critical);
+
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale: 12 / 14 / 16 / 20 / 28 px. Logs are 13 px mono (class "log-text"). */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-xl: 1.25rem;
+  --text-3xl: 1.75rem;
+
+  --animate-log-slide: logSlide 150ms ease-out;
+  --animate-pulse-dot: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --shadow-glow-teal: 0 4px 16px rgba(13, 61, 46, 0.15);
+  --shadow-glow-red: 0 4px 16px rgba(185, 28, 28, 0.18);
+  --shadow-glow-green: 0 4px 16px rgba(13, 61, 46, 0.15);
+}
+
+@keyframes logSlide {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-base); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+  /* Numbers line up in columns. */
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+@layer components {
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .log-text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .row-y { padding-block: var(--row-y); }
+}
+
+/* Motion stays quiet and respects the reader's setting. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
