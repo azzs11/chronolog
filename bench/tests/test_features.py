@@ -1,7 +1,7 @@
 import pandas as pd
 
 from chronobench.cases import parse_case_id
-from chronobench.features import FEATURES, MISSING_TIME_FACTOR, case_features
+from chronobench.features import ALL_FEATURES, FEATURES, MISSING_TIME_FACTOR, case_features
 from chronobench.templates import TemplatedCase
 
 INJECT = 100
@@ -49,7 +49,31 @@ def test_mentions_and_graph_point_at_the_named_service():
 
 def test_all_features_present_finite_and_ranks_in_unit_range():
     f = case_features(_case())
-    assert list(f.columns) == FEATURES
+    assert list(f.columns) == ALL_FEATURES
+    assert set(FEATURES) <= set(ALL_FEATURES)
     assert f.notna().all().all()
     ranks = f[[c for c in FEATURES if c.startswith("rank_")]]
     assert ((ranks > 0) & (ranks <= 1)).all().all()
+
+
+def test_shift_features_flag_a_service_whose_logging_changes():
+    f = case_features(_case())
+    # alpha logs new templates after injection and beta too; gamma only keeps its heartbeat
+    assert f.loc["gamma", "template_shift"] < 1e-9
+    assert f.loc["alpha", "template_shift"] > f.loc["gamma", "template_shift"]
+    assert (f["template_shift"].between(0, 1)).all()
+    assert (f["vanished_mass"].between(0, 1)).all()
+    assert f.loc["gamma", "silence_increase"] == 0
+
+
+def test_a_service_that_goes_quiet_has_silence_and_vanished_mass():
+    # 10 lines per 10 s bucket, so a drop to zero is a real change
+    rows = [(t, s, "info", 0) for t in range(0, 200) for s in ("alpha", "beta")]
+    rows = [r for r in rows if not (r[1] == "alpha" and r[0] >= INJECT)]  # alpha falls silent
+    frame = pd.DataFrame(rows, columns=["timestamp", "source", "severity", "template_id"])
+    frame["template_id"] = frame["template_id"].astype("int32")
+    case = TemplatedCase(parse_case_id("re2ob_alpha_cpu_1"), INJECT, frame, {0: "heartbeat ok"})
+    f = case_features(case)
+    assert f.loc["alpha", "silence_increase"] > f.loc["beta", "silence_increase"]
+    assert f.loc["alpha", "vanished_mass"] == 1.0 and f.loc["beta", "vanished_mass"] == 0.0
+    assert f.loc["alpha", "t_first_deviation"] < f.loc["beta", "t_first_deviation"]

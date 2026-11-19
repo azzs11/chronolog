@@ -28,10 +28,21 @@ WARN_LEVELS = ("warning", *ERROR_LEVELS)
 RAW_TIME = ["t_first_error", "t_first_novel", "t_first_spike", "t_first_mention"]
 RAW_COUNT = ["error_ratio", "rate_ratio", "novel_templates", "mentions", "mentions_warn"]
 RAW_OTHER = ["novel_fraction", "in_degree", "out_degree", "pagerank"]
-FEATURES = [
+BASE_FEATURES = [
     *RAW_TIME, *RAW_COUNT, *RAW_OTHER,
     *(f"rank_{name}" for name in [*RAW_TIME, *RAW_COUNT, "pagerank"]),
 ]  # fmt: skip
+
+# Features added in feature version f2, aimed at resource faults (cpu, memory, disk, delay, loss,
+# socket), which change how a service logs without always producing new templates.
+SHIFT_TIME = ["t_first_deviation"]
+SHIFT_COUNT = ["template_shift", "vanished_mass", "silence_increase"]
+SHIFT_FEATURES = [*SHIFT_TIME, *SHIFT_COUNT, *(f"rank_{n}" for n in [*SHIFT_TIME, *SHIFT_COUNT])]
+ALL_FEATURES = [*BASE_FEATURES, *SHIFT_FEATURES]
+# RootRank uses the base set. The shift features were tried on the train split only and did not
+# improve resource-fault AC@3 (38.6% -> 38.0%, within seed noise), so they stay optional.
+FEATURES = BASE_FEATURES
+MIN_DEVIATION = 5  # a bucket deviates only if it differs from the baseline mean by this many lines
 
 
 def _mention_table(tc: TemplatedCase, services: list[str]) -> dict[int, list[str]]:
@@ -166,6 +177,68 @@ def _mention_features(tc: TemplatedCase, sp: _Split, out: pd.DataFrame) -> None:
     out["pagerank"] = _pagerank(sp.services, edges)
 
 
+def _bucket_matrix(
+    rows: pd.DataFrame, services: list[str], inject: int, lo: int, hi: int
+) -> np.ndarray:
+    """Line counts per (service, bucket) for bucket indices lo..hi-1, zeros included."""
+    counts = np.zeros((len(services), max(hi - lo, 1)))
+    index = {s: i for i, s in enumerate(services)}
+    bucket = (rows["timestamp"] - inject) // BUCKET_S
+    keep = (bucket >= lo) & (bucket < hi)
+    grouped = rows[keep].assign(bucket=bucket[keep]).groupby(["source", "bucket"]).size()
+    for (service, b), n in grouped.items():
+        counts[index[service], int(b) - lo] = n
+    return counts
+
+
+def _first_deviation(base: np.ndarray, now: np.ndarray, missing: float) -> np.ndarray:
+    """Seconds to the first window bucket that differs from baseline in either direction."""
+    mean, std = base.mean(axis=1, keepdims=True), base.std(axis=1, keepdims=True)
+    limit = np.maximum(SPIKE_SIGMAS * std, MIN_DEVIATION)
+    hit = np.abs(now - mean) > limit
+    first = np.where(hit.any(axis=1), hit.argmax(axis=1) * BUCKET_S, missing)
+    return first.astype(float)
+
+
+def _kl(a: np.ndarray, m: np.ndarray) -> np.ndarray:
+    """Per-term KL(a || m) in bits; m > 0 wherever a > 0 because m is the mean of a and another."""
+    out = np.zeros(len(a))
+    nonzero = a > 0
+    out[nonzero] = a[nonzero] * np.log2(a[nonzero] / m[nonzero])
+    return out
+
+
+def _js_and_vanished(sp: _Split) -> tuple[pd.Series, pd.Series]:
+    """Jensen-Shannon divergence between a service's baseline and window template mix (0-1, base 2),
+    and the share of its baseline lines whose template never appears in the window."""
+    key = ["source", "template_id"]
+    both = pd.concat(
+        [sp.baseline.groupby(key).size().rename("b"), sp.window.groupby(key).size().rename("w")],
+        axis=1,
+    ).fillna(0.0)
+    totals = both.groupby("source").transform("sum").replace(0.0, 1.0)
+    p, q = both["b"] / totals["b"], both["w"] / totals["w"]
+    m = (p + q) / 2
+    divergence = 0.5 * (_kl(p.to_numpy(), m.to_numpy()) + _kl(q.to_numpy(), m.to_numpy()))
+    gone = p.where(both["w"] == 0, 0.0)
+    frame = pd.DataFrame({"js": divergence, "gone": gone}, index=both.index)
+    per_service = frame.groupby("source").sum()
+    return per_service["js"].reindex(sp.services, fill_value=0.0), per_service["gone"].reindex(
+        sp.services, fill_value=0.0
+    )
+
+
+def _shift_features(sp: _Split, out: pd.DataFrame) -> None:
+    lo, hi = -int(np.ceil(sp.baseline_s / BUCKET_S)), int(np.ceil(sp.window_s / BUCKET_S))
+    base = _bucket_matrix(sp.baseline, sp.services, sp.inject, lo, 0)
+    now = _bucket_matrix(sp.window, sp.services, sp.inject, 0, hi)
+    out["t_first_deviation"] = _first_deviation(base, now, sp.missing)
+    out["silence_increase"] = (now == 0).mean(axis=1) - (base == 0).mean(axis=1)
+    js, gone = _js_and_vanished(sp)
+    out["template_shift"] = js
+    out["vanished_mass"] = gone
+
+
 def case_features(tc: TemplatedCase) -> pd.DataFrame:
     """Feature matrix for one case, indexed by service."""
     sp = _split(tc)
@@ -173,13 +246,14 @@ def case_features(tc: TemplatedCase) -> pd.DataFrame:
     _rate_features(sp, out)
     _novelty_features(sp, out)
     _mention_features(tc, sp, out)
+    _shift_features(sp, out)
     return _add_ranks(out)
 
 
 def _add_ranks(out: pd.DataFrame) -> pd.DataFrame:
     """Within-case percentile ranks: 0 = first/most, 1 = last/least (ties share their average)."""
-    for name in RAW_TIME:
+    for name in [*RAW_TIME, *SHIFT_TIME]:
         out[f"rank_{name}"] = out[name].rank(pct=True, method="average")
-    for name in [*RAW_COUNT, "pagerank"]:
+    for name in [*RAW_COUNT, "pagerank", *SHIFT_COUNT]:
         out[f"rank_{name}"] = out[name].rank(pct=True, ascending=False, method="average")
-    return out[FEATURES]
+    return out[ALL_FEATURES]

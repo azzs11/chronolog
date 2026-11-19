@@ -9,7 +9,7 @@ tuned here; the table only says how much each signal contributes.
 import numpy as np
 import pandas as pd
 
-from .features import FEATURES
+from .features import ALL_FEATURES, FEATURES, SHIFT_FEATURES
 from .metrics import ac_at_k
 from .rootrank import SEEDS, cross_validate, ranks_for
 
@@ -58,6 +58,8 @@ def run_ablation(table: pd.DataFrame, rounds: int, has_hscore: bool) -> dict:
     for name, cols in GROUPS.items():
         variants[f"only {name}"] = cols
     variants["only first-error rank"] = ["rank_t_first_error"]
+    variants["all features + distribution-shift features"] = ALL_FEATURES
+    variants["only distribution-shift features"] = SHIFT_FEATURES
     if has_hscore:
         variants["all features + ChronoLog-H score"] = [*FEATURES, *H_FEATURES]
         variants["without novel templates, + ChronoLog-H score"] = [
