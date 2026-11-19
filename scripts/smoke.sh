@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # Smoke test for a running ChronoLog stack (docker compose up -d).
+# Run it on a FRESH stack: the Root Cause checks rank the logs in the store, so logs left by earlier
+# manual testing (a running generator, other injected incidents) can change the answer. For a clean
+# store: docker compose down -v && docker compose up -d --build
 # Checks that every service is up, the API talks to Postgres and the ML service,
 # and that related logs form a causal chain. Exits non-zero on the first failure.
 set -euo pipefail

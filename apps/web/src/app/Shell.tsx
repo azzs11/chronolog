@@ -47,7 +47,8 @@ export default function Shell() {
 
       <div className="flex min-h-0 flex-1 flex-col">
         <header className="flex shrink-0 items-center justify-end gap-1 border-b border-border-dim px-4 py-2">
-          <div role="group" aria-label="Theme" className="flex rounded-md border border-border-dim">
+          <fieldset className="flex rounded-md border border-border-dim">
+            <legend className="sr-only">Theme</legend>
             {THEMES.map(({ value, label, icon: Icon }) => (
               <button
                 key={value}
@@ -61,7 +62,7 @@ export default function Shell() {
                 <Icon size={16} aria-hidden="true" />
               </button>
             ))}
-          </div>
+          </fieldset>
           <button
             type="button"
             aria-label={`Switch to ${nextDensity} density`}

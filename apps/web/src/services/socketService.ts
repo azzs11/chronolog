@@ -9,6 +9,7 @@ const RECONNECTION_ATTEMPTS = 10;
 class SocketService {
   private socket: Socket | null = null;
   private isConnected = false;
+  private readonly connectionListeners = new Set<(connected: boolean) => void>();
 
   connect(url: string = WS_URL): Socket {
     if (this.socket?.connected) return this.socket;
@@ -22,13 +23,28 @@ class SocketService {
 
     this.socket.on('connect', () => {
       this.isConnected = true;
+      this.notifyConnection();
     });
     this.socket.on('disconnect', () => {
       this.isConnected = false;
+      this.notifyConnection();
     });
     this.socket.on('connect_error', (err: Error) => console.warn('WS error:', err.message));
 
     return this.socket;
+  }
+
+  private notifyConnection(): void {
+    for (const listener of this.connectionListeners) listener(this.isConnected);
+  }
+
+  /** Be told when the connection comes up or drops. Calls back at once with the current state; returns an unsubscribe. */
+  onConnectionChange(listener: (connected: boolean) => void): () => void {
+    this.connectionListeners.add(listener);
+    listener(this.isConnected);
+    return () => {
+      this.connectionListeners.delete(listener);
+    };
   }
 
   disconnect(): void {
@@ -36,6 +52,7 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
       this.isConnected = false;
+      this.notifyConnection();
     }
   }
 

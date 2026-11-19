@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
+vi.mock('../features/live/LiveView', () => ({ default: () => <h2>Live view</h2> }));
 vi.mock('../features/rootrank/RootRankView', () => ({ default: () => <h2>Root cause view</h2> }));
 vi.mock('../features/playground/PlaygroundPage', () => ({ default: () => <h2>Playground view</h2> }));
 vi.mock('../LegacyApp', () => ({ default: () => <h2>Legacy view</h2> }));
@@ -21,14 +22,14 @@ describe('AppRoutes and Shell', () => {
     document.documentElement.removeAttribute('data-theme');
   });
 
-  it('sends the root URL to the root-cause view', () => {
+  it('sends the root URL to the live view', () => {
     at('/');
-    expect(screen.getByRole('heading', { name: 'Root cause view' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Live view' })).toBeInTheDocument();
   });
 
-  it('gives every view its own URL and marks the current one', () => {
+  it('gives every view its own URL and marks the current one', async () => {
     at('/playground');
-    expect(screen.getByRole('heading', { name: 'Playground view' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Playground view' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /playground/i })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: /root cause/i })).not.toHaveAttribute('aria-current');
   });
@@ -39,7 +40,7 @@ describe('AppRoutes and Shell', () => {
     expect(screen.queryByRole('navigation', { name: 'Main' })).not.toBeInTheDocument();
     unmount();
     at('/nope/not/here');
-    expect(screen.getByRole('heading', { name: 'Root cause view' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Live view' })).toBeInTheDocument();
   });
 
   it('has landmarks and a skip link for keyboard users', () => {
