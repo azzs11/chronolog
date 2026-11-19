@@ -20,4 +20,6 @@ workflow still builds the demo and skips the upload.
 Lighthouse (mobile preset) reports accessibility under 95, best practices under 90, LCP over 3 s, blocking time over
 300 ms or layout shift over 0.1 (`lighthouserc.json`).
 
-Measured locally on 2026-11-19: performance 94-95, accessibility 96, best practices 100, SEO 100, LCP 2.6-2.7 s.
+Measured locally on 2026-11-19 (mobile preset, served with compression as Cloudflare Pages does): performance 98, accessibility 100,
+best practices 100, LCP 2.1-2.3 s, layout shift 0.03. Measuring against a server that does not compress inflates LCP by
+about a second, so `lighthouserc.json` starts a compressing server.
