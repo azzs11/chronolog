@@ -13,8 +13,11 @@ from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
 from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
 from .report import render_report
+from .rootrank import feature_table, run_rootrank
+from .rootrank_report import render_rootrank_report
 from .runner import run_chronolog_h
 from .select import write_subset
+from .templates import template_cases
 
 
 def _cmd_select(args: argparse.Namespace) -> None:
@@ -76,6 +79,31 @@ def _cmd_anomaly(args: argparse.Namespace) -> None:
     print(f"Anomaly benchmark done in {time.perf_counter() - started:.0f}s")
 
 
+def _cmd_templates(args: argparse.Namespace) -> None:
+    cases = load_subset(args.subset)
+    download_cases(cases)
+    started = time.perf_counter()
+    done = template_cases([c.case_id for c in cases], args.workers)
+    lines = sum(n for _, n, _ in done)
+    mean_templates = sum(t for _, _, t in done) / len(done)
+    print(
+        f"Templated {len(done)} cases ({lines:,} lines, {mean_templates:.0f} templates per case) "
+        f"in {time.perf_counter() - started:.0f}s"
+    )
+
+
+def _cmd_rootrank(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    cases = load_subset("full")
+    download_cases(cases)
+    result = run_rootrank(feature_table(cases, args.workers))
+    RESULTS_DIR.mkdir(exist_ok=True)
+    (RESULTS_DIR / "rootrank.json").write_text(json.dumps(result, indent=1, sort_keys=True) + "\n")
+    rcaeval = json.loads(_results_json("full").read_text())
+    (RESULTS_DIR / "RESULTS-rootrank.md").write_text(render_rootrank_report(result, rcaeval))
+    print(f"RootRank done in {time.perf_counter() - started:.0f}s")
+
+
 def _cmd_replay(args: argparse.Namespace) -> None:
     parsed = parse_case_id(args.case)
     download_cases([parsed])
@@ -113,6 +141,15 @@ def main() -> None:
 
     anomaly = sub.add_parser("anomaly", help="score the anomaly detector on Loghub HDFS and BGL")
     anomaly.set_defaults(func=_cmd_anomaly)
+
+    templates = sub.add_parser("templates", help="mine and cache Drain3 templates for a subset")
+    templates.add_argument("--subset", choices=["small", "full"], default="small")
+    templates.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    templates.set_defaults(func=_cmd_templates)
+
+    rootrank = sub.add_parser("rootrank", help="train and evaluate RootRank on the full subset")
+    rootrank.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    rootrank.set_defaults(func=_cmd_rootrank)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")
