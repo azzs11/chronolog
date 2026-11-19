@@ -56,6 +56,7 @@ apps/ml/models/*.pkl
 CLAUDE.md
 packages/engine/dist/
 apps/api/dist/
+bench/runner/dist/
 apps/ml/.venv/
 apps/ml/models/*.json
 .ruff_cache/
