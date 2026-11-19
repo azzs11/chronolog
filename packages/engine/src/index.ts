@@ -6,3 +6,4 @@ export { SERVICE_DEPS, sourceRelationScore } from './serviceGraph';
 export { sha256Hex } from './sha256';
 export * from './constants';
 export * from './types';
+export * from './rootrank';
