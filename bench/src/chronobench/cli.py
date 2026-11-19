@@ -10,6 +10,8 @@ from .ablation_report import render_ablation_report
 from .adapt import load_case_logs
 from .anomaly_eval import build_anomaly_results
 from .anomaly_report import render_anomaly_report
+from .autostart import run_autostart
+from .autostart_report import render_autostart_report
 from .baselines import complete_ranking
 from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
@@ -19,6 +21,7 @@ from .report import render_report
 from .robustness import run_robustness
 from .robustness_report import render_robustness_report
 from .rootrank import feature_table, run_rootrank
+from .rootrank_export import export_all
 from .rootrank_report import render_rootrank_report
 from .runner import run_chronolog_h
 from .select import write_subset
@@ -145,6 +148,27 @@ def _cmd_robustness(args: argparse.Namespace) -> None:
     print(f"Robustness done in {time.perf_counter() - started:.0f}s")
 
 
+def _cmd_export(args: argparse.Namespace) -> None:
+    cases = load_subset("full")
+    table = feature_table(cases, args.workers)
+    rootrank = json.loads((RESULTS_DIR / "rootrank.json").read_text())
+    revision = json.loads(_results_json("full").read_text())["meta"]["dataset_revision"]
+    export_all(table, rootrank["rounds"], revision)
+    print("Wrote the RootRank model and the parity fixture into packages/engine")
+
+
+def _cmd_autostart(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    cases = load_subset("full")
+    clean = feature_table(cases, args.workers)
+    rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
+    result = run_autostart(clean, rounds, args.workers)
+    text = json.dumps(result, indent=1, sort_keys=True) + "\n"
+    (RESULTS_DIR / "autostart.json").write_text(text)
+    (RESULTS_DIR / "RESULTS-autostart.md").write_text(render_autostart_report(result))
+    print(f"Autostart done in {time.perf_counter() - started:.0f}s")
+
+
 def _cmd_replay(args: argparse.Namespace) -> None:
     parsed = parse_case_id(args.case)
     download_cases([parsed])
@@ -203,6 +227,14 @@ def main() -> None:
     robustness = sub.add_parser("robustness", help="RootRank under dropped logs and clock skew")
     robustness.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     robustness.set_defaults(func=_cmd_robustness)
+
+    export = sub.add_parser("export-rootrank", help="write the RootRank model and parity fixture")
+    export.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    export.set_defaults(func=_cmd_export)
+
+    autostart = sub.add_parser("autostart", help="RootRank with an estimated incident start")
+    autostart.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    autostart.set_defaults(func=_cmd_autostart)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")

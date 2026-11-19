@@ -42,6 +42,7 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 "src/chronobench/rootrank_report.py" = ["E501"]
 "src/chronobench/ablation_report.py" = ["E501"]
 "src/chronobench/robustness_report.py" = ["E501"]
+"src/chronobench/autostart_report.py" = ["E501"]
 "tests/test_anomaly_eval.py" = ["E501"]
 
 # LightGBM is built from source without OpenMP so it loads on any machine with no system
