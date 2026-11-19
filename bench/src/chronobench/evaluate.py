@@ -75,15 +75,23 @@ def evaluate_cases(cases: list[Case], workers: int = DEFAULT_WORKERS) -> list[di
         return list(pool.map(_evaluate_by_id, cases))
 
 
-def code_fingerprint() -> str:
-    """Hash of the code that defines ChronoLog-H and the log adapter, so results name the rules."""
+RCA_RUNNER_FILES = ("ranker.ts", "replay.ts")
+
+
+def code_fingerprint(runner_files: tuple[str, ...] | None = RCA_RUNNER_FILES) -> str:
+    """Hash of the code that defines a method's output, so results name the rules they used.
+
+    The RCA results depend only on the engine, the RCA runner files and the log adapter. Pass
+    ``runner_files=None`` to include every runner file (the anomaly benchmark does).
+    """
+    runner_dir = REPO_ROOT / "bench" / "runner" / "src"
+    runner = sorted(runner_dir.glob("*.ts")) if runner_files is None else [
+        runner_dir / name for name in runner_files
+    ]
     files = sorted(
-        [
-            *(REPO_ROOT / "packages" / "engine" / "src").glob("*.ts"),
-            *(REPO_ROOT / "bench" / "runner" / "src").glob("*.ts"),
-            Path(__file__).with_name("adapt.py"),
-        ]
-    )
+        [*(REPO_ROOT / "packages" / "engine" / "src").glob("*.ts"), *runner,
+         Path(__file__).with_name("adapt.py")]
+    )  # fmt: skip
     digest = hashlib.sha256()
     for path in files:
         digest.update(path.name.encode())
