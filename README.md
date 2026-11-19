@@ -16,35 +16,45 @@
 
 ## Benchmark
 
-On all 359 real incidents in [RCAEval](https://github.com/phamquiluan/RCAEval) (RE2 and RE3, logs only), ChronoLog-H
-names the true root-cause service in its top 3 for **26.5%** of cases (95% interval 22–31%). Random guessing gets 10.7%.
-The simple baseline "first service to log an error" gets 28.1% (23–33%), so **ChronoLog-H is better than chance but
-not distinguishable from that trivial baseline**. On the 131 held-out test cases the figures are 29.0% and 27.5%.
-In 26 cases the faulty service writes no logs at all, so no log-based method can name it. Every method, interval,
-system and fault type is in [bench/results/RESULTS-full.md](bench/results/RESULTS-full.md); a faster 40-case subset
-is in [RESULTS.md](RESULTS.md). Both are reproduced by one command (`uv run bench all`, see [bench/](bench/)).
-A first learned ranker, **RootRank** (LightGBM lambdarank over log features such as novel templates, error
-timing and which services other services name), reaches **52.6%** AC@3 (95% interval 48–57%, 5 seeds) on all 359
-cases when whole root services are held out of training, against 26.5% for ChronoLog-H. Splitting by case id
-instead would give a higher number, because RCAEval has several instances of the same fault on the same service
-and the model can recognise the service; the strict figure is the one to quote. Leaving one whole system out gives
-53.5%. Details, other splits and the most used features are in
-[bench/results/RESULTS-rootrank.md](bench/results/RESULTS-rootrank.md); run it with `uv run bench rootrank`.
-The split matters: on the 90 Train Ticket code-fault cases RootRank is right in its top 3 every time (probably
-because changed code logs messages never seen before), while on the 269 resource-fault cases (cpu, memory, disk,
-delay, packet loss, socket) it gets **36.8%**, against 20.8% for "first service to log an error". The ablation shows one
-signal, templates a service never logged before, carries almost all of the gain
-([bench/results/RESULTS-ablation.md](bench/results/RESULTS-ablation.md), `uv run bench ablate`).
-RootRank holds up on messy logs: with a model trained on clean logs and held-out cases degraded, 40% of log lines
-dropped at random costs 1.3 points of AC@3 (51.3%), and ±2 s of clock skew per service costs 0.4
-([bench/results/RESULTS-robustness.md](bench/results/RESULTS-robustness.md), `uv run bench robustness`).
-Adding ChronoLog-H's own score as a feature makes RootRank worse (49.1%), so the hand-written rules are not used in it.
-RootRank is not yet part of the running app.
-Anomaly detection was scored too, on the first 2 million lines of Loghub HDFS and BGL
-([bench/results/RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). The current rules are weak there:
-F1 is 1.5% on HDFS (block-level anomalies hide in event sequences, not severity) and 19.1% on BGL, where a
-plain "flag error and critical lines" rule gets 67.9%. Run it with `uv run bench anomaly`.
-The roadmap's next phases aim to beat these baselines, and the results will be published either way.
+Every number below comes from a script in this repo. The data is 359 real incidents from
+[RCAEval](https://github.com/phamquiluan/RCAEval) (RE2 and RE3, logs only). The question is: does the method name
+the true root-cause service in its top 3 (AC@3)? Intervals are 95% bootstrap intervals that resample whole
+(system, root service) groups, because several incidents are repeats of the same fault on the same service.
+
+| Method | AC@3 | 95% interval |
+|---|---|---|
+| Random guessing | 10.7% | ± 4.8 over 5 seeds |
+| First service to log an error | 28.1% | 16–41% |
+| ChronoLog-H (the hand-written rules the app runs today) | 26.5% | 14–40% |
+| **RootRank** (learned ranker; whole root services held out of training) | **52.6%** | 43–61% |
+
+On the same cases RootRank beats first-error by 24.5 points (interval +10.6 to +36.6) and ChronoLog-H by 26.2
+points (+10.5 to +40.3). ChronoLog-H is better than chance but not distinguishable from the trivial baseline.
+
+What to know before quoting these:
+
+- **Easy and hard faults differ a lot.** On the 90 Train Ticket code-fault cases RootRank is right every time
+  (probably because changed code logs messages never seen before). On the 269 resource-fault cases (cpu, memory,
+  disk, delay, packet loss, socket) it gets **36.8%**, against 20.8% for first-error.
+- **One signal does most of the work:** templates a service never logged before. Two further feature families I
+  tried did not help, and ChronoLog-H's own score made RootRank worse.
+- **It holds up on messy logs:** dropping 40% of lines costs 1.3 points; ±2 s of clock skew costs 0.4.
+- **Leaving one whole system out** gives 53.5%. Splitting by case id would give a higher number, because the model
+  could recognise repeated services, so the strict figure is the one to quote.
+- In 26 of the 359 cases the faulty service writes no logs, so no log-based method can name it.
+- **Anomaly detection is weak.** On Loghub HDFS and BGL the current rules score F1 1.5% and 19.1%, and a plain
+  "flag error lines" rule gets 67.9% on BGL.
+- **RootRank is in the app** (the Root Cause view, and `POST /api/rca/rank`, below). Given the true incident start it
+  scores 53.2% AC@3 on randomly cropped windows. When the start is estimated from the logs instead, as the app does if
+  you do not give one, it scores **45.0%** (36–53%); the old "first error line" rule for finding the start scored 31.6%
+  ([RESULTS-autostart.md](bench/results/RESULTS-autostart.md), `uv run bench autostart`). The estimate finds *when* the
+  logs changed most; it cannot tell a calm window from an incident, so you tell it something went wrong.
+
+Details: [RESULTS-rootrank.md](bench/results/RESULTS-rootrank.md) (`uv run bench rootrank`),
+[RESULTS-ablation.md](bench/results/RESULTS-ablation.md) (`uv run bench ablate`),
+[RESULTS-robustness.md](bench/results/RESULTS-robustness.md) (`uv run bench robustness`),
+[RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md) (`uv run bench anomaly`),
+[RESULTS-full.md](bench/results/RESULTS-full.md) and [RESULTS.md](RESULTS.md) (`uv run bench all`).
 
 ---
 
@@ -189,7 +199,25 @@ All endpoints return `{ status, data, meta }`.
 | `POST` | `/api/logs` | Ingest a log entry |
 | `GET` | `/api/logs/stats` | Severity counts + throughput |
 | `GET` | `/api/anomalies` | Detected anomalies |
+| `POST` | `/api/rca/rank` | Rank the services most likely to have caused an incident (see below) |
 | `GET` | `/api/metrics` | Prometheus metrics |
+
+#### `POST /api/rca/rank`
+
+Ranks which service most likely broke first, with evidence. Body, all optional:
+
+- `incident_start`: Unix seconds or an ISO time. If you leave it out, ChronoLog estimates it from the logs.
+- `lookback_minutes` (1 to 120, default 15): which stored logs to use, when you do not send `logs`.
+- `logs`: up to 20,000 lines `{ timestamp, source, message, severity?, id? }` to rank instead of the stored logs.
+
+```bash
+curl -X POST localhost:5050/api/rca/rank -H 'Content-Type: application/json' -d '{"lookback_minutes": 15}'
+```
+
+Each candidate has a `rank`, a relative `weight` (not a probability) and `evidence` built from real log lines: when it
+first logged an error, the messages it never logged before (with a log id), and how often other services mention it.
+It answers `422` if the logs span under 4 minutes (too short to estimate a start) or there are no logs. The accuracy
+you should expect is in the [Benchmark](#benchmark) section.
 
 ### ML Service (`:5001`)
 
