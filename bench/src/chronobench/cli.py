@@ -5,6 +5,8 @@ import json
 import time
 from pathlib import Path
 
+from .ablation import add_hscore_features, run_ablation
+from .ablation_report import render_ablation_report
 from .adapt import load_case_logs
 from .anomaly_eval import build_anomaly_results
 from .anomaly_report import render_anomaly_report
@@ -12,6 +14,7 @@ from .baselines import complete_ranking
 from .cases import load_subset, parse_case_id, split_of
 from .download import download_cases
 from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
+from .hscores import compute_hscores, load_hscores
 from .report import render_report
 from .rootrank import feature_table, run_rootrank
 from .rootrank_report import render_rootrank_report
@@ -104,6 +107,30 @@ def _cmd_rootrank(args: argparse.Namespace) -> None:
     print(f"RootRank done in {time.perf_counter() - started:.0f}s")
 
 
+def _cmd_hscores(args: argparse.Namespace) -> None:
+    cases = load_subset("full")
+    download_cases(cases)
+    started = time.perf_counter()
+    done = compute_hscores(cases, args.workers)
+    print(f"ChronoLog-H scores for {len(done)} cases in {time.perf_counter() - started:.0f}s")
+
+
+def _cmd_ablate(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    cases = load_subset("full")
+    table = feature_table(cases, args.workers)
+    scores = load_hscores()
+    complete = scores is not None and all(c.case_id in scores for c in cases)
+    if complete:
+        table = add_hscore_features(table, scores)
+    rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
+    result = run_ablation(table, rounds, complete)
+    (RESULTS_DIR / "ablation.json").write_text(json.dumps(result, indent=1, sort_keys=True) + "\n")
+    rcaeval = json.loads(_results_json("full").read_text())
+    (RESULTS_DIR / "RESULTS-ablation.md").write_text(render_ablation_report(result, rcaeval))
+    print(f"Ablation done in {time.perf_counter() - started:.0f}s (ChronoLog-H score: {complete})")
+
+
 def _cmd_replay(args: argparse.Namespace) -> None:
     parsed = parse_case_id(args.case)
     download_cases([parsed])
@@ -150,6 +177,14 @@ def main() -> None:
     rootrank = sub.add_parser("rootrank", help="train and evaluate RootRank on the full subset")
     rootrank.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     rootrank.set_defaults(func=_cmd_rootrank)
+
+    hscores = sub.add_parser("hscores", help="cache ChronoLog-H per-service scores for all cases")
+    hscores.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    hscores.set_defaults(func=_cmd_hscores)
+
+    ablate = sub.add_parser("ablate", help="ablation and breakdowns for RootRank")
+    ablate.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    ablate.set_defaults(func=_cmd_ablate)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")
