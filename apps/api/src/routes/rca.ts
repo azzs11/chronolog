@@ -1,8 +1,10 @@
 import { Router, type Request, type Response } from 'express';
 import type { RcaLine } from '@chronolog/engine';
+import { requireApiKey } from '../middleware/apiKeyAuth';
 import { rcaLimiter } from '../middleware/rateLimiter';
-import { validateRcaRank } from '../middleware/validation';
-import { MAX_LOOKBACK_MINUTES, RcaError, rankIncident } from '../services/rootRank';
+import { validateInjectIncident, validateRcaRank } from '../middleware/validation';
+import { UnobservableFaultError, injectIncident } from '../services/incidentInjector';
+import { DEFAULT_LOOKBACK_MINUTES, MAX_LOOKBACK_MINUTES, RcaError, learnGraph, rankIncident } from '../services/rootRank';
 import { errorMessage } from './http';
 
 const router = Router();
@@ -44,6 +46,44 @@ router.post('/rank', rcaLimiter, validateRcaRank, async (req: Request, res: Resp
   } catch (err) {
     if (err instanceof RcaError) {
       res.status(422).json({ status: 'error', code: err.code, message: err.message });
+      return;
+    }
+    res.status(500).json({ status: 'error', message: errorMessage(err) });
+  }
+});
+
+/**
+ * GET /api/rca/graph?lookback_minutes=15: the service graph learned from the stored logs
+ * (mention edges A names B, and correlation edges for services whose log volumes move together).
+ */
+router.get('/graph', rcaLimiter, async (req: Request, res: Response) => {
+  try {
+    const asked = Number(req.query.lookback_minutes ?? DEFAULT_LOOKBACK_MINUTES);
+    if (!Number.isFinite(asked) || asked < 1) {
+      res.status(400).json({ status: 'error', message: 'lookback_minutes must be a number of at least 1' });
+      return;
+    }
+    res.json({ status: 'success', data: await learnGraph(Math.min(asked, MAX_LOOKBACK_MINUTES)) });
+  } catch (err) {
+    if (err instanceof RcaError) {
+      res.status(422).json({ status: 'error', code: err.code, message: err.message });
+      return;
+    }
+    res.status(500).json({ status: 'error', message: errorMessage(err) });
+  }
+});
+
+/**
+ * POST /api/rca/incident (admin key): backfill a simulated incident ending now, so Root Cause can be
+ * tried with a known answer. Body (all optional): service, fault, seed. Returns the truth.
+ */
+router.post('/incident', rcaLimiter, requireApiKey, validateInjectIncident, async (req: Request, res: Response) => {
+  try {
+    const data = await injectIncident(req.body as Parameters<typeof injectIncident>[0]);
+    res.status(201).json({ status: 'success', data });
+  } catch (err) {
+    if (err instanceof UnobservableFaultError) {
+      res.status(400).json({ status: 'error', message: err.message });
       return;
     }
     res.status(500).json({ status: 'error', message: errorMessage(err) });

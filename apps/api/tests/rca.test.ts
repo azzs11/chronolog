@@ -1,6 +1,9 @@
 import request from 'supertest';
 import app from '../src/app';
 
+// ADMIN_API_KEY is read per request, so setting it after the import is fine.
+process.env.ADMIN_API_KEY = 'test-admin-key';
+
 const normal = (t: number, source: string) => ({ timestamp: t, source, message: 'heartbeat ok', severity: 'info' });
 
 /** 200 s of calm traffic from three services, then `db` breaks first and `api` follows. */
@@ -75,5 +78,57 @@ describe('POST /api/rca/rank', () => {
   it('answers 422 when the stored window has no logs', async () => {
     const res = await request(app).post('/api/rca/rank').send({ lookback_minutes: 1 });
     expect([200, 422]).toContain(res.status); // other tests may have stored recent logs
+  });
+});
+
+describe('GET /api/rca/graph', () => {
+  it('rejects a bad look-back', async () => {
+    const res = await request(app).get('/api/rca/graph?lookback_minutes=abc');
+    expect(res.status).toBe(400);
+  });
+
+  it('answers with a graph or an explanation when no logs are stored', async () => {
+    const res = await request(app).get('/api/rca/graph?lookback_minutes=1');
+    expect([200, 422]).toContain(res.status);
+    if (res.status === 200) {
+      expect(res.body.data).toHaveProperty('services');
+      expect(res.body.data).toHaveProperty('mentions');
+      expect(res.body.data).toHaveProperty('correlations');
+    }
+  });
+});
+
+describe('POST /api/rca/incident', () => {
+  const key = { 'X-API-Key': 'test-admin-key' };
+
+  it('needs the admin key', async () => {
+    const res = await request(app).post('/api/rca/incident').send({});
+    expect(res.status).toBe(401);
+  });
+
+  it('backfills an incident with a known cause that Root Cause can then rank', async () => {
+    const injected = await request(app).post('/api/rca/incident').set(key).send({ service: 'db', fault: 'disk', seed: 5 });
+    expect(injected.status).toBe(201);
+    expect(injected.body.data.truth).toEqual({ service: 'db', fault: 'disk' });
+    expect(injected.body.data.lines).toBeGreaterThan(5000);
+
+    const ranked = await request(app).post('/api/rca/rank').send({ lookback_minutes: 15 });
+    expect(ranked.status).toBe(200);
+    expect(ranked.body.data.candidates[0].service).toBe('db');
+    expect(ranked.body.data.startSource).toBe('estimated');
+  });
+
+  it('picks a random observable fault when none is given', async () => {
+    const res = await request(app).post('/api/rca/incident').set(key).send({ seed: 11 });
+    expect(res.status).toBe(201);
+    expect(res.body.data.truth).toHaveProperty('service');
+  });
+
+  it('rejects unknown values, half a choice, and faults that leave no logs', async () => {
+    expect((await request(app).post('/api/rca/incident').set(key).send({ service: 'nope', fault: 'disk' })).status).toBe(400);
+    expect((await request(app).post('/api/rca/incident').set(key).send({ service: 'db' })).status).toBe(400);
+    const gateway = await request(app).post('/api/rca/incident').set(key).send({ service: 'gateway', fault: 'delay' });
+    expect(gateway.status).toBe(400);
+    expect(gateway.body.message).toMatch(/no logs to find/);
   });
 });

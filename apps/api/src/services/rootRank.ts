@@ -8,6 +8,8 @@
  * locates a change; it does not decide whether an incident happened, so this never answers "no incident".
  */
 import {
+  learnServiceGraph,
+  type LearnedGraph,
   ROOTRANK_V1,
   rankRootCauses,
   WindowTooShortError,
@@ -79,4 +81,11 @@ export async function rankIncident(input: RcaInput): Promise<RcaOutput> {
     if (err instanceof WindowTooShortError) throw new RcaError('window_too_short', err.message);
     throw err;
   }
+}
+
+/** The service graph learned from the stored logs of the lookback window. */
+export async function learnGraph(lookbackMinutes: number): Promise<LearnedGraph & { lines: number }> {
+  const lines = await storedLines(lookbackMinutes);
+  if (lines.length === 0) throw new RcaError('no_logs', 'No logs in the requested window.');
+  return { ...learnServiceGraph(lines), lines: lines.length };
 }

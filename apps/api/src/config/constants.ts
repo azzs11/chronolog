@@ -1,4 +1,4 @@
-export const MAX_LOGS_IN_MEMORY = 1000;
+export const MAX_LOGS_IN_MEMORY = 20_000;
 export const DEFAULT_LOG_LIMIT = 50;
 export const MAX_LOG_LIMIT = 500;
 export const ML_TIMEOUT_MS = 3000;

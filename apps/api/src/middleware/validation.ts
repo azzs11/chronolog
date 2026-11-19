@@ -1,5 +1,6 @@
 import { body, query, validationResult } from 'express-validator';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
+import { FAULT_KINDS, SERVICES } from '@chronolog/engine';
 import { VALID_SEVERITIES, MAX_LOG_LIMIT } from '../config/constants';
 
 export function handleValidationErrors(req: Request, res: Response, next: NextFunction): void {
@@ -82,5 +83,14 @@ export const validateRcaRank: RequestHandler[] = [
     .customSanitizer((v: unknown) => (typeof v === 'string' ? v.toLowerCase() : v))
     .isIn([...VALID_SEVERITIES]).withMessage(`severity must be one of: ${VALID_SEVERITIES.join(', ')}`),
 
+  handleValidationErrors,
+];
+
+export const validateInjectIncident: RequestHandler[] = [
+  body('service').optional().isIn([...SERVICES]).withMessage(`service must be one of: ${SERVICES.join(', ')}`),
+  body('fault').optional().isIn([...FAULT_KINDS]).withMessage(`fault must be one of: ${FAULT_KINDS.join(', ')}`),
+  body('seed').optional().isInt({ min: 0, max: 2_147_483_647 }).withMessage('seed must be a whole number from 0 to 2147483647').toInt(),
+  body().custom((value: { service?: unknown; fault?: unknown }) => !value.service === !value.fault)
+    .withMessage('give both service and fault, or neither'),
   handleValidationErrors,
 ];
