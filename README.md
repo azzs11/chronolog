@@ -28,7 +28,10 @@
 
   Plain-text lines that begin with a time, and JSON lines, are understood. If you leave out `--start`, ChronoLog
   estimates when the incident began (less accurate). Nothing leaves your machine.
-- **The running app**: `docker compose up -d`, then the **Root Cause** view or `POST /api/rca/rank` (below).
+- **The running app**: `docker compose up -d`, then open the **Incidents** inbox. It lists bursts of error lines, ranks the
+  likely root causes with the evidence, and lets you confirm or correct the answer; your answers are stored with the
+  ranking they were given for, to improve ChronoLog later. (A burst is something worth a look, not proof of an incident.)
+  The **Root Cause** view and `POST /api/rca/rank` (below) rank any window you choose.
 
 ---
 
@@ -226,6 +229,10 @@ All endpoints return `{ status, data, meta }`.
 | `GET` | `/api/logs/stats` | Severity counts + throughput |
 | `GET` | `/api/anomalies` | Detected anomalies |
 | `POST` | `/api/rca/rank` | Rank the services most likely to have caused an incident (see below) |
+| `GET` | `/api/incidents` | Bursts of error lines in the stored logs, biggest impact first, with review status |
+| `GET` | `/api/incidents/:id` | One incident with its ranking, evidence, per-service timeline and learned service graph |
+| `POST` | `/api/incidents/:id/feedback` | "Was this the root cause?" `{ verdict: confirm \| reject, correct_service?, note? }` |
+| `GET` | `/api/incidents/feedback/summary` | How often the first choice was right on incidents you reviewed |
 | `GET` | `/api/metrics` | Prometheus metrics |
 
 #### `POST /api/rca/rank`

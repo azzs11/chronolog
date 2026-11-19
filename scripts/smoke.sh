@@ -75,4 +75,12 @@ curl -fsS -X POST "$API/api/rca/incident" -H 'Content-Type: application/json' -H
 curl -fsS -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' -d '{"lookback_minutes":15}' \
   | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['candidates'][0]['service']=='db', d['candidates'][0]['service']"
 
+check "the injected incident shows up in the inbox, opens with a ranking, and can be reviewed"
+incident_id="$(curl -fsS "$API/api/incidents" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d, 'no incidents'; print(d[0]['id'])")"
+curl -fsS "$API/api/incidents/$incident_id" \
+  | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['ranking']['candidates'][0]['service']=='db', d['ranking']['candidates'][0]['service']; assert d['timeline']['services']"
+curl -fsS -X POST "$API/api/incidents/$incident_id/feedback" -H 'Content-Type: application/json' -d '{"verdict":"confirm"}' \
+  | grep -q '"rankOfCorrect":1'
+curl -fsS "$API/api/incidents/feedback/summary" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['reviewed']>=1 and d['top1']>=1, d"
+
 echo "smoke test passed"
