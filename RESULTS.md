@@ -6,7 +6,7 @@ How often does each method name the true root-cause service in its top 1, 3 and 
 
 - **Data:** [phamquiluan/RCAEval](https://huggingface.co/datasets/phamquiluan/RCAEval) (MIT), revision `afeacb11bcc9`, subset `small`: 40 cases (13 test, 27 train), logs only.
 - **Reachable cases:** 39 of 40. In the others the faulty service writes no logs, so no log-based method can name it. They stay in the tables as misses (⚠ below).
-- **Code:** log adapter v1, code fingerprint `fcbd0cfe572400d9`. A different fingerprint means the rules changed and these numbers are not comparable.
+- **Code:** log adapter v1, code fingerprint `e6210c296eeb9ffd`. A different fingerprint means the rules changed and these numbers are not comparable.
 - **Random:** mean ± standard deviation over 5 seeds. Other methods are deterministic; the bracket is a 95% bootstrap interval that resamples whole (system, root service) groups, because instances of one fault on one service are near-copies.
 
 ## All 40 cases

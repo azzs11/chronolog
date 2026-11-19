@@ -109,7 +109,7 @@
  },
  "setup": {
   "bgl_window_s": 60,
-  "code_fingerprint": "fd7aee3af66af012",
+  "code_fingerprint": "cf431ae7b378ba2a",
   "dataset": "Loghub HDFS_v1 and BGL (Zenodo record 8196385)",
   "methods": [
    "always_anomalous",

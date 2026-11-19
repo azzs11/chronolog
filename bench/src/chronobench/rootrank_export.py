@@ -21,13 +21,12 @@ from .cases import parse_case_id
 from .evaluate import REPO_ROOT, code_fingerprint
 from .features import BASE_FEATURES, case_features
 from .rootrank import fit
+from .servicegraph import learn_graph
 from .startdetect import detect_start
 from .templates import TemplatedCase, assign_templates
 
 MODEL_PATH = REPO_ROOT / "packages" / "engine" / "src" / "rootrank" / "modelV1.ts"
-GOLDEN_PATH = (
-    REPO_ROOT / "packages" / "engine" / "tests" / "fixtures" / "rootrank-golden.json"
-)
+GOLDEN_PATH = REPO_ROOT / "packages" / "engine" / "tests" / "fixtures" / "rootrank-golden.json"
 GOLDEN_CASES = (
     "re2ob_checkoutservice_cpu_1",
     "re2ss_carts_delay_1",
@@ -112,6 +111,7 @@ def _golden_case(case_id: str, model) -> dict:
             "features": features.to_numpy().tolist(),
             "scores": model.predict(features).tolist(),
             "estimated_start": detect_start(frame),
+            "graph": learn_graph(case),
         },
     }
 

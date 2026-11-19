@@ -6,9 +6,7 @@ from chronobench.loghub import Dataset, parse_bgl, parse_hdfs
 
 
 def _dataset(times, alarms, units, truth):
-    lines = pd.DataFrame(
-        {"t": times, "source": "s", "severity": "info", "is_alarm": alarms}
-    )
+    lines = pd.DataFrame({"t": times, "source": "s", "severity": "info", "is_alarm": alarms})
     pairs = pd.DataFrame({"line": range(len(times)), "unit": units})
     return Dataset("T", lines, pairs, pd.Series(truth))
 
@@ -30,7 +28,9 @@ def test_false_positive_and_miss_are_counted():
 def test_windowed_episodes_merge_consecutive_windows():
     # windows 0,1 anomalous (one episode), window 3 anomalous (second episode)
     times = [5, 65, 125, 185]
-    data = _dataset(times, [True, True, False, True], [0, 1, 2, 3], {0: True, 1: True, 2: False, 3: True})
+    data = _dataset(
+        times, [True, True, False, True], [0, 1, 2, 3], {0: True, 1: True, 2: False, 3: True}
+    )
     result = score(data, np.array([False, True, False, False]), windowed=True)
     assert result["episodes"] == 2 and result["episodes_detected"] == 1
     assert result["median_delay_s"] == 60  # first alarm at t=5, first flag at t=65

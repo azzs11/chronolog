@@ -1,0 +1,83 @@
+{
+ "byFault": {
+  "cpu": {
+   "runs": 120,
+   "top1": {
+    "estimated": 19,
+    "given": 19
+   },
+   "top3": {
+    "estimated": 100,
+    "given": 100
+   }
+  },
+  "crash": {
+   "runs": 120,
+   "top1": {
+    "estimated": 97,
+    "given": 120
+   },
+   "top3": {
+    "estimated": 111,
+    "given": 120
+   }
+  },
+  "delay": {
+   "runs": 100,
+   "top1": {
+    "estimated": 16,
+    "given": 16
+   },
+   "top3": {
+    "estimated": 100,
+    "given": 100
+   }
+  },
+  "disk": {
+   "runs": 120,
+   "top1": {
+    "estimated": 120,
+    "given": 120
+   },
+   "top3": {
+    "estimated": 120,
+    "given": 120
+   }
+  },
+  "loss": {
+   "runs": 100,
+   "top1": {
+    "estimated": 16,
+    "given": 16
+   },
+   "top3": {
+    "estimated": 100,
+    "given": 100
+   }
+  },
+  "memory": {
+   "runs": 120,
+   "top1": {
+    "estimated": 120,
+    "given": 120
+   },
+   "top3": {
+    "estimated": 120,
+    "given": 120
+   }
+  }
+ },
+ "overall": {
+  "runs": 680,
+  "top1": {
+   "estimated": 388,
+   "given": 411
+  },
+  "top3": {
+   "estimated": 651,
+   "given": 660
+  }
+ },
+ "seeds": 20,
+ "services": 6
+}

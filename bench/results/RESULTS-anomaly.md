@@ -7,7 +7,7 @@ Can the ChronoLog-H anomaly rules tell abnormal logs from normal ones? Generated
 - **Data:** Loghub HDFS_v1 and BGL (Zenodo record 8196385). Only the first 2,000,000 lines of each log are used (a plain `head`, so no line is picked by label).
 - **Unit:** an HDFS block, or a 60 s BGL window. A unit is predicted anomalous if any of its lines is flagged. Truth: HDFS block labels; a BGL window is anomalous if it has an alarm line.
 - **Delay:** per episode (one HDFS block, or a run of anomalous BGL windows), the time from the first reference line to the first flagged line. Reference: the first alarm line (BGL) or the block's first log line (HDFS, whose labels carry no time). Negative means flagged early.
-- **Code:** code fingerprint `fd7aee3af66af012`. Severity comes from the log's own level field. No parameter was tuned on these datasets.
+- **Code:** code fingerprint `cf431ae7b378ba2a`. Severity comes from the log's own level field. No parameter was tuned on these datasets.
 
 ## HDFS
 

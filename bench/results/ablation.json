@@ -360,6 +360,12 @@
   "re3tt_ts-route-service_f4_2",
   "re3tt_ts-route-service_f4_3"
  ],
+ "code_fault_check": {
+  "cases": 90,
+  "median_novel_other": 0.3645833333333333,
+  "median_novel_root": 19.0,
+  "restart_like": 81
+ },
  "rounds": 25,
  "variants": {
   "all features": {

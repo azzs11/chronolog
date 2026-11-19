@@ -2447,7 +2447,7 @@
   "bench_version": "2.0.0",
   "benchmark": "ChronoBench",
   "bootstrap_resamples": 1000,
-  "code_fingerprint": "fcbd0cfe572400d9",
+  "code_fingerprint": "e6210c296eeb9ffd",
   "dataset": "phamquiluan/RCAEval",
   "dataset_revision": "afeacb11bcc94dadfd1c8f483ee4377b2b8b614e",
   "ks": [
