@@ -64,3 +64,5 @@ apps/ml/models/*.json
 __pycache__/
 bench/data/
 bench/.venv/
+
+packages/engine/coverage/
