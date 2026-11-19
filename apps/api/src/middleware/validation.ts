@@ -54,3 +54,33 @@ export const validateGeneratorStart: RequestHandler[] = [
 
   handleValidationErrors,
 ];
+
+const MAX_RCA_BODY_LINES = 20_000;
+const isTime = (v: unknown): boolean =>
+  (typeof v === 'number' && Number.isFinite(v)) || (typeof v === 'string' && !Number.isNaN(Date.parse(v)));
+
+export const validateRcaRank: RequestHandler[] = [
+  body('incident_start')
+    .optional()
+    .custom(isTime).withMessage('incident_start must be Unix seconds or an ISO timestamp'),
+
+  body('lookback_minutes')
+    .optional()
+    .isFloat({ min: 1 }).withMessage('lookback_minutes must be a number of at least 1'),
+
+  body('logs')
+    .optional()
+    .isArray({ min: 1, max: MAX_RCA_BODY_LINES })
+    .withMessage(`logs must be an array of 1 to ${MAX_RCA_BODY_LINES} lines`),
+
+  body('logs.*.timestamp').custom(isTime).withMessage('each log needs a timestamp (Unix seconds or ISO)'),
+  body('logs.*.message').isString().withMessage('each log needs a message'),
+  body('logs.*.source').optional().isString().isLength({ max: 100 }),
+  body('logs.*.service').optional().isString().isLength({ max: 100 }),
+  body('logs.*.severity')
+    .optional()
+    .customSanitizer((v: unknown) => (typeof v === 'string' ? v.toLowerCase() : v))
+    .isIn([...VALID_SEVERITIES]).withMessage(`severity must be one of: ${VALID_SEVERITIES.join(', ')}`),
+
+  handleValidationErrors,
+];

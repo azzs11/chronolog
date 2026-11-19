@@ -47,4 +47,22 @@ code="$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/api/logs" \
   -H 'Content-Type: application/json' -d '{"message":"x","severity":"nope"}')"
 [ "$code" = "400" ] || { echo "FAIL: expected 400, got $code" >&2; exit 1; }
 
+check "RootRank ranks the service that breaks first, with an estimated start"
+payload="$(python3 - <<'PY'
+import json
+logs = []
+for t in range(300):
+    for service in ("api", "db", "cache"):
+        logs.append({"timestamp": t, "source": service, "message": "heartbeat ok", "severity": "info"})
+for t in range(300, 540):
+    logs += [{"timestamp": t, "source": s, "message": "heartbeat ok", "severity": "info"} for s in ("api", "cache")]
+    logs.append({"timestamp": t, "source": "db", "message": "disk write failed on volume %d" % (t % 5), "severity": "error"})
+print(json.dumps({"logs": logs}))
+PY
+)"
+ranked="$(curl -fsS -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' -d "$payload")"
+echo "$ranked" | grep -q '"model":{"id":"rootrank-v1"'
+echo "$ranked" | grep -q '"startSource":"estimated"'
+echo "$ranked" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['candidates'][0]['service']=='db', d['candidates'][0]['service']"
+
 echo "smoke test passed"

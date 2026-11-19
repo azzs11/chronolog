@@ -116,6 +116,19 @@ export const getLogs = async ({
   return rows.reverse();
 };
 
+/** Logs at or after `sinceIso`, oldest first, capped at the `limit` most recent. */
+export const getLogsSince = async (sinceIso: string, limit: number): Promise<StoredLog[]> => {
+  const sinceMs = new Date(sinceIso).getTime();
+  if (!isPgAvailable()) {
+    return memLogs.filter((l) => new Date(l.timestamp).getTime() >= sinceMs).slice(-limit);
+  }
+  const { rows } = await requirePool().query<StoredLog>(
+    'SELECT * FROM logs WHERE timestamp >= $1 ORDER BY timestamp DESC LIMIT $2',
+    [sinceIso, limit],
+  );
+  return rows.reverse();
+};
+
 export const getLogById = async (id: string): Promise<StoredLog | null> => {
   if (!isPgAvailable()) return memLogs.find((l) => l.id === id) ?? null;
   const { rows } = await requirePool().query<StoredLog>('SELECT * FROM logs WHERE id = $1', [id]);

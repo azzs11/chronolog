@@ -8,6 +8,7 @@ import causalRouter from './routes/causal';
 import healthRouter from './routes/health';
 import metricsRouter from './routes/metrics';
 import anomaliesRouter from './routes/anomalies';
+import rcaRouter from './routes/rca';
 import logger from './config/logger';
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/health', healthRouter);
 app.use('/api/logs', logsRouter);
 app.use('/api/causal', causalRouter);
 app.use('/api/anomalies', anomaliesRouter);
+app.use('/api/rca', rcaRouter);
 app.use('/api/metrics', metricsRouter);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────

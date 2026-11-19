@@ -18,3 +18,6 @@ export const logsIngestionLimiter = limiter(500);
 
 /** Generator endpoint limiter: 10 req/min. Prevents accidental rapid start/stop loops. */
 export const generatorLimiter = limiter(10);
+
+// Ranking replays the whole window through the engine, so it is limited harder than reads.
+export const rcaLimiter = limiter(20);
