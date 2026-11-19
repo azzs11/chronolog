@@ -48,3 +48,19 @@ CREATE INDEX idx_logs_source ON logs(source);
 CREATE INDEX idx_logs_causal_root ON logs(causal_root_id);
 CREATE INDEX idx_logs_anomaly ON logs(is_anomaly) WHERE is_anomaly = TRUE;
 CREATE INDEX idx_logs_fingerprint ON logs(fingerprint_hash);
+
+-- Engineers' answers to "was this the root cause?" (also created on first use for older databases).
+CREATE TABLE IF NOT EXISTS rca_feedback (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  incident_id TEXT NOT NULL,
+  window_start TIMESTAMPTZ NOT NULL,
+  window_end TIMESTAMPTZ NOT NULL,
+  model_id TEXT NOT NULL,
+  predicted_service TEXT,
+  correct_service TEXT NOT NULL,
+  verdict TEXT NOT NULL CHECK (verdict IN ('confirm','reject')),
+  rank_of_correct INTEGER,
+  candidates JSONB NOT NULL,
+  note TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

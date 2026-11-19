@@ -129,6 +129,23 @@ export const getLogsSince = async (sinceIso: string, limit: number): Promise<Sto
   return rows.reverse();
 };
 
+/** Logs between two ISO times (inclusive start, exclusive end), oldest first, capped at the `limit` newest. */
+export const getLogsBetween = async (fromIso: string, toIso: string, limit: number): Promise<StoredLog[]> => {
+  const from = new Date(fromIso).getTime();
+  const to = new Date(toIso).getTime();
+  if (!isPgAvailable()) {
+    return memLogs.filter((l) => {
+      const t = new Date(l.timestamp).getTime();
+      return t >= from && t < to;
+    }).slice(-limit);
+  }
+  const { rows } = await requirePool().query<StoredLog>(
+    'SELECT * FROM logs WHERE timestamp >= $1 AND timestamp < $2 ORDER BY timestamp DESC LIMIT $3',
+    [fromIso, toIso, limit],
+  );
+  return rows.reverse();
+};
+
 export const getLogById = async (id: string): Promise<StoredLog | null> => {
   if (!isPgAvailable()) return memLogs.find((l) => l.id === id) ?? null;
   const { rows } = await requirePool().query<StoredLog>('SELECT * FROM logs WHERE id = $1', [id]);

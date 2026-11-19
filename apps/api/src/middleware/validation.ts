@@ -94,3 +94,15 @@ export const validateInjectIncident: RequestHandler[] = [
     .withMessage('give both service and fault, or neither'),
   handleValidationErrors,
 ];
+
+export const validateFeedback: RequestHandler[] = [
+  body('verdict').isIn(['confirm', 'reject']).withMessage('verdict must be "confirm" or "reject"'),
+  body('correct_service')
+    .if(body('verdict').equals('reject'))
+    .isString().withMessage('say which service was the real cause')
+    .trim().notEmpty().withMessage('say which service was the real cause')
+    .isLength({ max: 100 }),
+  body('correct_service').optional().isString().trim().isLength({ max: 100 }),
+  body('note').optional().isString().trim().isLength({ max: 500 }).withMessage('note must not exceed 500 characters'),
+  handleValidationErrors,
+];
