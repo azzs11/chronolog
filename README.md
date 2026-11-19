@@ -30,6 +30,11 @@ instead would give a higher number, because RCAEval has several instances of the
 and the model can recognise the service; the strict figure is the one to quote. Leaving one whole system out gives
 53.5%. Details, other splits and the most used features are in
 [bench/results/RESULTS-rootrank.md](bench/results/RESULTS-rootrank.md); run it with `uv run bench rootrank`.
+The split matters: on the 90 Train Ticket code-fault cases RootRank is right in its top 3 every time (probably
+because changed code logs messages never seen before), while on the 269 resource-fault cases (cpu, memory, disk,
+delay, packet loss, socket) it gets **36.8%**, against 20.8% for "first service to log an error". The ablation shows one
+signal, templates a service never logged before, carries almost all of the gain
+([bench/results/RESULTS-ablation.md](bench/results/RESULTS-ablation.md), `uv run bench ablate`).
 RootRank is not yet part of the running app.
 Anomaly detection was scored too, on the first 2 million lines of Loghub HDFS and BGL
 ([bench/results/RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). The current rules are weak there:
