@@ -38,9 +38,17 @@ BASE_FEATURES = [
 SHIFT_TIME = ["t_first_deviation"]
 SHIFT_COUNT = ["template_shift", "vanished_mass", "silence_increase"]
 SHIFT_FEATURES = [*SHIFT_TIME, *SHIFT_COUNT, *(f"rank_{n}" for n in [*SHIFT_TIME, *SHIFT_COUNT])]
-ALL_FEATURES = [*BASE_FEATURES, *SHIFT_FEATURES]
-# RootRank uses the base set. The shift features were tried on the train split only and did not
-# improve resource-fault AC@3 (38.6% -> 38.0%, within seed noise), so they stay optional.
+# Features added in feature version f3: does a service deviate BEFORE the services whose normal
+# traffic is correlated with its own? The neighbourhood is learned from baseline log volume only.
+CORR_BUCKET_S = 2  # width of the volume buckets used to correlate services
+NEIGHBOURS = 3  # a service's neighbourhood is its most correlated services
+PRECEDENCE_TIME = ["t_first_any"]
+PRECEDENCE_OTHER = ["lead_share", "neighbour_anomalous_share", "neighbour_delay", "neighbour_corr"]
+PRECEDENCE_FEATURES = [*PRECEDENCE_TIME, *PRECEDENCE_OTHER, "rank_t_first_any"]
+ALL_FEATURES = [*BASE_FEATURES, *SHIFT_FEATURES, *PRECEDENCE_FEATURES]
+# RootRank uses the base set. The shift and precedence features were tried on the train split only
+# and did not improve resource-fault AC@3 (38.6% -> 38.0% and 37.0%, within seed noise), so they
+# stay optional.
 FEATURES = BASE_FEATURES
 MIN_DEVIATION = 5  # a bucket deviates only if it differs from the baseline mean by this many lines
 
@@ -239,6 +247,43 @@ def _shift_features(sp: _Split, out: pd.DataFrame) -> None:
     out["vanished_mass"] = gone
 
 
+def _baseline_correlation(sp: _Split) -> np.ndarray:
+    """Correlation of per-service log volume over the baseline (diagonal 0). Normal traffic
+    couples services that call each other, so strong correlation marks a likely neighbour."""
+    n = max(int(np.ceil(sp.baseline_s / CORR_BUCKET_S)), 1)
+    index = {s: i for i, s in enumerate(sp.services)}
+    volume = np.zeros((len(sp.services), n))
+    bucket = (sp.baseline["timestamp"] - (sp.inject - sp.baseline_s)) // CORR_BUCKET_S
+    keep = (bucket >= 0) & (bucket < n)
+    rows = sp.baseline[keep].assign(b=bucket[keep])
+    for (service, b), count in rows.groupby(["source", "b"]).size().items():
+        volume[index[service], int(b)] = count
+    if len(sp.services) < 2:
+        return np.zeros((len(sp.services), len(sp.services)))
+    with np.errstate(all="ignore"):
+        corr = np.nan_to_num(np.corrcoef(volume))  # silent services have no variance: 0
+    np.fill_diagonal(corr, 0.0)
+    return corr
+
+
+def _precedence_features(sp: _Split, out: pd.DataFrame) -> None:
+    corr = _baseline_correlation(sp)
+    first = out[["t_first_error", "t_first_novel", "t_first_deviation"]].min(axis=1).to_numpy()
+    out["t_first_any"] = first
+    k = min(NEIGHBOURS, len(sp.services) - 1)
+    cols = {name: np.zeros(len(first)) for name in PRECEDENCE_OTHER}
+    for i in range(len(first) if k > 0 else 0):
+        near = np.argsort(-corr[i], kind="stable")[:k]
+        others = first[near]
+        cols["lead_share"][i] = np.mean(others > first[i])
+        cols["neighbour_anomalous_share"][i] = np.mean(others < sp.missing)
+        delay = np.clip(others - first[i], -sp.missing, sp.missing)
+        cols["neighbour_delay"][i] = delay.mean() / sp.missing
+        cols["neighbour_corr"][i] = corr[i, near].mean()
+    for name, values in cols.items():
+        out[name] = values
+
+
 def case_features(tc: TemplatedCase) -> pd.DataFrame:
     """Feature matrix for one case, indexed by service."""
     sp = _split(tc)
@@ -247,12 +292,13 @@ def case_features(tc: TemplatedCase) -> pd.DataFrame:
     _novelty_features(sp, out)
     _mention_features(tc, sp, out)
     _shift_features(sp, out)
+    _precedence_features(sp, out)
     return _add_ranks(out)
 
 
 def _add_ranks(out: pd.DataFrame) -> pd.DataFrame:
     """Within-case percentile ranks: 0 = first/most, 1 = last/least (ties share their average)."""
-    for name in [*RAW_TIME, *SHIFT_TIME]:
+    for name in [*RAW_TIME, *SHIFT_TIME, *PRECEDENCE_TIME]:
         out[f"rank_{name}"] = out[name].rank(pct=True, method="average")
     for name in [*RAW_COUNT, "pagerank", *SHIFT_COUNT]:
         out[f"rank_{name}"] = out[name].rank(pct=True, ascending=False, method="average")

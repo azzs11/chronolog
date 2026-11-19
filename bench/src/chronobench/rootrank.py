@@ -28,7 +28,7 @@ from .features import FEATURES, case_features
 from .metrics import ac_at_k, hit_ranks
 from .templates import TEMPLATE_VERSION, template_case
 
-FEATURE_VERSION = f"{TEMPLATE_VERSION}f2"
+FEATURE_VERSION = f"{TEMPLATE_VERSION}f3"
 CACHE_FILE = DATA_DIR.parent / "cache" / f"features.{FEATURE_VERSION}.parquet"
 SEEDS = (0, 1, 2, 3, 4)
 CV_FOLDS = 5

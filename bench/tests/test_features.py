@@ -77,3 +77,23 @@ def test_a_service_that_goes_quiet_has_silence_and_vanished_mass():
     assert f.loc["alpha", "silence_increase"] > f.loc["beta", "silence_increase"]
     assert f.loc["alpha", "vanished_mass"] == 1.0 and f.loc["beta", "vanished_mass"] == 0.0
     assert f.loc["alpha", "t_first_deviation"] < f.loc["beta", "t_first_deviation"]
+
+
+def test_precedence_features_reward_deviating_before_correlated_neighbours():
+    rows = []
+    for t in range(0, 100):  # alpha and beta share a bursty rhythm; gamma is flat
+        burst = 6 if (t // 10) % 2 else 1
+        rows += [(t, "alpha", "info", 0)] * burst + [(t, "beta", "info", 0)] * burst
+        rows += [(t, "gamma", "info", 0)] * 3
+    for t in range(100, 200):  # after injection: alpha floods at once, beta follows 30 s later
+        rows += [(t, "alpha", "info", 0)] * (40 if t >= 110 else 3)
+        rows += [(t, "beta", "info", 0)] * (40 if t >= 140 else 3)
+        rows += [(t, "gamma", "info", 0)] * 3
+    frame = pd.DataFrame(rows, columns=["timestamp", "source", "severity", "template_id"])
+    frame["template_id"] = frame["template_id"].astype("int32")
+    case = TemplatedCase(parse_case_id("re2ob_alpha_cpu_1"), INJECT, frame, {0: "heartbeat ok"})
+    f = case_features(case)
+    assert f.loc["alpha", "t_first_any"] < f.loc["beta", "t_first_any"]
+    assert f.loc["alpha", "lead_share"] > f.loc["beta", "lead_share"]
+    assert f.loc["alpha", "neighbour_delay"] > f.loc["beta", "neighbour_delay"]
+    assert f["neighbour_corr"].between(-1, 1).all()
