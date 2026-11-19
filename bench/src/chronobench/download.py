@@ -4,6 +4,8 @@ Only ``logs.parquet`` and ``inject_time.txt`` are fetched. Metrics and traces ar
 and ``root_cause.txt`` holds the answer, so it is never downloaded.
 """
 
+import http.client
+import signal
 import time
 import urllib.error
 import urllib.request
@@ -15,11 +17,19 @@ BASE_URL = "https://huggingface.co/datasets/phamquiluan/RCAEval/resolve"
 FILES = ("logs.parquet", "inject_time.txt")
 RETRIES = 3
 TIMEOUT_S = 120
+# Hard limit per file: a socket timeout does not fire when a connection stalls mid-handshake.
+FILE_DEADLINE_S = 300
+
+
+def _on_deadline(signum: int, frame: object) -> None:
+    raise TimeoutError("download exceeded the per-file deadline")
 
 
 def _fetch(url: str, dest: Path) -> None:
     last_error: Exception | None = None
     for attempt in range(RETRIES):
+        signal.signal(signal.SIGALRM, _on_deadline)
+        signal.alarm(FILE_DEADLINE_S)
         try:
             tmp = dest.with_suffix(dest.suffix + ".part")
             with urllib.request.urlopen(url, timeout=TIMEOUT_S) as response, open(tmp, "wb") as out:
@@ -27,9 +37,16 @@ def _fetch(url: str, dest: Path) -> None:
                     out.write(chunk)
             tmp.replace(dest)
             return
-        except (urllib.error.URLError, TimeoutError) as exc:
+        except (
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+            http.client.HTTPException,
+        ) as exc:
             last_error = exc
             time.sleep(2**attempt)
+        finally:
+            signal.alarm(0)
     raise RuntimeError(f"Failed to download {url}: {last_error}")
 
 
