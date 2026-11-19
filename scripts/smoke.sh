@@ -65,4 +65,11 @@ echo "$ranked" | grep -q '"model":{"id":"rootrank-v1"'
 echo "$ranked" | grep -q '"startSource":"estimated"'
 echo "$ranked" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['candidates'][0]['service']=='db', d['candidates'][0]['service']"
 
+check "a simulated incident can be injected and Root Cause finds it"
+ADMIN_KEY="${ADMIN_API_KEY:-dev_key_change_in_prod}"
+curl -fsS -X POST "$API/api/rca/incident" -H 'Content-Type: application/json' -H "X-API-Key: $ADMIN_KEY" \
+  -d '{"service":"db","fault":"disk","seed":5}' | grep -q '"truth":{"service":"db","fault":"disk"}'
+curl -fsS -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' -d '{"lookback_minutes":15}' \
+  | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['candidates'][0]['service']=='db', d['candidates'][0]['service']"
+
 echo "smoke test passed"

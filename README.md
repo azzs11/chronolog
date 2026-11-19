@@ -10,9 +10,27 @@
 **ChronoLog** is an open, self-hosted log monitoring system that links log events into
 *causal chains*. It shows you what broke, what probably caused it, and how far the damage spread.
 
-> **Status:** ChronoLog 2.0 is in progress. The current engine (ChronoLog-H) uses hand-tuned rules.
-> It is now measured on real incidents, and the honest result is that it is not good yet.
-> See [Benchmark](#benchmark) and [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Status:** ChronoLog 2.0 is in progress. It now ships a learned root-cause ranker, **RootRank**, that is measured
+> on real incidents and clearly beats the older hand-tuned rules, though it is far from perfect. See
+> [Benchmark](#benchmark) and [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Try it
+
+- **Fault Playground** (no install): break a simulated system, or replay five real incidents, and see whether ChronoLog
+  finds the broken service. It runs entirely in your browser: `npm run build:demo -w chronolog-web`, and
+  [docs/DEPLOY.md](docs/DEPLOY.md) explains hosting it. Locally, open the **Playground** view of the app.
+- **Your own logs** from the command line, one file per service:
+
+  ```bash
+  npm ci && npm run build
+  node apps/cli/dist/cli.js analyze logs/api.log logs/db.log logs/cache.log --start 2026-11-19T10:02:00Z
+  ```
+
+  Plain-text lines that begin with a time, and JSON lines, are understood. If you leave out `--start`, ChronoLog
+  estimates when the incident began (less accurate). Nothing leaves your machine.
+- **The running app**: `docker compose up -d`, then the **Root Cause** view or `POST /api/rca/rank` (below).
+
+---
 
 ## Benchmark
 
@@ -33,15 +51,23 @@ points (+10.5 to +40.3). ChronoLog-H is better than chance but not distinguishab
 
 What to know before quoting these:
 
-- **Easy and hard faults differ a lot.** On the 90 Train Ticket code-fault cases RootRank is right every time
-  (probably because changed code logs messages never seen before). On the 269 resource-fault cases (cpu, memory,
-  disk, delay, packet loss, socket) it gets **36.8%**, against 20.8% for first-error.
+- **Easy and hard faults differ a lot.** On the 90 Train Ticket code-fault cases RootRank is right every time, and
+  the reason is measured: those faults were injected by restarting the service, so in 81 of 90 cases the faulty
+  service logs shutdown or startup lines it never logged before. That is a real production signal too, but an
+  artifact of this benchmark's fault injection. On the 269 resource-fault cases (cpu, memory, disk, delay, packet
+  loss, socket) RootRank gets **36.8%**, against 20.8% for first-error.
 - **One signal does most of the work:** templates a service never logged before. Two further feature families I
   tried did not help, and ChronoLog-H's own score made RootRank worse.
-- **It holds up on messy logs:** dropping 40% of lines costs 1.3 points; ±2 s of clock skew costs 0.4.
+- **It holds up on messy logs:** dropping 40% of lines costs 1.3 points; ±2 s of clock skew costs 0.4; a 60 s outage of
+  all logs or a 120 s outage of one service, placed at random, costs under half a point (a gap that hides the faulty
+  service exactly when it breaks would cost more).
 - **Leaving one whole system out** gives 53.5%. Splitting by case id would give a higher number, because the model
   could recognise repeated services, so the strict figure is the one to quote.
 - In 26 of the 359 cases the faulty service writes no logs, so no log-based method can name it.
+- **The service graph can be learned from logs, unevenly.** Compared with the real call graphs of Online Boutique and
+  Sock Shop (Train Ticket is not scored), "A's logs name B" edges have 93% precision on Sock Shop but 2% on Online
+  Boutique, whose logs never name other services; volume-correlation edges reach F1 51% there. Neither wins everywhere
+  ([RESULTS-graph.md](bench/results/RESULTS-graph.md), `uv run bench graph`; served by `GET /api/rca/graph`).
 - **Anomaly detection is weak.** On Loghub HDFS and BGL the current rules score F1 1.5% and 19.1%, and a plain
   "flag error lines" rule gets 67.9% on BGL.
 - **RootRank is in the app** (the Root Cause view, and `POST /api/rca/rank`, below). Given the true incident start it

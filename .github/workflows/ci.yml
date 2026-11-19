@@ -32,6 +32,23 @@ jobs:
       - name: Dependency audit
         run: npm audit --audit-level=high
 
+  demo:
+    name: Static demo (size budget and Lighthouse)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build the backend-free demo
+        run: npm run build:demo -w chronolog-web
+      - name: JavaScript size budget
+        run: scripts/check-demo-size.sh
+      - name: "Lighthouse (mobile): accessibility 95+, LCP under 3 s"
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.json
+
   python:
     name: Lint and test (${{ matrix.directory }})
     runs-on: ubuntu-latest

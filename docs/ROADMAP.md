@@ -10,6 +10,16 @@ Nothing yet measures whether a detected "root cause" is the real one.
 The 2.0 work closes that gap first, then improves the engine against a measured baseline.
 The current rules stay in the repo as the baseline, **ChronoLog-H**.
 
+## Where things stand
+
+- **Phases 0 to 3 are done.** The benchmark, RootRank, its ablation, robustness checks, learned service graph and an
+  end-to-end test with an estimated incident start are published in [`bench/results/`](../bench/results/).
+- **Phase 7 is in progress.** The Fault Playground, the real-incident replays and a command-line tool exist; hosting
+  at `chronolog.akchhya.xyz` needs a Cloudflare Pages project (see [DEPLOY.md](DEPLOY.md)).
+- Counterfactual blast radius was dropped for real incidents (RCAEval has no affected-service labels to score it
+  against); it can be measured in the Playground, where affected services are known by construction.
+- Phases 6, 4, 5 and 8 have not started.
+
 ## Phases
 
 Phases run in this order: 0 → 1 → 2 → 3 → 7 → 6 → 4 → 5 → 8.
