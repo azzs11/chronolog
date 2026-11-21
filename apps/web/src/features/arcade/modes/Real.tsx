@@ -4,6 +4,7 @@ import { EMPTY_PLAY, isOver, isSolved } from '../game';
 import GameCase from '../GameCase';
 import { usePlays } from '../store';
 import { ModeBar } from './common';
+import Panel from './Panel';
 
 export const REAL_KEY = 'chronolog.realcases.v2';
 
@@ -30,10 +31,10 @@ export default function Real({ onHome, fetcher = fetch }: { onHome: () => void; 
         <ModeBar title="REAL SYSTEMS" onHome={onHome}>
           <span className="font-pixel text-text-secondary">{score}</span>
         </ModeBar>
-        <p className="max-w-2xl text-sm text-text-secondary">
-          Real logs from three open-source shops built from microservices, with real faults injected ({bundle.source}). Harder than the Daily Case: Tock gets {tockRight} of{' '}
-          {bundle.cases.length} right on its first guess, and never trained on these services.
-        </p>
+        <Panel
+          title="PICK A CASE"
+          tock={`Real logs from three open-source shops, with real faults injected (${bundle.source}). I never trained on these services and get ${tockRight} of ${bundle.cases.length} right on my first guess. Your turn.`}
+        >
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5" aria-label="Real cases">
           {bundle.cases.map((c, i) => {
             const p = plays[c.caseId] ?? EMPTY_PLAY;
@@ -52,6 +53,7 @@ export default function Real({ onHome, fetcher = fetch }: { onHome: () => void; 
             );
           })}
         </ul>
+        </Panel>
       </div>
     );
   }

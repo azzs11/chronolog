@@ -5,6 +5,7 @@ import { EMPTY_PLAY, isOver, isSolved } from '../game';
 import GameCase from '../GameCase';
 import { usePlays } from '../store';
 import { ModeBar } from './common';
+import Panel from './Panel';
 
 export const DRILLS_KEY = 'chronolog.drills.v1';
 /** Drills come from the last day of stored incidents. */
@@ -77,14 +78,16 @@ export default function Drills({ onHome }: { onHome: () => void }) {
   return (
     <div className="space-y-4">
       <ModeBar title="YOUR TEAM" onHome={onHome} />
+      <Panel
+        title={reviewed.length === 0 ? 'NO DRILLS YET' : `${reviewed.length} DRILL${reviewed.length === 1 ? '' : 'S'}`}
+        tock={
+          reviewed.length === 0
+            ? 'Drills are made from your own incidents. Open one in Incidents and close the case (confirm or correct the cause). It then shows up here as practice for your team.'
+            : 'Each drill is a real incident from your system that someone on your team already solved. New people can practise here before their first on-call shift.'
+        }
+      >
       {reviewed.length === 0 ? (
-        <div className="card max-w-2xl space-y-2 text-sm">
-          <p className="font-pixel text-lg">NO DRILLS YET</p>
-          <p>
-            Drills are made from your own incidents. Open one in <b>Incidents</b>, and close the case (confirm or correct the cause). It then shows up here as practice for
-            your team, with the answer your team gave.
-          </p>
-        </div>
+        <p className="text-center text-lg">CLOSE A CASE IN INCIDENTS TO MAKE ONE</p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2" aria-label="Team drills">
           {reviewed.map((i) => {
@@ -104,6 +107,7 @@ export default function Drills({ onHome }: { onHome: () => void }) {
           })}
         </ul>
       )}
+      </Panel>
     </div>
   );
 }

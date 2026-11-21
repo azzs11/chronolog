@@ -64,7 +64,7 @@ describe('AppRoutes and Shell', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
     fireEvent.click(screen.getByRole('button', { name: /switch to compact density/i }));
     expect(document.documentElement.getAttribute('data-density')).toBe('compact');
-    expect(JSON.parse(localStorage.getItem('chronolog.preferences.v1') ?? '{}')).toEqual({ theme: 'light', density: 'compact' });
+    expect(JSON.parse(localStorage.getItem('chronolog.preferences.v1') ?? '{}')).toEqual({ theme: 'light', density: 'compact', lens: 'town' });
     fireEvent.click(screen.getByRole('button', { name: 'System theme' }));
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
   });
@@ -91,5 +91,19 @@ describe('AppRoutes and Shell', () => {
     fireEvent.click(screen.getByRole('button', { name: /Ask Tock/ }));
     fireEvent.keyDown(screen.getByRole('combobox', { name: /Ask Tock/ }), { key: 'Escape' });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('turns on the Pro lens from its switch or Shift+P (with compact rows), but not while typing', () => {
+    at('/incidents');
+    fireEvent.click(screen.getByRole('button', { name: /pro lens/i }));
+    expect(document.documentElement.getAttribute('data-lens')).toBe('pro');
+    expect(document.documentElement.getAttribute('data-density')).toBe('compact');
+    fireEvent.keyDown(window, { key: 'P', shiftKey: true });
+    expect(document.documentElement.getAttribute('data-lens')).toBe('town');
+    const input = document.createElement('input');
+    document.body.append(input);
+    fireEvent.keyDown(input, { key: 'P', shiftKey: true });
+    expect(document.documentElement.getAttribute('data-lens')).toBe('town');
+    input.remove();
   });
 });

@@ -24,7 +24,7 @@ describe('SuspectLineup', () => {
   it('shows the top three with rank, word, number and a face from their own evidence', () => {
     render(<SuspectLineup candidates={suspects} selected="db" onSelect={vi.fn()} />);
     const items = within(screen.getByRole('list', { name: 'Suspect lineup' })).getAllByRole('button');
-    expect(items.map((b) => b.getAttribute('aria-label'))).toEqual(['Number 1: db, likely, 0.62', 'Number 2: api, unlikely, 0.25', 'Number 3: cache, unlikely, 0.10']);
+    expect(items.map((b) => b.textContent?.replace(/\s+/g, ' ').trim())).toEqual(['#1 db likely, 0.62 Sick', '#2 api unlikely, 0.25 Stressed', '#3 cache unlikely, 0.10 Fine']);
     expect(items[0]).toHaveTextContent('Sick');
     expect(items[1]).toHaveTextContent('Stressed');
     expect(items[2]).toHaveTextContent('Fine');
@@ -34,7 +34,7 @@ describe('SuspectLineup', () => {
   it('selects a suspect on click', () => {
     const onSelect = vi.fn();
     render(<SuspectLineup candidates={suspects} selected="db" onSelect={onSelect} />);
-    fireEvent.click(screen.getByRole('button', { name: /Number 3: cache/ }));
+    fireEvent.click(screen.getByRole('button', { name: /#3 cache/ }));
     expect(onSelect).toHaveBeenCalledWith('cache');
   });
 });

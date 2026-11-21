@@ -26,3 +26,10 @@ export function filterCommands(commands: readonly Command[], query: string): Com
 
 /** True for Cmd+K on a Mac and Ctrl+K elsewhere. */
 export const isPaletteShortcut = (e: { key: string; metaKey: boolean; ctrlKey: boolean }): boolean => e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey);
+
+/** Shift+P toggles the Pro lens, except while typing in a field. */
+export function isLensShortcut(e: { key: string; shiftKey: boolean; metaKey: boolean; ctrlKey: boolean; altKey: boolean; target: EventTarget | null }): boolean {
+  if (e.key !== 'P' || !e.shiftKey || e.metaKey || e.ctrlKey || e.altKey) return false;
+  const el = e.target as HTMLElement | null;
+  return !(el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)));
+}

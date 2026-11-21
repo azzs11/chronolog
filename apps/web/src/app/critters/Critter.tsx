@@ -212,7 +212,7 @@ export default function Critter({ name, mood, size = 56, look, decorative = fals
       width={size}
       height={size}
       viewBox="0 0 100 100"
-      className={`shrink-0 overflow-visible ${mood === 'quiet' ? '' : 'motion-safe:animate-bob'} ${className}`.trim()}
+      className={`critter shrink-0 overflow-visible ${mood === 'quiet' ? '' : 'motion-safe:animate-bob'} ${className}`.trim()}
       data-mood={mood}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : label}

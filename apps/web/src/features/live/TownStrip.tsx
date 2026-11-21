@@ -2,6 +2,8 @@ import { BASELINE_S, RECENT_S, type ServiceMood } from '@chronolog/engine';
 import Critter from '../../app/critters/Critter';
 import { MOOD_LOOK } from '../../app/critters/looks';
 import Tock from '../../app/critters/Tock';
+import MoodTable from '../../app/ui/MoodTable';
+import { isEverythingSilent, SILENCE_LINE } from '../moods/silence';
 
 /** Log ids are UUIDs; the first characters are enough to tell them apart on screen. */
 const SHORT_ID = 6;
@@ -10,6 +12,7 @@ const SHORT_ID = 6;
 function tockSays(moods: readonly ServiceMood[], selected: string): { text: string; cites: string[] } {
   const focus = moods.find((m) => m.service === selected) ?? moods[0];
   if (!focus) return { text: `No services have logged in the last ${(RECENT_S + BASELINE_S) / 60} minutes.`, cites: [] };
+  if (!selected && isEverythingSilent(moods)) return { text: SILENCE_LINE, cites: [] };
   if (!selected && focus.mood === 'fine') return { text: moods.length === 1 ? 'The one service logging looks fine.' : `All ${moods.length} services look fine.`, cites: [] };
   return { text: `${focus.service} · ${MOOD_LOOK[focus.mood].label}. ${focus.reason}`, cites: focus.evidenceIds };
 }
@@ -31,7 +34,9 @@ export default function TownStrip({ moods, selected, onSelect }: TownStripProps)
   const says = tockSays(moods, selected);
 
   return (
-    <section aria-label="Service moods" className="card flex flex-col gap-3 p-3 md:flex-row md:items-center">
+    <>
+    <MoodTable moods={moods} caption="Service moods" />
+    <section aria-label="Service moods" className="lens-cute card flex flex-col gap-3 p-3 md:flex-row md:items-center">
       <div className="flex min-w-0 items-start gap-2 md:w-80 md:shrink-0">
         <Tock size={44} />
         <div className="min-w-0 space-y-1">
@@ -67,5 +72,6 @@ export default function TownStrip({ moods, selected, onSelect }: TownStripProps)
         })}
       </ul>
     </section>
+    </>
   );
 }

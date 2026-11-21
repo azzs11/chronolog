@@ -12,13 +12,13 @@ describe('preferences', () => {
   });
 
   it('saves and reloads a choice', () => {
-    savePreferences({ theme: 'light', density: 'compact' });
-    expect(loadPreferences()).toEqual({ theme: 'light', density: 'compact' });
+    savePreferences({ theme: 'light', density: 'compact', lens: 'pro' });
+    expect(loadPreferences()).toEqual({ theme: 'light', density: 'compact', lens: 'pro' });
   });
 
   it('ignores corrupt or unknown saved values field by field', () => {
     localStorage.setItem('chronolog.preferences.v1', JSON.stringify({ theme: 'neon', density: 'compact' }));
-    expect(loadPreferences()).toEqual({ theme: DEFAULT_PREFERENCES.theme, density: 'compact' });
+    expect(loadPreferences()).toEqual({ theme: DEFAULT_PREFERENCES.theme, density: 'compact', lens: 'town' });
     localStorage.setItem('chronolog.preferences.v1', '{nope');
     expect(loadPreferences()).toEqual(DEFAULT_PREFERENCES);
   });
@@ -37,10 +37,11 @@ describe('preferences', () => {
   });
 
   it('"system" leaves data-theme off so the stylesheet follows the system, and a choice sets it', () => {
-    applyPreferences({ theme: 'dark', density: 'compact' });
+    applyPreferences({ theme: 'dark', density: 'compact', lens: 'pro' });
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     expect(document.documentElement.getAttribute('data-density')).toBe('compact');
-    applyPreferences({ theme: 'system', density: 'comfortable' });
+    expect(document.documentElement.getAttribute('data-lens')).toBe('pro');
+    applyPreferences({ theme: 'system', density: 'comfortable', lens: 'town' });
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
   });
 });

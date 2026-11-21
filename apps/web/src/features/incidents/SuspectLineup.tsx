@@ -25,23 +25,22 @@ function Suspect({ cause, isSelected, onSelect }: { cause: RankedCause; isSelect
       <button
         type="button"
         aria-current={isSelected ? 'true' : undefined}
-        aria-label={`Number ${cause.rank}: ${cause.service}, ${word}, ${cause.weight.toFixed(2)}`}
         onClick={onSelect}
         className={`flex w-full items-center gap-3 rounded-2xl border-2 px-3 py-2 text-left sm:flex-col sm:gap-1.5 sm:px-2 sm:pb-3 sm:text-center ${
           isLead ? 'bg-pastel-butter text-on-pastel sm:pt-3' : 'bg-bg-surface sm:pt-6'
         } ${isSelected ? 'border-ink shadow-sticker' : 'border-border-dim hover:border-ink'}`}
       >
-        <span className="w-8 shrink-0 font-display text-xl sm:w-auto">#{cause.rank}</span>
+        <span className="w-8 shrink-0 font-display text-xl sm:w-auto">#{cause.rank}</span>{' '}
         <Critter name={cause.service} mood={mood} size={isLead ? CREATURE_SIZE.lead : CREATURE_SIZE.other} decorative className="h-12 w-12 sm:h-auto sm:w-auto" />
         <span className="flex min-w-0 flex-1 flex-col gap-1 sm:w-full sm:items-center">
-          <span className="w-full truncate font-mono text-sm font-bold">{cause.service}</span>
+          <span className="w-full truncate font-mono text-sm font-bold">{cause.service}</span>{' '}
           <span className="h-2.5 w-full overflow-hidden rounded-full border-2 border-ink bg-bg-surface" aria-hidden="true">
             <span className="block h-full bg-accent-solid" style={{ width: `${Math.round(cause.weight * 100)}%` }} />
           </span>
           <span className="flex flex-wrap items-center gap-2 text-xs sm:justify-center">
             <span>
               {word}, {cause.weight.toFixed(2)}
-            </span>
+            </span>{' '}
             <span className={`chip ${MOOD_LOOK[mood].chip}`}>{MOOD_LOOK[mood].label}</span>
           </span>
         </span>

@@ -1,13 +1,13 @@
-import { Monitor, Moon, Rows3, Search, Sun } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Monitor, Moon, Rows3, Search, Sun, Table2 } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { fetchIncidents, type IncidentSummary } from '../features/incidents/api';
 import Onboarding, { shouldShowIntro } from './onboarding/Onboarding';
 import CommandPalette from './palette/CommandPalette';
-import { type Command, isPaletteShortcut } from './palette/commands';
+import { type Command, isLensShortcut, isPaletteShortcut } from './palette/commands';
 import Tock from './critters/Tock';
 import { NAV_ITEMS } from './nav';
-import { type Density, type Theme, usePreferences } from './preferences';
+import { type Density, type Lens, type Theme, usePreferences } from './preferences';
 
 const THEMES: ReadonlyArray<{ value: Theme; label: string; icon: typeof Sun }> = [
   { value: 'system', label: 'System theme', icon: Monitor },
@@ -47,7 +47,7 @@ const ARCADE_TABS = [
 const RECENT_INCIDENTS = 5;
 
 /** The palette's commands: views, Arcade games, display settings and the latest incidents. */
-function useCommands(isOpen: boolean, setPreferences: (p: { theme?: Theme; density?: Density }) => void): Command[] {
+function useCommands(isOpen: boolean, setPreferences: (p: { theme?: Theme; density?: Density; lens?: Lens }) => void): Command[] {
   const navigate = useNavigate();
   const [incidents, setIncidents] = useState<IncidentSummary[]>([]);
   useEffect(() => {
@@ -60,6 +60,8 @@ function useCommands(isOpen: boolean, setPreferences: (p: { theme?: Theme; densi
       { id: 'analyse-files', label: 'Analyse my log files', group: 'Go to', keywords: 'drop upload files local', run: () => navigate('/root-cause#files') },
       ...incidents.map((i) => ({ id: `inc-${i.id}`, label: `${i.services.map((s) => s.service).join(', ')} · ${new Date(i.start).toLocaleTimeString()}`, group: 'Incidents', keywords: i.id, run: () => navigate(`/incidents/${i.id}`) })),
       ...THEMES.map(({ value, label }) => ({ id: `theme-${value}`, label, group: 'Display', keywords: value === 'dark' ? 'night' : value === 'light' ? 'day' : '', run: () => setPreferences({ theme: value }) })),
+      { id: 'lens-pro', label: 'Pro lens: tables instead of the town', group: 'Display', keywords: 'dense table serious plain hide creatures', run: () => setPreferences({ lens: 'pro', density: 'compact' }) },
+      { id: 'lens-town', label: 'Town lens: creatures and maps', group: 'Display', keywords: 'cute creatures map', run: () => setPreferences({ lens: 'town' }) },
       { id: 'density-compact', label: 'Compact rows', group: 'Display', keywords: 'density pro', run: () => setPreferences({ density: 'compact' }) },
       { id: 'density-comfortable', label: 'Comfortable rows', group: 'Display', keywords: 'density', run: () => setPreferences({ density: 'comfortable' }) },
     ],
@@ -74,15 +76,25 @@ export default function Shell() {
   const commands = useCommands(isPaletteOpen, setPreferences);
   const [isIntroOpen, setIntroOpen] = useState(shouldShowIntro);
   const navigate = useNavigate();
+  /** The Pro lens also turns on compact rows; turning it off leaves density as the reader set it. */
+  const setLens = (lens: Lens) => setPreferences(lens === 'pro' ? { lens, density: 'compact' } : { lens });
+  const lensRef = useRef(preferences.lens);
+  lensRef.current = preferences.lens;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!isPaletteShortcut(e)) return;
-      e.preventDefault();
-      setPaletteOpen((open) => !open);
+      if (isPaletteShortcut(e)) {
+        e.preventDefault();
+        setPaletteOpen((open) => !open);
+        return;
+      }
+      if (isLensShortcut(e)) {
+        e.preventDefault();
+        setPreferences(lensRef.current === 'pro' ? { lens: 'town' } : { lens: 'pro', density: 'compact' });
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [setPreferences]);
 
   return (
     <div className="flex h-full flex-col md:flex-row">
@@ -145,6 +157,18 @@ export default function Shell() {
             className={`rounded-xl border-2 border-ink p-2 shadow-sticker-sm ${preferences.density === 'compact' ? 'bg-pastel-lilac text-on-pastel' : 'bg-bg-surface text-text-secondary'}`}
           >
             <Rows3 size={16} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-pressed={preferences.lens === 'pro'}
+            aria-keyshortcuts="Shift+P"
+            title="Pro lens: the same data as dense tables (Shift+P)"
+            onClick={() => setLens(preferences.lens === 'pro' ? 'town' : 'pro')}
+            className={`flex items-center gap-1.5 rounded-xl border-2 border-ink px-2 py-1.5 text-sm font-bold shadow-sticker-sm ${preferences.lens === 'pro' ? 'bg-pastel-lilac text-on-pastel' : 'bg-bg-surface text-text-secondary'}`}
+          >
+            <Table2 size={16} aria-hidden="true" />
+            <span className="hidden sm:inline">Pro lens</span>
+            <span className="sr-only sm:hidden">Pro lens</span>
           </button>
         </header>
         {isIntroOpen && (

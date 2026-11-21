@@ -90,7 +90,7 @@ describe('Incidents inbox', () => {
   it('changes the evidence when another candidate is picked', async () => {
     at('/incidents/inc-1');
     const candidates = await screen.findByRole('region', { name: 'Candidates' });
-    fireEvent.click(within(candidates).getByRole('button', { name: /api/ }));
+    fireEvent.click(within(within(candidates).getByRole('list', { name: 'Suspect lineup' })).getByRole('button', { name: /api/ }));
     expect(screen.getByRole('region', { name: 'Evidence for api' })).toBeInTheDocument();
   });
 
@@ -138,5 +138,18 @@ describe('Incidents inbox', () => {
     api.fetchIncident.mockRejectedValue(new ApiError('That incident is no longer in the stored logs.', 404));
     at('/incidents/inc-old');
     expect(await screen.findByRole('alert')).toHaveTextContent('That incident is no longer in the stored logs.');
+  });
+});
+
+describe('Pro lens', () => {
+  it('has a table of every suspect with its numbers, alongside the lineup', async () => {
+    const { default: SuspectTable } = await import('./SuspectTable');
+    const onSelect = vi.fn();
+    render(<SuspectTable candidates={detail().ranking.candidates} selected="db" onSelect={onSelect} />);
+    const rows = within(screen.getByRole('table', { name: 'Suspects, ranked by RootRank' })).getAllByRole('row');
+    expect(rows).toHaveLength(4);
+    expect(rows[1]).toHaveTextContent('1dblikely, 0.704013Sick');
+    fireEvent.click(screen.getByRole('button', { name: 'api' }));
+    expect(onSelect).toHaveBeenCalledWith('api');
   });
 });

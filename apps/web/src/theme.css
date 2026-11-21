@@ -389,6 +389,20 @@
   .row-y { padding-block: var(--row-y); }
 }
 
+/*
+ * Pro lens: the same data without the town. Creatures, Tock and the maps are hidden, headings use the
+ * plain sans, stickers lose their shadows and the paper its dots. Views that show data visually also
+ * render a dense table (.lens-pro), shown only in this lens; their visual (.lens-cute) is hidden.
+ * The Arcade is a game and keeps its look.
+ */
+.lens-pro { display: none; }
+[data-lens="pro"] .lens-pro { display: revert; }
+[data-lens="pro"] .lens-cute,
+[data-lens="pro"] .critter:not(.arcade-screen .critter) { display: none; }
+[data-lens="pro"] body { background-image: none; }
+[data-lens="pro"] :where(h1, h2, h3):not(.arcade-screen *) { font-family: var(--font-sans); font-weight: 700; letter-spacing: 0; }
+[data-lens="pro"] .card:not(.arcade-screen *) { box-shadow: none; border-width: 1px; }
+
 /* Motion stays small and respects the reader's setting. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

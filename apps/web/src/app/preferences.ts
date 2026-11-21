@@ -3,28 +3,33 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type Theme = 'system' | 'dark' | 'light';
 export type Density = 'comfortable' | 'compact';
+/** "town": creatures, maps and stickers. "pro": the same data as dense tables, for people who want the facts fast. */
+export type Lens = 'town' | 'pro';
 
 export interface Preferences {
   theme: Theme;
   density: Density;
+  lens: Lens;
 }
 
 const STORAGE_KEY = 'chronolog.preferences.v1';
 /** Day (light) is the brand look, so it is the default; "system" and night are one click away. */
-export const DEFAULT_PREFERENCES: Preferences = { theme: 'light', density: 'comfortable' };
+export const DEFAULT_PREFERENCES: Preferences = { theme: 'light', density: 'comfortable', lens: 'town' };
 
 const isTheme = (v: unknown): v is Theme => v === 'system' || v === 'dark' || v === 'light';
 const isDensity = (v: unknown): v is Density => v === 'comfortable' || v === 'compact';
+const isLens = (v: unknown): v is Lens => v === 'town' || v === 'pro';
 
 /** Saved choices, or the defaults when storage is missing, blocked or unreadable. */
 export function loadPreferences(): Preferences {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
     if (parsed && typeof parsed === 'object') {
-      const { theme, density } = parsed as Record<string, unknown>;
+      const { theme, density, lens } = parsed as Record<string, unknown>;
       return {
         theme: isTheme(theme) ? theme : DEFAULT_PREFERENCES.theme,
         density: isDensity(density) ? density : DEFAULT_PREFERENCES.density,
+        lens: isLens(lens) ? lens : DEFAULT_PREFERENCES.lens,
       };
     }
   } catch {
@@ -46,6 +51,7 @@ export function applyPreferences(preferences: Preferences, root: HTMLElement = d
   if (preferences.theme === 'system') root.removeAttribute('data-theme');
   else root.setAttribute('data-theme', preferences.theme);
   root.setAttribute('data-density', preferences.density);
+  root.setAttribute('data-lens', preferences.lens);
 }
 
 export function usePreferences(): [Preferences, (change: Partial<Preferences>) => void] {

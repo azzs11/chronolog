@@ -10,6 +10,7 @@ import CaseStamp from './CaseStamp';
 import EvidenceBubbles from './EvidenceBubbles';
 import FeedbackForm from './FeedbackForm';
 import SuspectLineup, { LINEUP_SIZE } from './SuspectLineup';
+import SuspectTable from './SuspectTable';
 import { formatDuration, formatRange } from './format';
 
 const RELATIONS_SHOWN = 6;
@@ -93,6 +94,8 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
 
       <section aria-label="Candidates" className="space-y-3">
         <h4 className="text-base text-text-primary">The lineup</h4>
+        <SuspectTable candidates={ranking.candidates} selected={selected} onSelect={setSelected} />
+        <div className="lens-cute space-y-3">
         <SuspectLineup candidates={ranking.candidates} selected={selected} onSelect={setSelected} />
         {others.length > 0 && showAll && (
           <ol className="card-flat divide-y-2 divide-border-dim overflow-hidden" start={LINEUP_SIZE + 1}>
@@ -120,6 +123,7 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
             {showAll ? 'Hide the other suspects' : `Show all ${ranking.candidates.length} services`}
           </button>
         )}
+        </div>
         <p className="text-xs text-text-muted">
           Order and bars are RootRank&apos;s ranking. Faces come from each suspect&apos;s own logs in this window; a calm face can still rank first.
         </p>
@@ -132,7 +136,7 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
         </section>
       )}
 
-      <section aria-label="Rewind" className="space-y-2">
+      <section aria-label="Rewind" className="lens-cute space-y-2">
         <h4 className="text-base text-text-primary">Rewind</h4>
         <Rewind timeline={timeline} graph={graph} selected={selected ?? undefined} />
       </section>

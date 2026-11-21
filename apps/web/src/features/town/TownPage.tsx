@@ -6,9 +6,11 @@ import { MOOD_LOOK } from '../../app/critters/looks';
 import Tock from '../../app/critters/Tock';
 import { API_URL } from '../../env';
 import { CiteChip } from '../incidents/EvidenceBubbles';
+import { isEverythingSilent, SILENCE_LINE } from '../moods/silence';
 import { useMoods } from '../moods/useMoods';
 import { defaultRoadOptions, type GraphData, priorRoads, type RoadOptions, townRoads } from './roads';
 import RoadToggles from './RoadToggles';
+import MoodTable from '../../app/ui/MoodTable';
 import TownGuide from './TownGuide';
 import TownMap from './TownMap';
 
@@ -42,6 +44,7 @@ function summary(moods: readonly ServiceMood[]): string {
   const unwell = moods.filter((m) => m.mood !== 'fine');
   if (moods.length === 0) return `Nobody has logged anything in the last ${(RECENT_S + BASELINE_S) / 60} minutes. The town is asleep.`;
   if (unwell.length === 0) return `All ${moods.length} services look fine right now.`;
+  if (isEverythingSilent(moods)) return SILENCE_LINE;
   const worst = unwell[0] as ServiceMood;
   return `${unwell.length} of ${moods.length} services look unwell. The most worrying is ${worst.service}: ${worst.reason}`;
 }
@@ -81,7 +84,7 @@ export default function TownPage() {
       )}
 
       {services.length > 0 && (
-        <section aria-label="Town map" className="card space-y-2 p-2 md:p-4">
+        <section aria-label="Town map" className="lens-cute card space-y-2 p-2 md:p-4">
           <TownMap services={services} roads={roads} moods={moodOf} label={`Town map: ${(moods ?? []).map((m) => `${m.service} ${MOOD_LOOK[m.mood].label}`).join(', ')}`} />
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-2 text-xs text-text-muted">
             <RoadToggles options={roadOptions} onChange={setRoadOptions} hasPrior={hasPrior} hasCorrelations={(graph?.correlations.length ?? 0) > 0} />
@@ -94,10 +97,13 @@ export default function TownPage() {
         </section>
       )}
 
-      <TownGuide />
+      <div className="lens-cute">
+        <TownGuide />
+      </div>
 
+      {moods && moods.length > 0 && <MoodTable moods={moods} caption="Every service and its mood" />}
       {moods && moods.length > 0 && (
-        <section aria-label="Who is who" className="space-y-2">
+        <section aria-label="Who is who" className="lens-cute space-y-2">
           <h3 className="text-base text-text-primary">Who&apos;s who</h3>
           <ul className="grid gap-2 sm:grid-cols-2">
             {moods.map((m) => (
