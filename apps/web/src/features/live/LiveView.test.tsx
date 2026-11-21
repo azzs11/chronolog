@@ -43,14 +43,14 @@ async function renderLive(logs: unknown[] = initial) {
 }
 
 describe('LiveView', () => {
-  it('groups lines by template, with counts, and a single Live indicator and stats strip', async () => {
+  it('groups lines by template, with counts and one stats strip, and nothing blinking while live', async () => {
     await renderLive();
     const rows = templateRows();
     expect(rows).toHaveLength(2);
     expect(within(rows[0] as HTMLElement).getByText(/2×|1×/)).toBeInTheDocument();
-    expect(screen.getAllByRole('status')[0]).toHaveTextContent('Live');
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent('');
+    expect(document.querySelector('[class*="animate-pulse"]')).toBeNull();
     expect(screen.getByLabelText('Stream statistics')).toHaveTextContent('Lines');
-    expect(screen.getAllByText(/live/i, { selector: '[role="status"]' })).toHaveLength(1);
   });
 
   it('shows the severity as a named pill, never only as colour', async () => {

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Panes from '../../app/Panes';
 import FilterBar, { type Mode } from './FilterBar';
-import LiveDot from './LiveDot';
+import ConnectionNote from './ConnectionNote';
 import RawLogTable from './RawLogTable';
 import StatsStrip from './StatsStrip';
 import TemplateDetail from './TemplateDetail';
@@ -43,8 +43,8 @@ export default function LiveView() {
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div className="flex flex-wrap items-center gap-3">
-        <h2 className="text-xl font-semibold text-text-primary">Live</h2>
-        <LiveDot status={live.status} pending={live.pending} />
+        <h2 className="text-3xl text-text-primary">Live</h2>
+        <ConnectionNote status={live.status} pending={live.pending} />
         <button
           type="button"
           onClick={() => live.setPaused(!live.paused)}
@@ -65,8 +65,9 @@ export default function LiveView() {
         <div className="card text-sm text-text-secondary">
           <p className="font-medium text-text-primary">No logs yet.</p>
           <p className="mt-1">
-            Send one with <code className="log-text">POST /api/logs</code>, or start the log generator from the previous UI&apos;s Settings. Lines appear here
-            as they arrive and are grouped by what they say.
+            Send logs with <code className="log-text">POST /api/logs</code>, or start the built-in sample traffic with{' '}
+            <code className="log-text">POST /api/logs/generator/start</code> (needs the admin key; see the README). Lines appear here as they arrive and are
+            grouped by what they say.
           </p>
         </div>
       ) : (
