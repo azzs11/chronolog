@@ -6,9 +6,11 @@ import RawLogTable from './RawLogTable';
 import StatsStrip from './StatsStrip';
 import TemplateDetail from './TemplateDetail';
 import TemplateList from './TemplateList';
+import TownStrip from './TownStrip';
 import { filterGroups, filterLogs, NO_FILTERS, servicesOf } from './filters';
 import { computeStats } from './stats';
 import { useLiveLogs } from './useLiveLogs';
+import { useMoods } from '../moods/useMoods';
 
 const CLOCK_EVERY_MS = 1000;
 
@@ -24,6 +26,7 @@ function useNow(): number {
 
 export default function LiveView() {
   const live = useLiveLogs();
+  const town = useMoods();
   const now = useNow();
   const [filters, setFilters] = useState(NO_FILTERS);
   const [mode, setMode] = useState<Mode>('grouped');
@@ -51,6 +54,7 @@ export default function LiveView() {
         </button>
       </div>
       <StatsStrip stats={stats} />
+      {town.moods && town.moods.length > 0 && <TownStrip moods={town.moods} selected={filters.service} onSelect={(service) => setFilters({ ...filters, service })} />}
       <FilterBar filters={filters} onChange={setFilters} services={services} mode={mode} onMode={setMode} />
       {live.loadError && (
         <p role="alert" className="text-sm text-sev-warning">

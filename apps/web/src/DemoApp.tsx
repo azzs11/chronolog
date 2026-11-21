@@ -1,3 +1,4 @@
+import Tock from './app/critters/Tock';
 import { usePreferences } from './app/preferences';
 import PlaygroundPage from './features/playground/PlaygroundPage';
 
@@ -12,7 +13,10 @@ export default function DemoApp() {
   return (
     <div className="min-h-screen bg-bg-base text-text-primary">
       <header className="flex items-center justify-between gap-3 border-b-2 border-ink bg-bg-surface px-4 py-3">
-        <span className="font-display text-xl">ChronoLog</span>
+        <span className="flex items-center gap-2">
+          <Tock size={32} />
+          <span className="font-display text-xl">ChronoLog</span>
+        </span>
         <a className="text-sm underline text-text-secondary" href={REPO_URL}>
           Source, benchmark and self-hosting
         </a>
