@@ -1,3 +1,4 @@
+import { citeEvidence } from './citations';
 import { extent } from './extent';
 import { type PreparedLine, computeFeatures, FEATURE_NAMES } from './features';
 import { predict, type TreeModel } from './model';
@@ -60,6 +61,13 @@ export function rankRootCauses(
   const order = columnOrder(model);
   const scores = result.rows.map((row) => predict(model, order.map((at) => row[at] as number)));
   const weights = scores.length > 0 ? softmax(scores) : [];
+  const cites = citeEvidence(
+    ordered.map((l) => l.id),
+    prepared,
+    result.services,
+    table.texts,
+    start,
+  );
 
   const causes: RankedCause[] = result.services.map((service, i) => {
     const details = result.details[i] as (typeof result.details)[number];
@@ -74,6 +82,8 @@ export function rankRootCauses(
       })),
       mentions: details.mentions,
       errorLines: details.errorLines,
+      firstErrorId: cites.get(service)?.firstErrorId,
+      mentionIds: cites.get(service)?.mentionIds ?? [],
     };
     const features = Object.fromEntries(FEATURE_NAMES.map((name, j) => [name, (result.rows[i] as number[])[j] as number]));
     return { service, score: scores[i] as number, weight: weights[i] as number, rank: 0, features, evidence };

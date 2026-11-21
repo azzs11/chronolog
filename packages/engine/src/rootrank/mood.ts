@@ -173,3 +173,17 @@ export function serviceMoods(lines: readonly MoodLine[], now: number): ServiceMo
   }));
   return moods.sort((a, b) => MOODS.indexOf(a.mood) - MOODS.indexOf(b.mood) || a.service.localeCompare(b.service));
 }
+
+/**
+ * The face for a suspect in an incident's lineup, from its RootRank evidence over the incident
+ * window (not the last two minutes): a new shutdown or startup message means restarted, a burst-sized
+ * count of error lines means sick, any error means stressed, a new message means new-phrase. Like
+ * every mood it is a symptom; the lineup's order is the ranking, not the face.
+ */
+export function suspectMood(evidence: { errorLines: number; novelTemplates: ReadonlyArray<{ template: string }> }): Mood {
+  if (evidence.novelTemplates.some((t) => isRestartText(t.template))) return 'restarted';
+  if (evidence.errorLines >= MIN_BURST_ERRORS) return 'sick';
+  if (evidence.errorLines > 0) return 'stressed';
+  if (evidence.novelTemplates.length > 0) return 'new-phrase';
+  return 'fine';
+}

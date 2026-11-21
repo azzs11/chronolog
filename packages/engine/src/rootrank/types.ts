@@ -26,6 +26,10 @@ export interface CauseEvidence {
   /** Lines from other services during the incident that name this service. */
   mentions: number;
   errorLines: number;
+  /** Id of the first error line at or after the incident start, when lines carry ids. */
+  firstErrorId?: string;
+  /** Ids of a few lines from other services that name this one (empty when lines carry no ids). */
+  mentionIds?: string[];
 }
 
 export interface RankedCause {

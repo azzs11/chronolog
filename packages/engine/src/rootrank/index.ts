@@ -8,7 +8,7 @@ export { assignTemplates, maskMessage, MAX_TEMPLATE_TOKENS, type TemplateTable }
 export type { CauseEvidence, NovelTemplate, RankedCause, RankResult, RcaLine } from './types';
 export { ROOTRANK_V1 } from './modelV1';
 export { learnServiceGraph, MIN_CORRELATION, MIN_MENTIONS, type LearnedGraph } from './learnedGraph';
-export { confidenceWord, evidenceSentences, formatDelay } from './explain';
+export { confidenceWord, evidenceClaims, evidenceSentences, formatDelay, type EvidenceClaim } from './explain';
 export { TemplateStream, type AddResult, type StreamLine, type TemplateGroup } from './templateStream';
 export { BURST_BUCKET_S, findErrorBursts, MERGE_GAP_BUCKETS, MIN_BURST_ERRORS, type Burst, type BurstLine } from './bursts';
 export {
@@ -17,7 +17,9 @@ export {
   RECENT_S,
   RESTART_WORDS,
   serviceMoods,
+  suspectMood,
   type Mood,
   type MoodLine,
   type ServiceMood,
 } from './mood';
+export { citeEvidence, MAX_CITES, type Citations } from './citations';

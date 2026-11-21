@@ -30,20 +30,40 @@ export function formatDelay(seconds: number): string {
 
 const clip = (text: string): string => (text.length > MAX_TEMPLATE_CHARS ? `${text.slice(0, MAX_TEMPLATE_CHARS)}…` : text);
 
-/** The reasons shown for a candidate, citing log ids where the engine has them. */
-export function evidenceSentences(cause: Pick<RankedCause, 'evidence'>): string[] {
+export interface EvidenceClaim {
+  text: string;
+  /** Log ids that back the sentence. Empty when the lines carry no ids, or the claim is about an absence. */
+  cites: string[];
+  /** True for "nothing was found" sentences: an absence has no line to cite. */
+  isAbsence: boolean;
+}
+
+/** The reasons shown for a candidate, each with the log ids behind it. Built only from engine fields. */
+export function evidenceClaims(cause: Pick<RankedCause, 'evidence'>): EvidenceClaim[] {
   const { evidence } = cause;
-  const out: string[] = [];
+  const out: EvidenceClaim[] = [];
   if (evidence.firstErrorAfter !== null) {
-    out.push(`Logged its first error ${formatDelay(evidence.firstErrorAfter)} (${evidence.errorLines} error lines in total).`);
+    out.push({
+      text: `Logged its first error ${formatDelay(evidence.firstErrorAfter)} (${evidence.errorLines} error lines in total).`,
+      cites: evidence.firstErrorId ? [evidence.firstErrorId] : [],
+      isAbsence: false,
+    });
   }
   for (const novel of evidence.novelTemplates) {
-    const id = novel.exampleId ? `, log ${novel.exampleId}` : '';
-    out.push(`Logged a message it never logged before: "${clip(novel.template)}" (${novel.count}×${id}).`);
+    out.push({
+      text: `Logged a message it never logged before: "${clip(novel.template)}" (${novel.count}×).`,
+      cites: novel.exampleId ? [novel.exampleId] : [],
+      isAbsence: false,
+    });
   }
   if (evidence.mentions > 0) {
-    out.push(`Other services mention it in ${evidence.mentions} log lines during the incident.`);
+    out.push({ text: `Other services mention it in ${evidence.mentions} log lines during the incident.`, cites: evidence.mentionIds ?? [], isAbsence: false });
   }
-  if (out.length === 0) out.push('No error lines, new messages or mentions from other services.');
+  if (out.length === 0) out.push({ text: 'No error lines, new messages or mentions from other services.', cites: [], isAbsence: true });
   return out;
+}
+
+/** The same reasons as plain sentences (the CLI and older views), with the ids written into the text. */
+export function evidenceSentences(cause: Pick<RankedCause, 'evidence'>): string[] {
+  return evidenceClaims(cause).map(({ text, cites }) => (cites.length === 0 ? text : `${text.slice(0, -1)} [log ${cites.join(', ')}].`));
 }
