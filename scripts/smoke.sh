@@ -63,7 +63,9 @@ for t in range(300, 540):
 print(json.dumps({"logs": logs}))
 PY
 )"
-ranked="$(curl -fsS -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' -d "$payload")"
+# Sent on stdin, not as an argument: the payload is about 140 KB, over Linux's 128 KB limit for one
+# command-line argument (curl then fails to start with exit 126; macOS has no such limit).
+ranked="$(printf '%s' "$payload" | curl -fsS -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' --data-binary @-)"
 echo "$ranked" | grep -q '"model":{"id":"rootrank-v1"'
 echo "$ranked" | grep -q '"startSource":"estimated"'
 echo "$ranked" | python3 -c "import json,sys; d=json.load(sys.stdin)['data']; assert d['candidates'][0]['service']=='db', d['candidates'][0]['service']"
