@@ -32,12 +32,12 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
 
   if (!editing) {
     return (
-      <section aria-label="Your review" className="card space-y-2">
-        <p className="text-sm text-text-primary">
+      <section aria-label="Your review" className="card flex flex-wrap items-center gap-3">
+        <p className="flex-1 text-sm text-text-primary">
           {incident.status === 'confirmed' ? 'You confirmed ' : 'You said the real cause was '}
           <span className="font-mono font-semibold">{incident.correctService}</span>.
         </p>
-        <button type="button" onClick={() => setEditing(true)} className="text-sm text-accent underline">
+        <button type="button" onClick={() => setEditing(true)} className="btn btn-secondary">
           Change my answer
         </button>
       </section>
@@ -46,14 +46,14 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
 
   return (
     <section aria-label="Review this incident" className="card space-y-3">
-      <h4 className="text-sm font-semibold text-text-primary">Was {top ? <span className="font-mono">{top}</span> : 'the first choice'} the root cause?</h4>
-      <fieldset className="flex flex-wrap gap-4 text-sm text-text-primary">
+      <h4 className="text-base text-text-primary">Close the case: was {top ? <span className="font-mono">{top}</span> : 'the best guess'} the root cause?</h4>
+      <fieldset className="flex flex-wrap gap-2 text-sm text-text-primary">
         <legend className="sr-only">Your answer</legend>
-        <label className="flex items-center gap-2">
+        <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-border-dim px-3 py-1.5 has-[:checked]:border-ink has-[:checked]:bg-pastel-lilac has-[:checked]:text-on-pastel">
           <input type="radio" name="answer" checked={answer === 'yes'} onChange={() => setAnswer('yes')} />
-          Yes
+          Yes, that was it
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-border-dim px-3 py-1.5 has-[:checked]:border-ink has-[:checked]:bg-pastel-lilac has-[:checked]:text-on-pastel">
           <input type="radio" name="answer" checked={answer === 'no'} onChange={() => setAnswer('no')} />
           No, it was another service
         </label>
@@ -90,9 +90,9 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
         disabled={busy || (answer === 'no' && service === '')}
         className="btn btn-primary"
       >
-        {busy ? 'Saving…' : 'Save my answer'}
+        {busy ? 'Saving…' : 'Close the case'}
       </button>
-      <p className="text-xs text-text-muted">Answers are stored with the ranking they were given for, to improve ChronoLog later.</p>
+      <p className="text-xs text-text-muted">Your answer is stored with the ranking it was given for, so RootRank can learn from real incidents later.</p>
     </section>
   );
 }

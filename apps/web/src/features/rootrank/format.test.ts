@@ -45,7 +45,7 @@ describe('evidenceSentences', () => {
     );
     expect(sentences).toEqual([
       'Logged its first error 5 s after the incident start (2 error lines in total).',
-      'Logged a message it never logged before: "disk write failed on volume <*>" (2×, log boom).',
+      'Logged a message it never logged before: "disk write failed on volume <*>" (2×) [log boom].',
       'Other services mention it in 3 log lines during the incident.',
     ]);
   });

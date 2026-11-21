@@ -14,6 +14,9 @@ export interface CauseEvidence {
   novelTemplates: NovelTemplate[];
   mentions: number;
   errorLines: number;
+  /** Cited log ids (absent from older API versions). */
+  firstErrorId?: string;
+  mentionIds?: string[];
 }
 
 export interface RankedCause {

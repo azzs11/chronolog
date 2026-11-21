@@ -1,15 +1,22 @@
+import { suspectMood } from '@chronolog/engine';
 import { useEffect, useState } from 'react';
+import Critter from '../../app/critters/Critter';
+import Tock from '../../app/critters/Tock';
 import Timeline from '../playground/Timeline';
-import CandidateCard from '../rootrank/CandidateCard';
 import { confidenceWord } from '../rootrank/format';
 import { ApiError, type IncidentDetail, fetchIncident } from './api';
+import CaseStamp from './CaseStamp';
+import EvidenceBubbles from './EvidenceBubbles';
 import FeedbackForm from './FeedbackForm';
+import SuspectLineup, { LINEUP_SIZE } from './SuspectLineup';
 import { formatDuration, formatRange } from './format';
 
-const SHOWN_AT_FIRST = 5;
 const RELATIONS_SHOWN = 6;
 
-/** Everything about one incident: the ranked causes, the evidence for the one you pick, the logs over time, and the review. */
+/**
+ * The case file for one incident: Tock's best guess, RootRank's ranking as a suspect lineup, cited
+ * evidence for the suspect you pick, the logs over time, and the review that closes the case.
+ */
 export default function IncidentStory({ id, onReviewed }: { id: string; onReviewed: () => void }) {
   const [detail, setDetail] = useState<IncidentDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +55,7 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
   if (!detail) return <p className="text-sm text-text-muted">Loading the incident…</p>;
 
   const { incident, ranking, timeline, graph } = detail;
-  const candidates = showAll ? ranking.candidates : ranking.candidates.slice(0, SHOWN_AT_FIRST);
+  const others = ranking.candidates.slice(LINEUP_SIZE);
   const chosen = ranking.candidates.find((c) => c.service === selected);
   const top = ranking.candidates[0];
   const relations = [
@@ -57,67 +64,82 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
   ].slice(0, RELATIONS_SHOWN);
 
   return (
-    <article className="space-y-5">
-      <header className="space-y-1">
-        <h3 className="text-xl font-semibold text-text-primary">{formatRange(incident.start, incident.end)}</h3>
-        <p className="text-sm text-text-secondary">
-          {formatDuration(incident.durationSeconds)}, {incident.errorLines.toLocaleString('en-US')} error lines across {incident.services.length} services. Found as a
-          burst of errors in the logs; a burst is worth a look, not proof of an incident.
-        </p>
+    <article className="space-y-6">
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 space-y-1">
+          <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Case {incident.id}</p>
+          <h3 className="text-xl text-text-primary">{formatRange(incident.start, incident.end)}</h3>
+          <p className="text-sm text-text-secondary">
+            {formatDuration(incident.durationSeconds)}, {incident.errorLines.toLocaleString('en-US')} error lines across {incident.services.length} services. Found as a
+            burst of errors in the logs; a burst is worth a look, not proof of an incident.
+          </p>
+        </div>
+        <CaseStamp status={incident.status} correctService={incident.correctService} />
       </header>
 
       {top && (
-        <section aria-label="Best guess" className="card">
-          <p className="text-xs text-text-muted">ChronoLog&apos;s best guess</p>
-          <p className="text-lg text-text-primary">
-            <span className="font-mono font-semibold">{top.service}</span> <span className="text-sm text-text-secondary">({confidenceWord(top.weight, top.rank)}, {top.weight.toFixed(2)})</span>
+        <section aria-label="Best guess" className="flex items-center gap-3">
+          <Tock size={48} />
+          <p className="rounded-2xl border-2 border-ink bg-bg-surface px-3 py-2 text-text-primary">
+            My best guess is <span className="font-mono font-bold">{top.service}</span>{' '}
+            <span className="text-sm text-text-secondary">
+              ({confidenceWord(top.weight, top.rank)}, {top.weight.toFixed(2)})
+            </span>
+            . Pick any suspect to see the evidence.
           </p>
         </section>
       )}
 
-      <section aria-label="Candidates" className="space-y-2">
-        <h4 className="text-sm font-semibold text-text-secondary">Candidates</h4>
-        <ol className="card-flat divide-y-2 divide-border-dim overflow-hidden">
-          {candidates.map((c) => (
-            <li key={c.service}>
-              <button
-                type="button"
-                aria-current={c.service === selected ? 'true' : undefined}
-                onClick={() => setSelected(c.service)}
-                className={`row-y flex w-full items-center gap-3 px-3 text-left ${c.service === selected ? 'bg-bg-elevated' : 'hover:bg-bg-surface'}`}
-              >
-                <span className="tabular w-6 text-text-muted">{c.rank}</span>
-                <span className="flex-1 font-mono text-text-primary">{c.service}</span>
-                <span className="text-sm text-text-secondary">{confidenceWord(c.weight, c.rank)}, {c.weight.toFixed(2)}</span>
-              </button>
-            </li>
-          ))}
-        </ol>
-        {ranking.candidates.length > SHOWN_AT_FIRST && (
+      <section aria-label="Candidates" className="space-y-3">
+        <h4 className="text-base text-text-primary">The lineup</h4>
+        <SuspectLineup candidates={ranking.candidates} selected={selected} onSelect={setSelected} />
+        {others.length > 0 && showAll && (
+          <ol className="card-flat divide-y-2 divide-border-dim overflow-hidden" start={LINEUP_SIZE + 1}>
+            {others.map((c) => (
+              <li key={c.service}>
+                <button
+                  type="button"
+                  aria-current={c.service === selected ? 'true' : undefined}
+                  onClick={() => setSelected(c.service)}
+                  className={`row-y flex w-full items-center gap-3 px-3 text-left ${c.service === selected ? 'bg-bg-elevated' : 'hover:bg-bg-elevated'}`}
+                >
+                  <span className="tabular w-6 text-text-muted">{c.rank}</span>
+                  <Critter name={c.service} mood={suspectMood(c.evidence)} size={28} decorative />
+                  <span className="flex-1 font-mono text-text-primary">{c.service}</span>
+                  <span className="text-sm text-text-secondary">
+                    {confidenceWord(c.weight, c.rank)}, {c.weight.toFixed(2)}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        )}
+        {others.length > 0 && (
           <button type="button" className="text-sm text-accent underline" onClick={() => setShowAll(!showAll)}>
-            {showAll ? 'Show fewer' : `Show all ${ranking.candidates.length} services`}
+            {showAll ? 'Hide the other suspects' : `Show all ${ranking.candidates.length} services`}
           </button>
         )}
+        <p className="text-xs text-text-muted">
+          Order and bars are RootRank&apos;s ranking. Faces come from each suspect&apos;s own logs in this window; a calm face can still rank first.
+        </p>
       </section>
 
       {chosen && (
         <section aria-label={`Evidence for ${chosen.service}`} className="space-y-2">
-          <h4 className="text-sm font-semibold text-text-secondary">Evidence for {chosen.service}</h4>
-          <ol>
-            <CandidateCard cause={chosen} highlight />
-          </ol>
+          <h4 className="text-base text-text-primary">Evidence for {chosen.service}</h4>
+          <EvidenceBubbles cause={chosen} />
         </section>
       )}
 
       <section aria-label="Logs over time" className="space-y-2">
-        <h4 className="text-sm font-semibold text-text-secondary">Logs over time</h4>
+        <h4 className="text-base text-text-primary">Logs over time</h4>
         <p className="text-xs text-text-muted">Each row is a service; darker means more lines; red marks error lines. The dashed line is when the burst began.</p>
         <Timeline timeline={timeline} highlight={selected ?? undefined} />
       </section>
 
       {relations.length > 0 && (
         <section aria-label="How services relate" className="space-y-1">
-          <h4 className="text-sm font-semibold text-text-secondary">Services that look connected</h4>
+          <h4 className="text-base text-text-primary">Services that look connected</h4>
           <ul className="list-disc space-y-1 pl-5 text-sm text-text-secondary">
             {relations.map((r) => (
               <li key={r}>{r}</li>

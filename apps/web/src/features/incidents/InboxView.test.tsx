@@ -98,7 +98,7 @@ describe('Incidents inbox', () => {
     api.sendFeedback.mockResolvedValue({ verdict: 'confirm', correctService: 'db', rankOfCorrect: 1 });
     at('/incidents/inc-1');
     const form = await screen.findByRole('region', { name: 'Review this incident' });
-    fireEvent.click(within(form).getByRole('button', { name: 'Save my answer' }));
+    fireEvent.click(within(form).getByRole('button', { name: 'Close the case' }));
     await waitFor(() => expect(api.sendFeedback).toHaveBeenCalledWith('inc-1', { verdict: 'confirm', note: undefined }));
     expect(api.fetchIncidents.mock.calls.length).toBeGreaterThan(1); // the inbox refreshed
   });
@@ -108,10 +108,10 @@ describe('Incidents inbox', () => {
     at('/incidents/inc-1');
     const form = await screen.findByRole('region', { name: 'Review this incident' });
     fireEvent.click(within(form).getByLabelText(/No, it was another service/));
-    expect(within(form).getByRole('button', { name: 'Save my answer' })).toBeDisabled();
+    expect(within(form).getByRole('button', { name: 'Close the case' })).toBeDisabled();
     fireEvent.change(within(form).getByLabelText('The real root cause'), { target: { value: 'cache' } });
     fireEvent.change(within(form).getByLabelText(/Note/), { target: { value: 'it was cache' } });
-    fireEvent.click(within(form).getByRole('button', { name: 'Save my answer' }));
+    fireEvent.click(within(form).getByRole('button', { name: 'Close the case' }));
     await waitFor(() => expect(api.sendFeedback).toHaveBeenCalledWith('inc-1', { verdict: 'reject', correct_service: 'cache', note: 'it was cache' }));
   });
 

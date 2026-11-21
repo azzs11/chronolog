@@ -1,6 +1,6 @@
 import type { RankData } from './api';
 
-export { confidenceWord, evidenceSentences, formatDelay } from '@chronolog/engine';
+export { confidenceWord, evidenceClaims, evidenceSentences, formatDelay, type EvidenceClaim } from '@chronolog/engine';
 
 export const startSourceText: Record<RankData['startSource'], string> = {
   given: 'the start time you gave',

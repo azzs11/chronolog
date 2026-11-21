@@ -321,3 +321,9 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* The case-closed stamp lands with a small thump. */
+@keyframes stamp {
+  from { transform: rotate(-6deg) scale(1.6); opacity: 0; }
+  to { transform: rotate(-6deg) scale(1); opacity: 1; }
+}
