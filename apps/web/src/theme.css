@@ -1,84 +1,138 @@
 @import "tailwindcss";
 
 /*
- * ChronoLog design tokens: the one place colour, type and spacing are decided.
+ * ChronoLog design tokens: the one place colour, type and shape are decided.
  *
- * A calm "control room": a dark neutral base and ONE accent (teal). Severity colours are signals
- * (pills, dots, edge marks), never backgrounds. 1 px borders, no shadows, no gradients.
- * Dark is the default; `data-theme="light"` or the system preference switches it. Every text and
- * signal colour passes WCAG AA (4.5:1) on all three surfaces in both themes; src/theme.test.ts
- * checks that from this file, so a token edit that breaks contrast fails the tests.
+ * "ChronoTown", a pastel sticker book: soft lavender paper, white stickers with thick ink outlines
+ * and hard offset shadows (no blur), pastel fills for moods and severities, ONE loud pink for the
+ * thing to press. Day (light) is the brand default; night is a deep indigo town with the same stickers.
+ *
+ * Rules the tests enforce (src/theme.test.ts reads this file):
+ *  - text and severity-text tokens reach 4.5:1 on all three surfaces, in both themes;
+ *  - text on ANY pastel is --on-pastel (dark plum) and reaches 4.5:1 on every pastel, in both themes;
+ *  - outlines (--ink) reach 3:1 against the page;
+ *  - the system-dark block repeats the night block exactly.
+ * Severity may fill a sticker only through its --sev-*-bg pastel, and always with its word and shape
+ * (see app/ui/SeverityPill.tsx), so it never depends on colour alone.
  */
 
 :root,
-[data-theme="dark"] {
-  color-scheme: dark;
-  --bg-base: #0e1112;
-  --bg-surface: #15191b;
-  --bg-elevated: #1d2225;
-  --border-dim: #262d30;
-  --border-strong: #5a666b; /* input and control outlines: 3:1 against the base */
-  --text-primary: #e9eef0;
-  --text-secondary: #a9b4b9;
-  --text-muted: #8a959a;
-  --accent: #2dd4bf; /* accent as text or an icon */
-  --accent-solid: #14b8a6; /* accent as a button fill */
-  --accent-fg: #042f2a; /* text on the solid accent */
-  --sev-critical: #fb7185;
-  --sev-error: #fb923c;
-  --sev-warning: #fbbf24;
-  --sev-info: #a5b4bc;
-  --sev-debug: #8a959a;
-}
-
 [data-theme="light"] {
   color-scheme: light;
-  --bg-base: #f6f7f8;
+  --bg-base: #f3f0ff;
   --bg-surface: #ffffff;
-  --bg-elevated: #eceff1;
-  --border-dim: #d5dadc;
-  --border-strong: #7b878d;
-  --text-primary: #14191b;
-  --text-secondary: #47535a;
-  --text-muted: #5b676d;
-  --accent: #0f766e;
-  --accent-solid: #0f766e;
-  --accent-fg: #ffffff;
-  --sev-critical: #be123c;
-  --sev-error: #a84a08;
-  --sev-warning: #92400e;
-  --sev-info: #475569;
-  --sev-debug: #5b676d;
+  --bg-elevated: #ebe5ff;
+  --border-dim: #d6cdf2;
+  --border-strong: #2a2340;
+  --ink: #2a2340; /* sticker outlines */
+  --shadow-ink: #2a2340; /* hard offset shadows */
+  --dot-grid: #ddd5f7; /* the faint dotted paper */
+  --text-primary: #2a2340;
+  --text-secondary: #4f4670;
+  --text-muted: #5f5682;
+  --accent: #b0144f; /* accent as text or an icon */
+  --accent-solid: #ff7fb0; /* accent as a button fill */
+  --accent-fg: #2a2340; /* text on the solid accent */
+  --sev-critical: #b0123a;
+  --sev-error: #9a3b00;
+  --sev-warning: #735000;
+  --sev-info: #36557a;
+  --sev-debug: #5f5682;
+  --sev-critical-bg: #ffc2cc;
+  --sev-error-bg: #ffd5bf;
+  --sev-warning-bg: #fff0a3;
+  --sev-info-bg: #cfe6ff;
+  --sev-debug-bg: #ebe5ff;
+  --pastel-mint: #bdf0d8;
+  --pastel-peach: #ffd1b8;
+  --pastel-butter: #fff0a3;
+  --pastel-sky: #c8e2ff;
+  --pastel-pink: #ffc6de;
+  --pastel-lilac: #dccfff;
+  --on-pastel: #2a2340;
 }
 
-/* No saved choice: follow the system. The values repeat [data-theme="light"] (a test keeps them equal). */
-@media (prefers-color-scheme: light) {
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-base: #1a1630;
+  --bg-surface: #241e3f;
+  --bg-elevated: #2f2852;
+  --border-dim: #3d3566;
+  --border-strong: #c4bce0;
+  --ink: #c4bce0;
+  --shadow-ink: #0b0918;
+  --dot-grid: #2a2449;
+  --text-primary: #f4f0ff;
+  --text-secondary: #c9c1e6;
+  --text-muted: #aaa1cc;
+  --accent: #ff9cc4;
+  --accent-solid: #ff7fb0;
+  --accent-fg: #2a2340;
+  --sev-critical: #ff8fa0;
+  --sev-error: #ffad85;
+  --sev-warning: #ffe066;
+  --sev-info: #9cc8ff;
+  --sev-debug: #aaa1cc;
+  --sev-critical-bg: #ffb3c0;
+  --sev-error-bg: #ffc9ad;
+  --sev-warning-bg: #ffec8f;
+  --sev-info-bg: #bcdcff;
+  --sev-debug-bg: #d5cbf5;
+  --pastel-mint: #a8e8cb;
+  --pastel-peach: #ffc4a6;
+  --pastel-butter: #ffec8f;
+  --pastel-sky: #b6d7ff;
+  --pastel-pink: #ffb6d4;
+  --pastel-lilac: #cdbdff;
+  --on-pastel: #2a2340;
+}
+
+/* No saved choice and a dark system: night. The values repeat the night block (a test keeps them equal). */
+@media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    color-scheme: light;
-    --bg-base: #f6f7f8;
-    --bg-surface: #ffffff;
-    --bg-elevated: #eceff1;
-    --border-dim: #d5dadc;
-    --border-strong: #7b878d;
-    --text-primary: #14191b;
-    --text-secondary: #47535a;
-    --text-muted: #5b676d;
-    --accent: #0f766e;
-    --accent-solid: #0f766e;
-    --accent-fg: #ffffff;
-    --sev-critical: #be123c;
-    --sev-error: #a84a08;
-    --sev-warning: #92400e;
-    --sev-info: #475569;
-    --sev-debug: #5b676d;
+    color-scheme: dark;
+    --bg-base: #1a1630;
+    --bg-surface: #241e3f;
+    --bg-elevated: #2f2852;
+    --border-dim: #3d3566;
+    --border-strong: #c4bce0;
+    --ink: #c4bce0;
+    --shadow-ink: #0b0918;
+    --dot-grid: #2a2449;
+    --text-primary: #f4f0ff;
+    --text-secondary: #c9c1e6;
+    --text-muted: #aaa1cc;
+    --accent: #ff9cc4;
+    --accent-solid: #ff7fb0;
+    --accent-fg: #2a2340;
+    --sev-critical: #ff8fa0;
+    --sev-error: #ffad85;
+    --sev-warning: #ffe066;
+    --sev-info: #9cc8ff;
+    --sev-debug: #aaa1cc;
+    --sev-critical-bg: #ffb3c0;
+    --sev-error-bg: #ffc9ad;
+    --sev-warning-bg: #ffec8f;
+    --sev-info-bg: #bcdcff;
+    --sev-debug-bg: #d5cbf5;
+    --pastel-mint: #a8e8cb;
+    --pastel-peach: #ffc4a6;
+    --pastel-butter: #ffec8f;
+    --pastel-sky: #b6d7ff;
+    --pastel-pink: #ffb6d4;
+    --pastel-lilac: #cdbdff;
+    --on-pastel: #2a2340;
   }
 }
 
-/* Density: how much space rows and controls take. Comfortable by default. */
+/* Density and motion. Comfortable by default. */
 :root {
   --row-y: 8px;
   --gap: 12px;
   --motion: 150ms;
+  --radius-sticker: 18px;
+  --radius-control: 12px;
+  --outline: 2px;
 }
 [data-density="compact"] {
   --row-y: 3px;
@@ -91,6 +145,7 @@
   --color-bg-elevated: var(--bg-elevated);
   --color-border-dim: var(--border-dim);
   --color-border-strong: var(--border-strong);
+  --color-ink: var(--ink);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
@@ -102,6 +157,18 @@
   --color-sev-warning: var(--sev-warning);
   --color-sev-info: var(--sev-info);
   --color-sev-debug: var(--sev-debug);
+  --color-sev-critical-bg: var(--sev-critical-bg);
+  --color-sev-error-bg: var(--sev-error-bg);
+  --color-sev-warning-bg: var(--sev-warning-bg);
+  --color-sev-info-bg: var(--sev-info-bg);
+  --color-sev-debug-bg: var(--sev-debug-bg);
+  --color-pastel-mint: var(--pastel-mint);
+  --color-pastel-peach: var(--pastel-peach);
+  --color-pastel-butter: var(--pastel-butter);
+  --color-pastel-sky: var(--pastel-sky);
+  --color-pastel-pink: var(--pastel-pink);
+  --color-pastel-lilac: var(--pastel-lilac);
+  --color-on-pastel: var(--on-pastel);
 
   /* Names the older views use, mapped onto the same tokens. */
   --color-accent-primary: var(--accent);
@@ -111,8 +178,8 @@
   --color-accent-danger: var(--sev-error);
   --color-accent-critical: var(--sev-critical);
 
-  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Mochiy Pop One", "Arial Rounded MT Bold", ui-rounded, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Type scale: 12 / 14 / 16 / 20 / 28 px. Logs are 13 px mono (class "log-text"). */
@@ -122,11 +189,17 @@
   --text-xl: 1.25rem;
   --text-3xl: 1.75rem;
 
+  --radius-sticker: var(--radius-sticker);
+  --shadow-sticker: 4px 4px 0 var(--shadow-ink);
+  --shadow-sticker-sm: 2px 2px 0 var(--shadow-ink);
+
   --animate-log-slide: logSlide 150ms ease-out;
   --animate-pulse-dot: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --shadow-glow-teal: 0 4px 16px rgba(13, 61, 46, 0.15);
-  --shadow-glow-red: 0 4px 16px rgba(185, 28, 28, 0.18);
-  --shadow-glow-green: 0 4px 16px rgba(13, 61, 46, 0.15);
+  --animate-bob: bob 2.4s ease-in-out infinite;
+  /* Legacy names, kept so the older views still build; they now draw sticker shadows. */
+  --shadow-glow-teal: 3px 3px 0 var(--shadow-ink);
+  --shadow-glow-red: 3px 3px 0 var(--shadow-ink);
+  --shadow-glow-green: 3px 3px 0 var(--shadow-ink);
 }
 
 @keyframes logSlide {
@@ -137,34 +210,99 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.85); }
 }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
 
 @layer base {
   * { box-sizing: border-box; }
   html, body, #root {
     height: 100%;
     margin: 0;
-    background: var(--bg-base);
     color: var(--text-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+  html { background-color: var(--bg-base); }
+  body {
+    background-color: var(--bg-base);
+    /* Faint dotted paper, the sticker book's page. */
+    background-image: radial-gradient(var(--dot-grid) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 3px solid var(--accent);
     outline-offset: 2px;
   }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: var(--bg-base); }
-  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 99px; border: 2px solid var(--bg-base); }
   /* Numbers line up in columns. */
   .tabular { font-variant-numeric: tabular-nums; }
 }
 
 @layer components {
+  /* A sticker: the one container style. Use it for things that stand alone, not for every block. */
   .card {
     background: var(--bg-surface);
-    border: 1px solid var(--border-dim);
-    border-radius: 8px;
+    border: var(--outline) solid var(--ink);
+    border-radius: var(--radius-sticker);
+    box-shadow: 4px 4px 0 var(--shadow-ink);
     padding: 16px;
+  }
+  .card-flat {
+    background: var(--bg-surface);
+    border: var(--outline) solid var(--border-dim);
+    border-radius: var(--radius-sticker);
+  }
+  /* Buttons press down into their shadow. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: var(--outline) solid var(--ink);
+    border-radius: var(--radius-control);
+    padding: 6px 14px;
+    font-weight: 800;
+    font-size: var(--text-sm);
+    box-shadow: 3px 3px 0 var(--shadow-ink);
+    transition: transform var(--motion) ease, box-shadow var(--motion) ease;
+    cursor: pointer;
+  }
+  .btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shadow-ink); }
+  .btn:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--shadow-ink); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-primary { background: var(--accent-solid); color: var(--accent-fg); }
+  .btn-secondary { background: var(--bg-surface); color: var(--text-primary); }
+  .btn-fun { background: var(--pastel-butter); color: var(--on-pastel); }
+  /* A chip: small pastel label with an ink outline. Pair a fill class (bg-pastel-*) with it. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    padding: 0 8px;
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--on-pastel);
+    white-space: nowrap;
+  }
+  .field {
+    border: var(--outline) solid var(--ink);
+    border-radius: var(--radius-control);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    font-size: var(--text-sm);
   }
   .log-text {
     font-family: var(--font-mono);
@@ -174,7 +312,7 @@
   .row-y { padding-block: var(--row-y); }
 }
 
-/* Motion stays quiet and respects the reader's setting. */
+/* Motion stays small and respects the reader's setting. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

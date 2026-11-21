@@ -1,4 +1,5 @@
-import '@fontsource-variable/inter';
+import '@fontsource-variable/nunito';
+import '@fontsource/mochiy-pop-one/latin-400.css'; // latin only: the Japanese subsets are 8 MB
 import '@fontsource-variable/jetbrains-mono';
 import './theme.css';
 import React from 'react';
