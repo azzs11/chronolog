@@ -1,4 +1,4 @@
-"""The real incidents bundled with the Fault Playground ("Replay a real incident").
+"""Helpers shared by the real-incident exports (puzzles.py writes the Arcade's Real Systems).
 
 Real logs are tens of megabytes per incident, so each replay ships a precomputed result: the engine
 (the same TypeScript code the app runs) ranked the full real logs offline, and the page shows that
@@ -12,7 +12,6 @@ ranking, the evidence and a small log-volume timeline. Two things keep it honest
 import hashlib
 import json
 import subprocess
-import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -24,12 +23,9 @@ from .evaluate import REPO_ROOT
 from .features import BASE_FEATURES
 from .metrics import group_of
 from .rootrank import fit
-from .runner import ensure_runner_built
 from .templates import template_case
 
 ENTRY = REPO_ROOT / "bench" / "runner" / "dist" / "rankcase.js"
-PLAYGROUND_DIR = REPO_ROOT / "apps" / "web" / "src" / "features" / "playground"
-REPLAYS_PATH = PLAYGROUND_DIR / "replays.json"
 # One incident per stratum, fixed before looking at any result.
 STRATA = (("ob", "cpu"), ("ob", "delay"), ("ss", "mem"), ("ss", "loss"), ("tt", "f3"))
 TIMELINE_BUCKET_S = 30
@@ -68,7 +64,7 @@ def heldout_model(table: pd.DataFrame, chosen: list[Case], rounds: int) -> dict:
     return {"id": "rootrank-v1-heldout", "feature_names": dump["feature_names"], "tree_info": trees}
 
 
-def _timeline(case: Case) -> dict:
+def _timeline(case: Case, with_warnings: bool = False) -> dict:
     tc = template_case(case)
     frame = tc.frame
     t0 = int(frame["timestamp"].min())
@@ -80,7 +76,8 @@ def _timeline(case: Case) -> dict:
     bucket = ((frame["timestamp"] - t0) // TIMELINE_BUCKET_S).to_numpy()
     rows = frame["source"].map(index).to_numpy()
     np.add.at(lines, (rows, bucket), 1)
-    is_error = frame["severity"].isin(["error", "critical"]).to_numpy()
+    levels = ["error", "critical", "warning"] if with_warnings else ["error", "critical"]
+    is_error = frame["severity"].isin(levels).to_numpy()
     np.add.at(errors, (rows[is_error], bucket[is_error]), 1)
     return {
         "bucketSeconds": TIMELINE_BUCKET_S,
@@ -112,53 +109,6 @@ def _rank(case: Case, model_path: Path) -> dict:
     if done.returncode != 0:
         raise RuntimeError(f"rankcase failed for {case.case_id}: {done.stderr.decode()}")
     return json.loads(done.stdout)
-
-
-def export_replays(
-    table: pd.DataFrame, cases: list[Case], rounds: int, revision: str
-) -> list[dict]:
-    ensure_runner_built()
-    chosen = select_replay_cases(cases)
-    model = heldout_model(table, chosen, rounds)
-    out = []
-    with tempfile.TemporaryDirectory() as tmp:
-        path = Path(tmp) / "model.json"
-        path.write_text(json.dumps(model))
-        for case in chosen:
-            ranked = _rank(case, path)
-            truth = case.root_service
-            positions = {
-                mode: [c["service"] for c in ranked[mode]["candidates"]].index(truth) + 1
-                if truth in [c["service"] for c in ranked[mode]["candidates"]]
-                else None
-                for mode in ("given", "estimated")
-            }
-            out.append(
-                {
-                    "caseId": case.case_id,
-                    "system": case.system,
-                    "fault": case.fault,
-                    "truth": truth,
-                    "services": len(ranked["given"]["candidates"]),
-                    "rankGiven": positions["given"],
-                    "rankEstimated": positions["estimated"],
-                    "given": ranked["given"],
-                    "estimated": ranked["estimated"],
-                    "timeline": _timeline(case),
-                }
-            )
-    REPLAYS_PATH.write_text(
-        json.dumps(
-            {
-                "source": f"RCAEval (MIT), revision {revision[:12]}, logs only",
-                "modelNote": "rootrank-v1-heldout: trained without these five incidents' services",
-                "cases": out,
-            },
-            separators=(",", ":"),
-        )
-        + "\n"
-    )
-    return out
 
 
 def parse_all(case_ids: list[str]) -> list[Case]:

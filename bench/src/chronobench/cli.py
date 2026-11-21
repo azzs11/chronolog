@@ -22,7 +22,7 @@ from .hscores import compute_hscores, load_hscores
 from .moodeval import compute_moods, evaluate_moods
 from .moods_report import render_moods_report
 from .playground import render_playground_report, run_playground
-from .replays import export_replays
+from .puzzles import export_puzzles
 from .report import render_report
 from .reportcard import write_report_card
 from .robustness import run_robustness
@@ -277,17 +277,14 @@ def _cmd_playground(_args: argparse.Namespace) -> None:
     print(f"Playground benchmark done: {result['overall']['runs']} simulated incidents")
 
 
-def _cmd_export_replays(args: argparse.Namespace) -> None:
+def _cmd_export_puzzles(args: argparse.Namespace) -> None:
     cases = load_subset("full")
     table = feature_table(cases, args.workers)
     rounds = json.loads((RESULTS_DIR / "rootrank.json").read_text())["rounds"]
     revision = json.loads(_results_json("full").read_text())["meta"]["dataset_revision"]
-    done = export_replays(table, cases, rounds, revision)
-    for r in done:
-        print(
-            f"{r['caseId']}: truth={r['truth']} rank(start given)={r['rankGiven']} "
-            f"rank(estimated)={r['rankEstimated']} of {r['services']}"
-        )
+    done = export_puzzles(table, cases, rounds, revision)
+    hits = sum(1 for p in done if p["tockGuess"] == p["truth"])
+    print(f"Wrote {len(done)} real-case puzzles; Tock's first guess is right in {hits}.")
 
 
 def _cmd_replay(args: argparse.Namespace) -> None:
@@ -370,9 +367,9 @@ def main() -> None:
     playground = sub.add_parser("playground", help="RootRank on the playground's simulated faults")
     playground.set_defaults(func=_cmd_playground)
 
-    export_r = sub.add_parser("export-replays", help="precompute the playground's replays")
-    export_r.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
-    export_r.set_defaults(func=_cmd_export_replays)
+    puzzles = sub.add_parser("export-puzzles", help="real incidents as Arcade puzzles")
+    puzzles.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    puzzles.set_defaults(func=_cmd_export_puzzles)
 
     replay = sub.add_parser("replay", help="run ChronoLog-H on one case and show its ranking")
     replay.add_argument("case")
