@@ -1,5 +1,10 @@
-import { Monitor, Moon, Rows3, Sun } from 'lucide-react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Monitor, Moon, Rows3, Search, Sun } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { fetchIncidents, type IncidentSummary } from '../features/incidents/api';
+import Onboarding, { shouldShowIntro } from './onboarding/Onboarding';
+import CommandPalette from './palette/CommandPalette';
+import { type Command, isPaletteShortcut } from './palette/commands';
 import Tock from './critters/Tock';
 import { NAV_ITEMS } from './nav';
 import { type Density, type Theme, usePreferences } from './preferences';
@@ -32,9 +37,50 @@ function Wordmark() {
  * header with the display preferences. Views fill the main area and may split it into a list and a
  * detail pane.
  */
+const ARCADE_TABS = [
+  ['daily', 'Daily case', 'puzzle game today'],
+  ['simulated', 'Break something', 'simulated faults playground'],
+  ['real', 'Replay a real incident', 'rcaeval'],
+  ['yours', 'Analyse my log files', 'drop upload files local'],
+] as const;
+const RECENT_INCIDENTS = 5;
+
+/** The palette's commands: views, Arcade games, display settings and the latest incidents. */
+function useCommands(isOpen: boolean, setPreferences: (p: { theme?: Theme; density?: Density }) => void): Command[] {
+  const navigate = useNavigate();
+  const [incidents, setIncidents] = useState<IncidentSummary[]>([]);
+  useEffect(() => {
+    if (isOpen) fetchIncidents().then((list) => setIncidents(list.slice(0, RECENT_INCIDENTS)), () => setIncidents([]));
+  }, [isOpen]);
+  return useMemo(
+    () => [
+      ...NAV_ITEMS.map((item) => ({ id: `go${item.path}`, label: item.label, group: 'Go to', run: () => navigate(item.path) })),
+      ...ARCADE_TABS.map(([tab, label, keywords]) => ({ id: `arcade-${tab}`, label, group: 'Arcade', keywords, run: () => navigate(`/playground?tab=${tab}`) })),
+      ...incidents.map((i) => ({ id: `inc-${i.id}`, label: `${i.services.map((s) => s.service).join(', ')} · ${new Date(i.start).toLocaleTimeString()}`, group: 'Incidents', keywords: i.id, run: () => navigate(`/incidents/${i.id}`) })),
+      ...THEMES.map(({ value, label }) => ({ id: `theme-${value}`, label, group: 'Display', keywords: value === 'dark' ? 'night' : value === 'light' ? 'day' : '', run: () => setPreferences({ theme: value }) })),
+      { id: 'density-compact', label: 'Compact rows', group: 'Display', keywords: 'density pro', run: () => setPreferences({ density: 'compact' }) },
+      { id: 'density-comfortable', label: 'Comfortable rows', group: 'Display', keywords: 'density', run: () => setPreferences({ density: 'comfortable' }) },
+    ],
+    [navigate, incidents, setPreferences],
+  );
+}
+
 export default function Shell() {
   const [preferences, setPreferences] = usePreferences();
   const nextDensity: Density = preferences.density === 'comfortable' ? 'compact' : 'comfortable';
+  const [isPaletteOpen, setPaletteOpen] = useState(false);
+  const commands = useCommands(isPaletteOpen, setPreferences);
+  const [isIntroOpen, setIntroOpen] = useState(shouldShowIntro);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!isPaletteShortcut(e)) return;
+      e.preventDefault();
+      setPaletteOpen((open) => !open);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <div className="flex h-full flex-col md:flex-row">
@@ -67,6 +113,11 @@ export default function Shell() {
 
       <div className="flex min-h-0 flex-1 flex-col">
         <header className="flex shrink-0 items-center justify-end gap-2 px-4 py-2">
+          <button type="button" onClick={() => setPaletteOpen(true)} className="btn btn-secondary mr-auto md:mr-0" aria-keyshortcuts="Meta+K Control+K">
+            <Search size={16} aria-hidden="true" />
+            Ask Tock
+            <kbd className="hidden rounded border border-border-dim px-1 text-xs text-text-muted md:inline">⌘K</kbd>
+          </button>
           <fieldset className="flex overflow-hidden rounded-xl border-2 border-ink bg-bg-surface shadow-sticker-sm">
             <legend className="sr-only">Theme</legend>
             {THEMES.map(({ value, label, icon: Icon }) => (
@@ -94,6 +145,15 @@ export default function Shell() {
             <Rows3 size={16} aria-hidden="true" />
           </button>
         </header>
+        {isIntroOpen && (
+          <Onboarding
+            onFinish={(play) => {
+              setIntroOpen(false);
+              if (play) navigate('/playground?tab=daily');
+            }}
+          />
+        )}
+        <CommandPalette isOpen={isPaletteOpen} onClose={() => setPaletteOpen(false)} commands={commands} />
         <main id="main" tabIndex={-1} className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
           <Outlet />
         </main>

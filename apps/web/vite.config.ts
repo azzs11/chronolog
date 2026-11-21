@@ -1,13 +1,33 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
+import type { Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
+
+/**
+ * Preload the two Latin font files the first screen uses, so they arrive with the CSS instead of
+ * after first paint. Without this, swapping from the fallback font reflowed the page (CLS 0.11).
+ */
+const PRELOAD_FONTS = [/^assets\/nunito-latin-wght-normal-[\w-]+\.woff2$/, /^assets\/mochiy-pop-one-latin-400-normal-[\w-]+\.woff2$/];
+function preloadFonts(): Plugin {
+  return {
+    name: 'chronolog-preload-fonts',
+    transformIndexHtml(_html, ctx) {
+      const files = Object.keys(ctx.bundle ?? {}).filter((name) => PRELOAD_FONTS.some((re) => re.test(name)));
+      return files.map((file) => ({
+        tag: 'link',
+        attrs: { rel: 'preload', as: 'font', type: 'font/woff2', href: `/${file}`, crossorigin: '' },
+        injectTo: 'head-prepend' as const,
+      }));
+    },
+  };
+}
 
 // The engine is pure TypeScript with no dependencies, so the app builds it from source.
 const engine = fileURLToPath(new URL('../../packages/engine/src/index.ts', import.meta.url));
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), preloadFonts()],
   resolve: { alias: { '@chronolog/engine': engine } },
   server: { port: 3000 },
   test: {

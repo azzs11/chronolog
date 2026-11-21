@@ -1,5 +1,7 @@
 import Tock from './app/critters/Tock';
+import Onboarding, { shouldShowIntro } from './app/onboarding/Onboarding';
 import { usePreferences } from './app/preferences';
+import { useState } from 'react';
 import PlaygroundPage from './features/playground/PlaygroundPage';
 
 const REPO_URL = 'https://github.com/azzs11/chronolog';
@@ -10,6 +12,7 @@ const REPO_URL = 'https://github.com/azzs11/chronolog';
  */
 export default function DemoApp() {
   usePreferences(); // applies the saved or system theme
+  const [isIntroOpen, setIntroOpen] = useState(shouldShowIntro);
   return (
     <div className="min-h-screen bg-bg-base text-text-primary">
       <header className="flex items-center justify-between gap-3 border-b-2 border-ink bg-bg-surface px-4 py-3">
@@ -21,6 +24,7 @@ export default function DemoApp() {
           Source, benchmark and self-hosting
         </a>
       </header>
+      {isIntroOpen && <Onboarding onFinish={() => setIntroOpen(false)} />}
       <main className="mx-auto max-w-3xl px-4 py-6">
         <PlaygroundPage />
       </main>

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import InboxView from '../features/incidents/InboxView';
 import LiveView from '../features/live/LiveView';
 import Shell from './Shell';
@@ -14,6 +14,12 @@ const ReportCardPage = lazy(() => import('../features/report/ReportCardPage'));
 
 const loading = <p className="p-6 text-text-muted">Loading…</p>;
 
+/** Re-mounts the Arcade when ?tab= changes, so a palette command can switch games while it is open. */
+function ArcadeRoute() {
+  const { search } = useLocation();
+  return <PlaygroundPage key={search} />;
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -24,7 +30,7 @@ export default function AppRoutes() {
         <Route path="town" element={<Suspense fallback={loading}><TownPage /></Suspense>} />
         <Route path="report" element={<Suspense fallback={loading}><ReportCardPage /></Suspense>} />
         <Route path="root-cause" element={<Suspense fallback={loading}><RootRankView /></Suspense>} />
-        <Route path="playground" element={<Suspense fallback={loading}><PlaygroundPage /></Suspense>} />
+        <Route path="playground" element={<Suspense fallback={loading}><ArcadeRoute /></Suspense>} />
       </Route>
       <Route
         path="legacy"

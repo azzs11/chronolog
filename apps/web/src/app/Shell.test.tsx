@@ -7,6 +7,7 @@ vi.mock('../features/live/LiveView', () => ({ default: () => <h2>Live view</h2> 
 vi.mock('../features/rootrank/RootRankView', () => ({ default: () => <h2>Root cause view</h2> }));
 vi.mock('../features/playground/PlaygroundPage', () => ({ default: () => <h2>Playground view</h2> }));
 vi.mock('../LegacyApp', () => ({ default: () => <h2>Legacy view</h2> }));
+vi.mock('../features/incidents/api', () => ({ fetchIncidents: () => Promise.resolve([]) }));
 
 import AppRoutes from './AppRoutes';
 
@@ -20,6 +21,7 @@ const at = (path: string) =>
 describe('AppRoutes and Shell', () => {
   beforeEach(() => {
     localStorage.clear();
+    localStorage.setItem('chronolog.onboarded.v1', 'yes');
     document.documentElement.removeAttribute('data-theme');
   });
 
@@ -66,5 +68,29 @@ describe('AppRoutes and Shell', () => {
     expect(JSON.parse(localStorage.getItem('chronolog.preferences.v1') ?? '{}')).toEqual({ theme: 'light', density: 'compact' });
     fireEvent.click(screen.getByRole('button', { name: 'System theme' }));
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
+  });
+
+  it('opens Ask Tock with Ctrl+K, finds a view by typing, and goes there on Enter', async () => {
+    at('/incidents');
+    fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
+    const box = screen.getByRole('combobox', { name: /Ask Tock/ });
+    expect(box).toHaveFocus();
+    fireEvent.change(box, { target: { value: 'play' } });
+    expect(screen.getAllByRole('option')[0]).toHaveTextContent('Playground');
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(await screen.findByRole('heading', { name: 'Playground view' })).toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Ask Tock' })).not.toBeInTheDocument();
+  });
+
+  it('closes Ask Tock with Escape, and changes the theme from it', () => {
+    at('/incidents');
+    fireEvent.click(screen.getByRole('button', { name: /Ask Tock/ }));
+    const box = screen.getByRole('combobox', { name: /Ask Tock/ });
+    fireEvent.change(box, { target: { value: 'night' } });
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    fireEvent.click(screen.getByRole('button', { name: /Ask Tock/ }));
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /Ask Tock/ }), { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
