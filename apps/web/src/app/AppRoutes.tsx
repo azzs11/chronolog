@@ -9,6 +9,8 @@ import Shell from './Shell';
 const PlaygroundPage = lazy(() => import('../features/playground/PlaygroundPage'));
 const RootRankView = lazy(() => import('../features/rootrank/RootRankView'));
 const LegacyApp = lazy(() => import('../LegacyApp'));
+const TownPage = lazy(() => import('../features/town/TownPage'));
+const ReportCardPage = lazy(() => import('../features/report/ReportCardPage'));
 
 const loading = <p className="p-6 text-text-muted">Loading…</p>;
 
@@ -19,6 +21,8 @@ export default function AppRoutes() {
         <Route index element={<Navigate to="/incidents" replace />} />
         <Route path="incidents/:id?" element={<InboxView />} />
         <Route path="live" element={<LiveView />} />
+        <Route path="town" element={<Suspense fallback={loading}><TownPage /></Suspense>} />
+        <Route path="report" element={<Suspense fallback={loading}><ReportCardPage /></Suspense>} />
         <Route path="root-cause" element={<Suspense fallback={loading}><RootRankView /></Suspense>} />
         <Route path="playground" element={<Suspense fallback={loading}><PlaygroundPage /></Suspense>} />
       </Route>

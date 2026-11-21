@@ -50,6 +50,9 @@
   --pastel-pink: #ffc6de;
   --pastel-lilac: #dccfff;
   --on-pastel: #2a2340;
+  /* Chart series (validated with the dataviz palette checker): ours, and the comparison. */
+  --chart-ours: #ff7fb0;
+  --chart-other: #8a7fd6;
 }
 
 [data-theme="dark"] {
@@ -85,6 +88,8 @@
   --pastel-pink: #ffb6d4;
   --pastel-lilac: #cdbdff;
   --on-pastel: #2a2340;
+  --chart-ours: #e0609a;
+  --chart-other: #8a7fd6;
 }
 
 /* No saved choice and a dark system: night. The values repeat the night block (a test keeps them equal). */
@@ -122,6 +127,8 @@
     --pastel-pink: #ffb6d4;
     --pastel-lilac: #cdbdff;
     --on-pastel: #2a2340;
+    --chart-ours: #e0609a;
+    --chart-other: #8a7fd6;
   }
 }
 
@@ -169,6 +176,8 @@
   --color-pastel-pink: var(--pastel-pink);
   --color-pastel-lilac: var(--pastel-lilac);
   --color-on-pastel: var(--on-pastel);
+  --color-chart-ours: var(--chart-ours);
+  --color-chart-other: var(--chart-other);
 
   /* Names the older views use, mapped onto the same tokens. */
   --color-accent-primary: var(--accent);

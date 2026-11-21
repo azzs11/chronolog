@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Critter from '../../app/critters/Critter';
 import Tock from '../../app/critters/Tock';
 import Timeline from '../playground/Timeline';
+import Rewind from '../town/Rewind';
 import { confidenceWord } from '../rootrank/format';
 import { ApiError, type IncidentDetail, fetchIncident } from './api';
 import CaseStamp from './CaseStamp';
@@ -130,6 +131,11 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
           <EvidenceBubbles cause={chosen} />
         </section>
       )}
+
+      <section aria-label="Rewind" className="space-y-2">
+        <h4 className="text-base text-text-primary">Rewind</h4>
+        <Rewind timeline={timeline} graph={graph} selected={selected ?? undefined} />
+      </section>
 
       <section aria-label="Logs over time" className="space-y-2">
         <h4 className="text-base text-text-primary">Logs over time</h4>

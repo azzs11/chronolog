@@ -50,10 +50,17 @@ export default function Shell() {
         className="order-last flex shrink-0 justify-around gap-1 border-t-2 border-ink bg-bg-surface p-1.5 md:order-first md:w-56 md:flex-col md:justify-start md:gap-1.5 md:border-r-2 md:border-t-0 md:p-3"
       >
         <Wordmark />
-        {NAV_ITEMS.map(({ path, label, icon: Icon, hideOnPhone }) => (
+        {NAV_ITEMS.map(({ path, label, shortLabel, icon: Icon, hideOnPhone }) => (
           <NavLink key={path} to={path} className={(state) => `${hideOnPhone ? 'hidden md:flex' : 'flex'} ${linkClass(state)}`}>
             <Icon size={18} aria-hidden="true" />
-            <span>{label}</span>
+            {shortLabel ? (
+              <>
+                <span className="md:hidden">{shortLabel}</span>
+                <span className="hidden md:inline">{label}</span>
+              </>
+            ) : (
+              <span>{label}</span>
+            )}
           </NavLink>
         ))}
       </nav>
