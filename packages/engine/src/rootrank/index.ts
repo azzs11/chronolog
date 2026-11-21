@@ -11,3 +11,13 @@ export { learnServiceGraph, MIN_CORRELATION, MIN_MENTIONS, type LearnedGraph } f
 export { confidenceWord, evidenceSentences, formatDelay } from './explain';
 export { TemplateStream, type AddResult, type StreamLine, type TemplateGroup } from './templateStream';
 export { BURST_BUCKET_S, findErrorBursts, MERGE_GAP_BUCKETS, MIN_BURST_ERRORS, type Burst, type BurstLine } from './bursts';
+export {
+  BASELINE_S,
+  MOODS,
+  RECENT_S,
+  RESTART_WORDS,
+  serviceMoods,
+  type Mood,
+  type MoodLine,
+  type ServiceMood,
+} from './mood';
