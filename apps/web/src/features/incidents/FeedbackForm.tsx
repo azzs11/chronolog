@@ -1,4 +1,7 @@
+import { suspectMood } from '@chronolog/engine';
 import { useState } from 'react';
+import { casePostcard } from '../../app/postcard/builders';
+import PostcardButton from '../../app/postcard/PostcardButton';
 import { type IncidentDetail, sendFeedback } from './api';
 
 /**
@@ -40,6 +43,17 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
         <button type="button" onClick={() => setEditing(true)} className="btn btn-secondary">
           Change my answer
         </button>
+        <div className="w-full">
+          <PostcardButton
+            fileName={`chronolog-${incident.id}.png`}
+            spec={casePostcard({
+              id: incident.id,
+              status: incident.status,
+              correctService: incident.correctService,
+              candidates: detail.ranking.candidates.map((c) => ({ service: c.service, rank: c.rank, weight: c.weight, mood: suspectMood(c.evidence) })),
+            })}
+          />
+        </div>
       </section>
     );
   }

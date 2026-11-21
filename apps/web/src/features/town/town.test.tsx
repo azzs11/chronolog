@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Rewind, { describeOffset } from './Rewind';
+import Rewind, { describeOffset, firstSignSentence } from './Rewind';
 import { defaultRoadOptions, layoutTown, priorRoads, TOWN, townRoads } from './roads';
 
 const graph = {
@@ -54,18 +54,26 @@ describe('town layout and roads', () => {
 
 describe('describeOffset', () => {
   it('reads like a sentence', () => {
-    expect(describeOffset(0)).toBe('at the burst start');
+    expect(describeOffset(0)).toBe('at the start of the burst');
+    expect(describeOffset(-30, 'the trouble')).toBe('30 s before the trouble');
     expect(describeOffset(-150)).toBe('2 min 30 s before the burst');
     expect(describeOffset(60)).toBe('1 min after the burst');
     expect(describeOffset(30)).toBe('30 s after the burst');
   });
 });
 
+describe('firstSignSentence', () => {
+  it('names a tie instead of picking a winner', () => {
+    const tie = { frames: [{ a: 'sick' as const, b: 'stressed' as const }], seconds: [0], baselineBuckets: 0, firstSign: { service: 'a', bucket: 0, seconds: 0, alsoUnwell: ['b'] } };
+    expect(firstSignSentence(tie)).toBe('First signs: a and b turned unwell within the same 30 s, at the start of the burst. Counts cannot tell which came first.');
+  });
+});
+
 describe('Rewind', () => {
   it('opens on the first sign and says who it was and when', () => {
     render(<Rewind timeline={timeline} graph={graph} />);
-    expect(screen.getByText(/First sign: db looked sick at the burst start/)).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /Town map at the burst start: db Sick, api Fine, cache Fine/ })).toBeInTheDocument();
+    expect(screen.getByText(/First sign: db looked sick at the start of the burst/)).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /Town map at the start of the burst: db Sick, api Fine, cache Fine/ })).toBeInTheDocument();
   });
 
   it('moves through time with the slider', () => {

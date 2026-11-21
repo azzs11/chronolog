@@ -3,12 +3,14 @@ import type { RankedCause } from '../rootrank/api';
 import { evidenceClaims } from '../rootrank/format';
 
 const SHORT_ID = 8;
+/** Ids like "api.log:42" (from the drop zone) are short and meaningful, so they are shown whole. */
+const isFileLine = (id: string): boolean => /:\d+$/.test(id);
 
 /** A log id as a small chip; the full id is in the tooltip and for screen readers. */
 export function CiteChip({ id }: { id: string }) {
   return (
     <code title={`Log ${id}`} className="inline-block rounded-md border border-ink bg-pastel-sky px-1 text-xs text-on-pastel">
-      <span aria-hidden="true">#{id.slice(0, SHORT_ID)}</span>
+      <span aria-hidden="true">{isFileLine(id) ? id : `#${id.slice(0, SHORT_ID)}`}</span>
       <span className="sr-only">log {id}</span>
     </code>
   );
