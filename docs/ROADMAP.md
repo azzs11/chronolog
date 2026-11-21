@@ -32,7 +32,7 @@ Each finished phase is tagged `v2.0-pN`.
 | 2 | ChronoBench: replay real incidents (RCAEval, Loghub) through the engine and measure AC@k against simple baselines | One command reproduces `RESULTS.md` |
 | 3 | Engine v2: log templates (Drain3), a service graph learned from logs, and RootRank (learning-to-rank root causes) | AC@3 vs ChronoLog-H reported over 5 seeds, with an ablation table |
 | 7 | Live demo: a browser-only Fault Playground and a real-incident replay | The demo link works on a phone with no backend |
-| 6 | UI/UX redesign: an incident-first interface, tested with users against the old UI | User test results published |
+| 6 | UI/UX redesign: an incident-first interface, tested with users against the old UI (kit: [docs/user-test](user-test/README.md)) | User test results published |
 | 4 | Anomaly detection v2: a template-based detector; the severity model is kept only for logs with no level | F1 and detection delay reported on HDFS and BGL |
 | 5 | Evidence-locked incident stories: an optional LLM narrative where every sentence cites log lines | Citation precision reported; the app works fully with the LLM off |
 | 8 | README, technical report and write-up | Published |
