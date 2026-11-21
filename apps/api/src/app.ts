@@ -10,6 +10,7 @@ import metricsRouter from './routes/metrics';
 import anomaliesRouter from './routes/anomalies';
 import rcaRouter from './routes/rca';
 import incidentsRouter from './routes/incidents';
+import moodsRouter from './routes/moods';
 import logger from './config/logger';
 
 const app = express();
@@ -51,6 +52,7 @@ app.use('/api/causal', causalRouter);
 app.use('/api/anomalies', anomaliesRouter);
 app.use('/api/rca', rcaRouter);
 app.use('/api/incidents', incidentsRouter);
+app.use('/api/moods', moodsRouter);
 app.use('/api/metrics', metricsRouter);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────

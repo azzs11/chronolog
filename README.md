@@ -233,6 +233,7 @@ All endpoints return `{ status, data, meta }`.
 | `GET` | `/api/incidents/:id` | One incident with its ranking, evidence, per-service timeline and learned service graph |
 | `POST` | `/api/incidents/:id/feedback` | "Was this the root cause?" `{ verdict: confirm \| reject, correct_service?, note? }` |
 | `GET` | `/api/incidents/feedback/summary` | How often the first choice was right on incidents you reviewed |
+| `GET` | `/api/moods` | Each service's mood right now (fine, new phrase, stressed, sick, gone quiet, restarted): the last 2 minutes against the 15 before, with a reason and the log ids behind it. Moods are symptoms, not causes |
 | `GET` | `/api/metrics` | Prometheus metrics |
 
 #### `POST /api/rca/rank`
