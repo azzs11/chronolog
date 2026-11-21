@@ -23,4 +23,4 @@ export {
   type ServiceMood,
 } from './mood';
 export { citeEvidence, MAX_CITES, type Citations } from './citations';
-export { LEAD_BUCKETS, MIN_LINES_FOR_QUIET, rewindMoods, type Rewind, type RewindMood, type RewindTimeline } from './rewind';
+export { LEAD_BUCKETS, MIN_LINES_FOR_QUIET, rewindMoods, timelineOf, type Rewind, type RewindMood, type RewindTimeline } from './rewind';

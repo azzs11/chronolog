@@ -27,7 +27,7 @@ describe('rewindMoods', () => {
         { name: 'b', lines: flat(8, 20), errors: [0, 0, 0, 3, 5, 5, 5, 5] },
       ]),
     );
-    expect(r.firstSign).toEqual({ service: 'b', bucket: 3, seconds: -30 });
+    expect(r.firstSign).toEqual({ service: 'b', bucket: 3, seconds: -30, alsoUnwell: ['a'] });
   });
 
   it('ignores noise long before the start and returns null when nothing happens', () => {

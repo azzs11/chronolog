@@ -30,8 +30,11 @@ export interface Rewind {
   frames: Array<Record<string, RewindMood>>;
   /** Seconds from the incident start at the beginning of each bucket. */
   seconds: number[];
-  /** The first service to look unwell near the start, or null. */
-  firstSign: { service: string; bucket: number; seconds: number } | null;
+  /**
+   * The first service to look unwell near the start, or null. `alsoUnwell` lists the others that
+   * turned unwell in the same bucket: counts cannot order events within one bucket, so they tie.
+   */
+  firstSign: { service: string; bucket: number; seconds: number; alsoUnwell: string[] } | null;
   /** How many buckets before the start served as each service's normal. */
   baselineBuckets: number;
 }
@@ -66,8 +69,44 @@ function findFirstSign(timeline: RewindTimeline, frames: Array<Record<string, Re
     const unwell = timeline.services
       .filter((s) => (frames[i] as Record<string, RewindMood>)[s.name] !== 'fine')
       .sort((a, b) => (b.errors[i] ?? 0) - (a.errors[i] ?? 0) || a.name.localeCompare(b.name));
-    const first = unwell[0];
-    if (first) return { service: first.name, bucket: i, seconds: seconds[i] as number };
+    const [first, ...rest] = unwell;
+    if (first) return { service: first.name, bucket: i, seconds: seconds[i] as number, alsoUnwell: rest.map((s) => s.name) };
   }
   return null;
+}
+
+const ERROR_LEVELS: ReadonlySet<string> = new Set(['error', 'critical']);
+const PROBLEM_LEVELS: ReadonlySet<string> = new Set(['error', 'critical', 'warning']);
+
+/**
+ * Per-service line and error counts in fixed buckets around a start time, ready for rewindMoods.
+ * With `withWarnings`, warning lines count as problems too (some faults, like a slow network, only
+ * ever produce warnings); say so wherever the result is shown.
+ */
+export function timelineOf(
+  lines: ReadonlyArray<{ timestamp: number; service: string; severity?: string }>,
+  incidentStart: number,
+  bucketSeconds: number,
+  withWarnings = false,
+): RewindTimeline {
+  const isProblem = (severity: string | undefined): boolean => severity !== undefined && (withWarnings ? PROBLEM_LEVELS : ERROR_LEVELS).has(severity);
+  if (lines.length === 0) return { bucketSeconds, startOffset: 0, services: [] };
+  let first = Number.POSITIVE_INFINITY;
+  let last = Number.NEGATIVE_INFINITY;
+  for (const l of lines) {
+    first = Math.min(first, l.timestamp);
+    last = Math.max(last, l.timestamp);
+  }
+  const firstBucket = Math.floor((first - incidentStart) / bucketSeconds);
+  const buckets = Math.floor((last - incidentStart) / bucketSeconds) - firstBucket + 1;
+  const byService = new Map<string, { lines: number[]; errors: number[] }>();
+  for (const l of lines) {
+    const row = byService.get(l.service) ?? { lines: new Array<number>(buckets).fill(0), errors: new Array<number>(buckets).fill(0) };
+    byService.set(l.service, row);
+    const i = Math.floor((l.timestamp - incidentStart) / bucketSeconds) - firstBucket;
+    row.lines[i] = (row.lines[i] as number) + 1;
+    if (isProblem(l.severity)) row.errors[i] = (row.errors[i] as number) + 1;
+  }
+  const services = [...byService].sort(([a], [b]) => a.localeCompare(b)).map(([name, row]) => ({ name, ...row }));
+  return { bucketSeconds, startOffset: firstBucket * bucketSeconds, services };
 }

@@ -10,3 +10,4 @@ export {
   type SimOptions,
 } from './simulate';
 export { SERVICES, type SimService } from './system';
+export { DAILY_EPOCH, dailyCase, utcDate, type DailyCase } from './daily';
