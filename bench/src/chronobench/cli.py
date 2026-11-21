@@ -22,6 +22,7 @@ from .hscores import compute_hscores, load_hscores
 from .playground import render_playground_report, run_playground
 from .replays import export_replays
 from .report import render_report
+from .reportcard import write_report_card
 from .robustness import run_robustness
 from .robustness_report import render_robustness_report
 from .rootrank import feature_table, run_rootrank
@@ -186,6 +187,8 @@ def _cmd_autostart(args: argparse.Namespace) -> None:
 def _cmd_facts(_args: argparse.Namespace) -> None:
     facts = write_facts()
     print("Wrote the web app's benchmark facts:", ", ".join(f"{k}={v}" for k, v in facts.items()))
+    card = write_report_card()
+    print(f"Wrote the Report card: {len(card['headline'])} methods, {len(card['byFault'])} faults")
 
 
 def _cmd_graph(_args: argparse.Namespace) -> None:
