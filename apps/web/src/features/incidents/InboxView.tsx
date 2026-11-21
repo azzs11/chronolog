@@ -93,7 +93,7 @@ export default function InboxView() {
         </div>
       )}
       {list.length > 0 && (
-        <ul aria-label="Incidents" onKeyDown={onKeyDown} className="divide-y divide-border-dim rounded-md border border-border-dim">
+        <ul aria-label="Incidents" onKeyDown={onKeyDown} className="card-flat divide-y-2 divide-border-dim overflow-hidden">
           {list.map((incident, i) => (
             <Row
               key={incident.id}

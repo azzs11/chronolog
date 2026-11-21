@@ -23,7 +23,7 @@ export default function FilterBar({
     else next.add(severity);
     onChange({ ...filters, severities: next });
   };
-  const control = 'rounded-md border border-border-strong bg-bg-surface px-2 py-1.5 text-sm text-text-primary';
+  const control = 'field';
   return (
     <div className="flex flex-wrap items-center gap-2">
       <fieldset className="flex flex-wrap gap-1">
@@ -34,8 +34,8 @@ export default function FilterBar({
             type="button"
             aria-pressed={filters.severities.has(severity)}
             onClick={() => toggle(severity)}
-            className={`rounded-md border px-2 py-1 text-xs ${
-              filters.severities.has(severity) ? 'border-accent bg-bg-elevated text-text-primary' : 'border-border-dim text-text-secondary'
+            className={`rounded-full border-2 px-2.5 py-0.5 text-xs font-bold ${
+              filters.severities.has(severity) ? 'border-ink bg-pastel-lilac text-on-pastel' : 'border-border-dim text-text-secondary'
             }`}
           >
             {severity}
@@ -64,7 +64,7 @@ export default function FilterBar({
         value={filters.query}
         onChange={(e) => onChange({ ...filters, query: e.target.value })}
       />
-      <fieldset className="flex rounded-md border border-border-dim">
+      <fieldset className="flex overflow-hidden rounded-xl border-2 border-ink bg-bg-surface">
         <legend className="sr-only">View</legend>
         {(['grouped', 'raw'] as const).map((m) => (
           <button
@@ -72,7 +72,7 @@ export default function FilterBar({
             type="button"
             aria-pressed={mode === m}
             onClick={() => onMode(m)}
-            className={`px-3 py-1.5 text-sm ${mode === m ? 'bg-bg-elevated text-text-primary' : 'text-text-secondary'}`}
+            className={`px-3 py-1.5 text-sm font-bold ${mode === m ? 'bg-pastel-lilac text-on-pastel' : 'text-text-secondary'}`}
           >
             {m === 'grouped' ? 'Grouped' : 'Raw'}
           </button>

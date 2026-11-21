@@ -63,7 +63,7 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
           <label htmlFor="real-cause" className="mb-1 block text-xs text-text-muted">
             The real root cause
           </label>
-          <select id="real-cause" value={service} onChange={(e) => setService(e.target.value)} className="w-full rounded-md border border-border-strong bg-bg-surface px-2 py-1.5 text-sm text-text-primary">
+          <select id="real-cause" value={service} onChange={(e) => setService(e.target.value)} className="field w-full">
             <option value="">Choose a service</option>
             {detail.graph.services.map((s) => (
               <option key={s} value={s}>
@@ -77,7 +77,7 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
         <label htmlFor="review-note" className="mb-1 block text-xs text-text-muted">
           Note (optional)
         </label>
-        <textarea id="review-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} rows={2} className="w-full rounded-md border border-border-strong bg-bg-surface px-2 py-1.5 text-sm text-text-primary" />
+        <textarea id="review-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} rows={2} className="field w-full" />
       </div>
       {error && (
         <p role="alert" className="text-sm text-sev-warning">
@@ -88,7 +88,7 @@ export default function FeedbackForm({ detail, onSaved }: { detail: IncidentDeta
         type="button"
         onClick={submit}
         disabled={busy || (answer === 'no' && service === '')}
-        className="rounded-md bg-accent-solid px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-50"
+        className="btn btn-primary"
       >
         {busy ? 'Saving…' : 'Save my answer'}
       </button>

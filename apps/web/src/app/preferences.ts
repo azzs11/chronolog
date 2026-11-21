@@ -10,7 +10,8 @@ export interface Preferences {
 }
 
 const STORAGE_KEY = 'chronolog.preferences.v1';
-export const DEFAULT_PREFERENCES: Preferences = { theme: 'system', density: 'comfortable' };
+/** Day (light) is the brand look, so it is the default; "system" and night are one click away. */
+export const DEFAULT_PREFERENCES: Preferences = { theme: 'light', density: 'comfortable' };
 
 const isTheme = (v: unknown): v is Theme => v === 'system' || v === 'dark' || v === 'light';
 const isDensity = (v: unknown): v is Density => v === 'comfortable' || v === 'compact';

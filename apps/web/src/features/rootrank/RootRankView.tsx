@@ -116,10 +116,10 @@ export default function RootRankView() {
             onChange={(e) => setStartText(e.target.value)}
           />
         </label>
-        <button type="button" className="rounded-md bg-accent-solid px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-50" onClick={run} disabled={isLoading}>
+        <button type="button" className="btn btn-primary" onClick={run} disabled={isLoading}>
           {isLoading ? 'Ranking…' : 'Rank root causes'}
         </button>
-        <button type="button" className="rounded border border-border-dim px-4 py-2 text-sm text-text-primary disabled:opacity-50" onClick={tryTestIncident} disabled={isLoading}>
+        <button type="button" className="btn btn-fun" onClick={tryTestIncident} disabled={isLoading}>
           Inject a test incident
         </button>
       </div>

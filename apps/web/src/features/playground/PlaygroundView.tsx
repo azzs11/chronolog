@@ -105,7 +105,7 @@ export default function PlaygroundView({ makeSeed = newSeed }: { makeSeed?: () =
       <div className="flex flex-wrap items-end gap-3">
         <button
           type="button"
-          className="rounded-md bg-accent-solid px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-50"
+          className="btn btn-primary"
           onClick={breakSomething}
           disabled={phase.kind === 'working'}
         >
@@ -178,7 +178,7 @@ export default function PlaygroundView({ makeSeed = newSeed }: { makeSeed?: () =
       )}
 
       {phase.kind === 'ranked' && (
-        <button type="button" className="rounded border border-border-dim px-4 py-2 text-sm text-text-primary" onClick={reveal}>
+        <button type="button" className="btn btn-secondary" onClick={reveal}>
           Reveal the answer
         </button>
       )}

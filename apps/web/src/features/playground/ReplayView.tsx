@@ -55,7 +55,7 @@ export default function ReplayView({ load = loadReplays }: { load?: () => Promis
             key={c.caseId}
             type="button"
             aria-pressed={index === i}
-            className={`rounded border px-3 py-1.5 text-sm ${index === i ? 'border-accent text-text-primary' : 'border-border-dim text-text-secondary'}`}
+            className={`rounded-full border-2 px-3 py-1 text-sm font-bold ${index === i ? 'border-ink bg-pastel-sky text-on-pastel' : 'border-border-dim text-text-secondary'}`}
             onClick={() => pick(i)}
           >
             {SYSTEM_NAMES[c.system]} #{i + 1}
@@ -85,7 +85,7 @@ export default function ReplayView({ load = loadReplays }: { load?: () => Promis
             </button>
           )}
           {!revealed ? (
-            <button type="button" className="rounded border border-border-dim px-4 py-2 text-sm text-text-primary" onClick={() => setRevealed(true)}>
+            <button type="button" className="btn btn-secondary" onClick={() => setRevealed(true)}>
               Reveal the answer
             </button>
           ) : (

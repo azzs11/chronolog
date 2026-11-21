@@ -8,10 +8,10 @@ type Tab = 'simulated' | 'real';
 export default function PlaygroundPage() {
   const [tab, setTab] = useState<Tab>('simulated');
   const tabClass = (t: Tab): string =>
-    `px-3 py-2 text-sm border-b-2 ${tab === t ? 'border-accent text-text-primary' : 'border-transparent text-text-secondary'}`;
+    `rounded-xl border-2 px-3 py-1.5 text-sm font-bold ${tab === t ? 'border-ink bg-pastel-butter text-on-pastel shadow-sticker-sm' : 'border-transparent text-text-secondary hover:text-text-primary'}`;
   return (
     <div className="space-y-4">
-      <div role="tablist" aria-label="Playground mode" className="flex gap-2 border-b border-border-dim">
+      <div role="tablist" aria-label="Playground mode" className="flex flex-wrap gap-2">
         <button type="button" role="tab" aria-selected={tab === 'simulated'} className={tabClass('simulated')} onClick={() => setTab('simulated')}>
           Simulated faults
         </button>

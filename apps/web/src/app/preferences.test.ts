@@ -7,7 +7,7 @@ describe('preferences', () => {
     document.documentElement.removeAttribute('data-density');
   });
 
-  it('defaults to the system theme and comfortable density', () => {
+  it('defaults to the day (light) theme and comfortable density', () => {
     expect(loadPreferences()).toEqual(DEFAULT_PREFERENCES);
   });
 
@@ -18,7 +18,7 @@ describe('preferences', () => {
 
   it('ignores corrupt or unknown saved values field by field', () => {
     localStorage.setItem('chronolog.preferences.v1', JSON.stringify({ theme: 'neon', density: 'compact' }));
-    expect(loadPreferences()).toEqual({ theme: 'system', density: 'compact' });
+    expect(loadPreferences()).toEqual({ theme: DEFAULT_PREFERENCES.theme, density: 'compact' });
     localStorage.setItem('chronolog.preferences.v1', '{nope');
     expect(loadPreferences()).toEqual(DEFAULT_PREFERENCES);
   });

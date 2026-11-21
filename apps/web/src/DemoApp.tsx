@@ -11,8 +11,8 @@ export default function DemoApp() {
   usePreferences(); // applies the saved or system theme
   return (
     <div className="min-h-screen bg-bg-base text-text-primary">
-      <header className="border-b border-border-dim px-4 py-3 flex items-center justify-between">
-        <span className="font-semibold">ChronoLog</span>
+      <header className="flex items-center justify-between gap-3 border-b-2 border-ink bg-bg-surface px-4 py-3">
+        <span className="font-display text-xl">ChronoLog</span>
         <a className="text-sm underline text-text-secondary" href={REPO_URL}>
           Source, benchmark and self-hosting
         </a>

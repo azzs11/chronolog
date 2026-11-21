@@ -55,7 +55,7 @@ describe('LiveView', () => {
 
   it('shows the severity as a named pill, never only as colour', async () => {
     await renderLive();
-    expect(screen.getByText('error', { selector: 'span.inline-flex' })).toBeInTheDocument();
+    expect(screen.getByText('error', { selector: 'span.chip' })).toBeInTheDocument();
   });
 
   it('opens a template in the detail pane, and shows examples and services', async () => {

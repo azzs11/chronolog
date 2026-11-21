@@ -77,7 +77,7 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
 
       <section aria-label="Candidates" className="space-y-2">
         <h4 className="text-sm font-semibold text-text-secondary">Candidates</h4>
-        <ol className="divide-y divide-border-dim rounded-md border border-border-dim">
+        <ol className="card-flat divide-y-2 divide-border-dim overflow-hidden">
           {candidates.map((c) => (
             <li key={c.service}>
               <button

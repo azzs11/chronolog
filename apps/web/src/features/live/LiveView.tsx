@@ -45,7 +45,7 @@ export default function LiveView() {
         <button
           type="button"
           onClick={() => live.setPaused(!live.paused)}
-          className="ml-auto rounded-md border border-border-strong px-3 py-1.5 text-sm text-text-primary"
+          className="btn btn-secondary ml-auto"
         >
           {live.paused ? 'Resume' : 'Pause'}
         </button>

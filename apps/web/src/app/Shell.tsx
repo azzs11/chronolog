@@ -5,14 +5,29 @@ import { type Density, type Theme, usePreferences } from './preferences';
 
 const THEMES: ReadonlyArray<{ value: Theme; label: string; icon: typeof Sun }> = [
   { value: 'system', label: 'System theme', icon: Monitor },
-  { value: 'dark', label: 'Dark theme', icon: Moon },
   { value: 'light', label: 'Light theme', icon: Sun },
+  { value: 'dark', label: 'Dark theme', icon: Moon },
 ];
 
 const linkClass = ({ isActive }: { isActive: boolean }): string =>
-  `flex-1 flex-col items-center gap-1 rounded-md px-2 py-1.5 text-xs md:flex-none md:flex-row md:gap-3 md:px-3 md:py-2 md:text-sm ${
-    isActive ? 'bg-bg-elevated text-text-primary' : 'text-text-secondary hover:bg-bg-surface hover:text-text-primary'
+  `flex-1 flex-col items-center gap-1 rounded-xl border-2 px-2 py-1.5 text-xs font-bold transition-transform md:flex-none md:flex-row md:gap-3 md:px-3 md:py-2 md:text-sm ${
+    isActive
+      ? 'border-ink bg-pastel-butter text-on-pastel shadow-sticker-sm'
+      : 'border-transparent text-text-secondary hover:-translate-y-px hover:border-border-dim hover:text-text-primary'
   }`;
+
+/** The wordmark: a small clock-face sticker and the name in the display face. */
+function Wordmark() {
+  return (
+    <span className="hidden items-center gap-2 px-2 pb-4 pt-1 md:flex">
+      <span aria-hidden="true" className="relative h-8 w-8 shrink-0 rounded-full border-2 border-ink bg-pastel-mint shadow-sticker-sm">
+        <span className="absolute left-1/2 top-1.5 h-2.5 w-0.5 -translate-x-1/2 rounded-full bg-on-pastel" />
+        <span className="absolute left-1/2 top-[13px] h-0.5 w-2.5 rounded-full bg-on-pastel" />
+      </span>
+      <span className="font-display text-xl">ChronoLog</span>
+    </span>
+  );
+}
 
 /**
  * The frame every view lives in: a nav rail on wide screens, a bottom tab bar on phones, and a thin
@@ -34,9 +49,9 @@ export default function Shell() {
 
       <nav
         aria-label="Main"
-        className="order-last flex shrink-0 justify-around border-t border-border-dim bg-bg-surface p-1 md:order-first md:w-56 md:flex-col md:justify-start md:gap-1 md:border-r md:border-t-0 md:p-3"
+        className="order-last flex shrink-0 justify-around gap-1 border-t-2 border-ink bg-bg-surface p-1.5 md:order-first md:w-56 md:flex-col md:justify-start md:gap-1.5 md:border-r-2 md:border-t-0 md:p-3"
       >
-        <span className="hidden px-3 pb-3 pt-1 text-xl font-semibold md:block">ChronoLog</span>
+        <Wordmark />
         {NAV_ITEMS.map(({ path, label, icon: Icon, hideOnPhone }) => (
           <NavLink key={path} to={path} className={(state) => `${hideOnPhone ? 'hidden md:flex' : 'flex'} ${linkClass(state)}`}>
             <Icon size={18} aria-hidden="true" />
@@ -46,8 +61,8 @@ export default function Shell() {
       </nav>
 
       <div className="flex min-h-0 flex-1 flex-col">
-        <header className="flex shrink-0 items-center justify-end gap-1 border-b border-border-dim px-4 py-2">
-          <fieldset className="flex rounded-md border border-border-dim">
+        <header className="flex shrink-0 items-center justify-end gap-2 px-4 py-2">
+          <fieldset className="flex overflow-hidden rounded-xl border-2 border-ink bg-bg-surface shadow-sticker-sm">
             <legend className="sr-only">Theme</legend>
             {THEMES.map(({ value, label, icon: Icon }) => (
               <button
@@ -57,7 +72,7 @@ export default function Shell() {
                 aria-pressed={preferences.theme === value}
                 title={label}
                 onClick={() => setPreferences({ theme: value })}
-                className={`p-2 ${preferences.theme === value ? 'bg-bg-elevated text-text-primary' : 'text-text-secondary'}`}
+                className={`p-2 ${preferences.theme === value ? 'bg-pastel-lilac text-on-pastel' : 'text-text-secondary hover:text-text-primary'}`}
               >
                 <Icon size={16} aria-hidden="true" />
               </button>
@@ -69,7 +84,7 @@ export default function Shell() {
             aria-pressed={preferences.density === 'compact'}
             title={`Density: ${preferences.density}`}
             onClick={() => setPreferences({ density: nextDensity })}
-            className="rounded-md border border-border-dim p-2 text-text-secondary"
+            className={`rounded-xl border-2 border-ink p-2 shadow-sticker-sm ${preferences.density === 'compact' ? 'bg-pastel-lilac text-on-pastel' : 'bg-bg-surface text-text-secondary'}`}
           >
             <Rows3 size={16} aria-hidden="true" />
           </button>
