@@ -1,6 +1,6 @@
 import type { Mood } from '@chronolog/engine';
 import type { ReactNode } from 'react';
-import { type Body, type BodyColour, type Ears, type Look, lookOf, MOOD_LOOK } from './looks';
+import { type Accessory, type Body, type BodyColour, type Ears, type Look, lookOf, MOOD_LOOK } from './looks';
 
 /*
  * A small original creature drawn from circles and curves in a 100 x 100 box. Its face is its
@@ -17,6 +17,8 @@ const BODY_PATH: Record<Body, string> = {
   round: 'M14 60 Q14 22 50 22 Q86 22 86 60 Q86 88 50 88 Q14 88 14 60Z',
   wide: 'M8 62 Q8 28 50 28 Q92 28 92 62 Q92 88 50 88 Q8 88 8 62Z',
   tall: 'M20 58 Q20 16 50 16 Q80 16 80 58 Q80 90 50 90 Q20 90 20 58Z',
+  pear: 'M24 60 Q22 26 50 24 Q78 26 76 60 Q88 90 50 90 Q12 90 24 60Z',
+  ghost: 'M16 56 Q16 20 50 20 Q84 20 84 56 V84 Q76 78 67 84 Q58 90 50 84 Q42 78 33 84 Q24 90 16 84Z',
 };
 
 function earsSvg(ears: Ears, fill: string): ReactNode {
@@ -46,6 +48,30 @@ function earsSvg(ears: Ears, fill: string): ReactNode {
       );
     case 'horns':
       return <path d="M30 28 Q24 14 32 8 Q34 18 40 24 Z M70 28 Q76 14 68 8 Q66 18 60 24 Z" fill="var(--pastel-butter)" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />;
+    case 'bunny':
+      return (
+        <>
+          <ellipse cx="36" cy="14" rx="7" ry="16" fill={fill} stroke={INK} strokeWidth={STROKE} />
+          <ellipse cx="64" cy="14" rx="7" ry="16" fill={fill} stroke={INK} strokeWidth={STROKE} />
+          <ellipse cx="36" cy="15" rx="3" ry="10" fill="var(--pastel-pink)" />
+          <ellipse cx="64" cy="15" rx="3" ry="10" fill="var(--pastel-pink)" />
+        </>
+      );
+    case 'propeller':
+      return (
+        <>
+          <path d="M50 22 V10" stroke={INK} strokeWidth={STROKE} strokeLinecap="round" />
+          <ellipse cx="41" cy="9" rx="9" ry="3.5" fill="var(--pastel-sky)" stroke={INK} strokeWidth={2} />
+          <ellipse cx="59" cy="9" rx="9" ry="3.5" fill="var(--pastel-pink)" stroke={INK} strokeWidth={2} />
+        </>
+      );
+    case 'star':
+      return (
+        <>
+          <path d="M50 22 Q48 14 52 9" fill="none" stroke={INK} strokeWidth={STROKE} strokeLinecap="round" />
+          <path d="M53 0 l2.6 5.4 5.9 0.8 -4.3 4.1 1 5.8 -5.2 -2.8 -5.2 2.8 1 -5.8 -4.3 -4.1 5.9 -0.8z" fill="var(--pastel-butter)" stroke={INK} strokeWidth={1.8} strokeLinejoin="round" />
+        </>
+      );
     case 'clock':
       return (
         <>
@@ -55,6 +81,46 @@ function earsSvg(ears: Ears, fill: string): ReactNode {
       );
   }
 }
+
+/** Extras that give each creature a bit more character. Drawn under the face, except glasses. */
+function accessoryUnder(accessory: Accessory): ReactNode {
+  switch (accessory) {
+    case 'bowtie':
+      return <path d="M50 84 L40 78 L40 90 Z M50 84 L60 78 L60 90 Z" fill="var(--accent-solid)" stroke={INK} strokeWidth={2} strokeLinejoin="round" />;
+    case 'scarf':
+      return <path d="M22 74 Q50 84 78 74 L78 81 Q50 91 22 81 Z" fill="var(--pastel-lilac)" stroke={INK} strokeWidth={2} strokeLinejoin="round" />;
+    case 'flower':
+      return (
+        <g transform="translate(27 30)">
+          {[0, 72, 144, 216, 288].map((a) => (
+            <circle key={a} cx={5 * Math.cos((a * Math.PI) / 180)} cy={5 * Math.sin((a * Math.PI) / 180)} r="3.6" fill="var(--bg-surface)" stroke={INK} strokeWidth={1.2} />
+          ))}
+          <circle r="2.8" fill="var(--pastel-butter)" stroke={INK} strokeWidth={1.2} />
+        </g>
+      );
+    case 'freckles':
+      return (
+        <g fill={INK} opacity="0.45">
+          <circle cx="26" cy="60" r="1.2" />
+          <circle cx="30" cy="63" r="1.2" />
+          <circle cx="25" cy="65" r="1.2" />
+          <circle cx="74" cy="60" r="1.2" />
+          <circle cx="70" cy="63" r="1.2" />
+          <circle cx="75" cy="65" r="1.2" />
+        </g>
+      );
+    default:
+      return null;
+  }
+}
+
+const GLASSES = (
+  <g fill="none" stroke={INK} strokeWidth={2.4}>
+    <circle cx="38" cy="54" r="9" />
+    <circle cx="62" cy="54" r="9" />
+    <path d="M47 53 Q50 50 53 53" />
+  </g>
+);
 
 const EYES_OPEN = (
   <>
@@ -137,7 +203,7 @@ export interface CritterProps {
 }
 
 export default function Critter({ name, mood, size = 56, look, decorative = false, className = '' }: CritterProps) {
-  const { colour, ears, body } = look ?? lookOf(name);
+  const { colour, ears, body, accessory } = look ?? lookOf(name);
   const fill = mood === 'sick' ? `color-mix(in srgb, ${fillOf(colour)} 45%, var(--pastel-mint))` : fillOf(colour);
   const hasBlush = mood === 'fine' || mood === 'new-phrase' || mood === 'stressed';
   const label = `${name}: ${MOOD_LOOK[mood].label}`;
@@ -161,7 +227,9 @@ export default function Critter({ name, mood, size = 56, look, decorative = fals
           <ellipse cx="72" cy="64" rx="5" ry="3" />
         </g>
       )}
+      {accessoryUnder(accessory)}
       {face(mood)}
+      {accessory === 'glasses' && GLASSES}
     </svg>
   );
 }

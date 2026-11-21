@@ -25,7 +25,7 @@ export interface Place {
 }
 
 /** Drawing box of the town, in SVG units. */
-export const TOWN = { width: 560, height: 360, margin: 62 } as const;
+export const TOWN = { width: 560, height: 380, margin: 72 } as const;
 
 /**
  * Services on an ellipse, in name order, so the same services always sit in the same places and a

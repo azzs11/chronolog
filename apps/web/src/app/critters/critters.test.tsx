@@ -14,11 +14,16 @@ describe('creature looks', () => {
     const looks = Array.from({ length: 20 }, (_, i) => lookOf(`service-${i}`));
     expect(new Set(looks.map((l) => l.colour)).size).toBeGreaterThanOrEqual(4);
     expect(new Set(looks.map((l) => l.ears)).size).toBeGreaterThanOrEqual(3);
+    expect(new Set(looks.map((l) => l.body)).size).toBeGreaterThanOrEqual(3);
+    expect(new Set(looks.map((l) => l.accessory)).size).toBeGreaterThanOrEqual(3);
     for (const look of looks) expect(BODY_COLOURS).toContain(look.colour);
   });
 
-  it('have a written label for every mood the engine can return', () => {
-    for (const mood of MOODS) expect(MOOD_LOOK[mood].label.length).toBeGreaterThan(0);
+  it('have a written label and meaning for every mood the engine can return', () => {
+    for (const mood of MOODS) {
+      expect(MOOD_LOOK[mood].label.length).toBeGreaterThan(0);
+      expect(MOOD_LOOK[mood].meaning.length).toBeGreaterThan(20);
+    }
   });
 });
 
@@ -27,6 +32,11 @@ describe('Critter', () => {
     render(<Critter name="db" mood={mood} />);
     const img = screen.getByRole('img', { name: `db: ${MOOD_LOOK[mood].label}` });
     expect(img).toHaveAttribute('data-mood', mood);
+  });
+
+  it.each(['glasses', 'bowtie', 'scarf', 'flower', 'freckles'] as const)('draws the %s accessory', (accessory) => {
+    const { container } = render(<Critter name="x" mood="fine" look={{ colour: 'mint', ears: 'bunny', body: 'ghost', accessory }} decorative />);
+    expect(container.querySelectorAll('svg *').length).toBeGreaterThan(8);
   });
 
   it('is hidden from screen readers when decorative', () => {

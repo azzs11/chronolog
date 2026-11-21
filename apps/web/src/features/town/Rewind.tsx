@@ -80,6 +80,9 @@ export default function Rewind({ timeline, graph, selected, event = 'the burst',
 
   return (
     <div className="space-y-3">
+      <p className="text-xs text-text-muted">
+        Each creature is a service. Press Play, or drag the slider, to replay {event} 30 seconds at a time and watch whose face changes first.
+      </p>
       <div className="flex items-start gap-3">
         <Tock size={44} />
         <p className="rounded-2xl border-2 border-ink bg-bg-surface px-3 py-2 text-sm text-text-primary">

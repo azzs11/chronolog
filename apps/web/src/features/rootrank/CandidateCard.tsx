@@ -7,7 +7,7 @@ export default function CandidateCard({ cause, highlight }: { cause: RankedCause
   return (
     <li className={`card ${highlight ? 'border-l-4 border-l-accent' : ''}`} data-testid="candidate">
       <div className="flex items-center gap-3">
-        <span className="text-lg font-bold text-accent-secondary w-6">{cause.rank}</span>
+        <span className="text-lg font-bold text-accent w-6">{cause.rank}</span>
         <span className="font-mono text-text-primary flex-1">{cause.service}</span>
         <span className="text-sm text-text-secondary">
           {word}, {cause.weight.toFixed(2)}

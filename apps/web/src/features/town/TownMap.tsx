@@ -2,6 +2,7 @@ import type { Mood } from '@chronolog/engine';
 import Critter from '../../app/critters/Critter';
 import { MOOD_LOOK } from '../../app/critters/looks';
 import { layoutTown, type Road, TOWN } from './roads';
+import Scenery from './Scenery';
 
 const CREATURE = 58;
 const ROAD_WIDTH = { min: 2, max: 9 } as const;
@@ -31,6 +32,7 @@ export default function TownMap({ services, roads, moods, firstSign, selected, l
   return (
     <svg viewBox={`0 0 ${TOWN.width} ${TOWN.height}`} role="img" aria-label={label} className="h-auto w-full max-w-full">
       <title>{label}</title>
+      <Scenery places={places} />
       {roads.map((road) => {
         const a = at.get(road.a);
         const b = at.get(road.b);

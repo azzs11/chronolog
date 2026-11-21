@@ -9,6 +9,7 @@ import { CiteChip } from '../incidents/EvidenceBubbles';
 import { useMoods } from '../moods/useMoods';
 import { defaultRoadOptions, type GraphData, priorRoads, type RoadOptions, townRoads } from './roads';
 import RoadToggles from './RoadToggles';
+import TownGuide from './TownGuide';
 import TownMap from './TownMap';
 
 /** The roads are learned from the last 15 minutes (the API's default window). */
@@ -66,6 +67,7 @@ export default function TownPage() {
         <h2 className="text-3xl text-text-primary">Town</h2>
         <p className="text-sm text-text-secondary">Every service, how it is doing right now, and which ones seem to talk to each other.</p>
       </header>
+      <TownGuide />
 
       {moodError && !moods && (
         <p role="alert" className="text-sm text-sev-warning">

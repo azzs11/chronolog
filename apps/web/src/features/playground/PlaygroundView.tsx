@@ -170,7 +170,7 @@ export default function PlaygroundView({ makeSeed = newSeed }: { makeSeed?: () =
             ))}
           </ol>
           {result.candidates.length > SHOWN_AT_FIRST && (
-            <button type="button" className="text-sm text-accent-secondary underline" onClick={() => setShowAll(!showAll)}>
+            <button type="button" className="text-sm text-accent underline" onClick={() => setShowAll(!showAll)}>
               {showAll ? 'Show fewer' : `Show all ${result.candidates.length} services`}
             </button>
           )}

@@ -28,7 +28,7 @@ function Result({ data }: { data: RankData }) {
         ))}
       </ol>
       {data.candidates.length > SHOWN_AT_FIRST && (
-        <button type="button" className="text-sm text-accent-secondary underline" onClick={() => setShowAll(!showAll)}>
+        <button type="button" className="text-sm text-accent underline" onClick={() => setShowAll(!showAll)}>
           {showAll ? 'Show fewer' : `Show all ${data.candidates.length} services`}
         </button>
       )}
