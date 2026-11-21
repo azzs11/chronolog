@@ -1,23 +1,26 @@
 import { lookOf } from '../../app/critters/looks';
-import { type Place, TOWN } from './roads';
+import type { Place } from './roads';
 
 const INK = 'var(--on-pastel)';
 const HOUSE = 28;
 /** Above this many services the town is too crowded for houses; the creatures matter more. */
 const MAX_HOUSES = 8;
-/** Fixed spots near the edges, clear of the ellipse the services sit on. */
+/** Trees and clouds sit at fixed fractions of the town, near the edges, clear of the services. */
 const TREES = [
-  [26, 318],
-  [534, 318],
-  [86, 356],
-  [474, 356],
-  [26, 70],
-  [534, 70],
+  [0.035, 0.84],
+  [0.965, 0.84],
+  [0.15, 0.95],
+  [0.85, 0.95],
+  [0.035, 0.18],
+  [0.965, 0.18],
+  [0.5, 0.95],
 ] as const;
+/** A tree is left out if it would stand this close to a creature, its label or its house. */
+const TREE_CLEARANCE = 80;
 const CLOUDS = [
-  [120, 30, 1],
-  [430, 26, 0.8],
-  [280, 14, 0.6],
+  [0.21, 30, 1],
+  [0.77, 26, 0.8],
+  [0.5, 14, 0.6],
 ] as const;
 
 function Tree({ x, y }: { x: number; y: number }) {
@@ -42,9 +45,9 @@ function Cloud({ x, y, scale }: { x: number; y: number; scale: number }) {
  * A small house beside each service, on the outer side (left of creatures on the left, right of those
  * on the right) so it never sits on the roads or the labels below. The roof colour comes from the name.
  */
-function House({ place }: { place: Place }) {
+function House({ place, width }: { place: Place; width: number }) {
   const roof = `var(--pastel-${lookOf(`${place.name}:house`).colour})`;
-  const isLeft = place.x < TOWN.width / 2 - 1;
+  const isLeft = place.x < width / 2 - 1;
   const x = isLeft ? place.x - 34 - HOUSE : place.x + 30;
   return (
     <g transform={`translate(${x} ${place.y - 40})`}>
@@ -56,17 +59,19 @@ function House({ place }: { place: Place }) {
 }
 
 /** Decoration only: the park, trees, clouds and houses. The map is one role="img", so screen readers read its label, not these. */
-export default function Scenery({ places }: { places: readonly Place[] }) {
+export default function Scenery({ places, width, height }: { places: readonly Place[]; width: number; height: number }) {
   return (
     <g>
-      <ellipse cx={TOWN.width / 2} cy={TOWN.height / 2 + 14} rx={TOWN.width / 2 - 14} ry={TOWN.height / 2 - 22} fill="var(--pastel-mint)" opacity="0.3" />
-      {CLOUDS.map(([x, y, s]) => (
-        <Cloud key={x} x={x} y={y} scale={s} />
+      <rect x="14" y="40" width={width - 28} height={height - 54} rx={Math.min(120, height / 3)} fill="var(--pastel-mint)" opacity="0.3" />
+      {CLOUDS.map(([fx, y, s]) => (
+        <Cloud key={fx} x={fx * width} y={y} scale={s} />
       ))}
-      {TREES.map(([x, y]) => (
-        <Tree key={`${x}-${y}`} x={x} y={y} />
-      ))}
-      {places.length <= MAX_HOUSES && places.map((p) => <House key={p.name} place={p} />)}
+      {TREES.map(([fx, fy]) => [fx * width, fy * height] as const)
+        .filter(([x, y]) => places.every((p) => Math.hypot(p.x - x, p.y + 20 - y) > TREE_CLEARANCE))
+        .map(([x, y]) => (
+          <Tree key={`${x}-${y}`} x={x} y={y} />
+        ))}
+      {places.length <= MAX_HOUSES && places.map((p) => <House key={p.name} place={p} width={width} />)}
     </g>
   );
 }

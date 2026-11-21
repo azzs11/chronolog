@@ -205,10 +205,36 @@ export const REPORT_CARD = {
     }
   ],
   "anomalyDataset": "Loghub HDFS and BGL, first 2M lines each",
+  "faces": {
+    "ac1": {
+      "value": 0.262277,
+      "low": 0.144177,
+      "high": 0.38871
+    },
+    "ac3": {
+      "value": 0.528982,
+      "low": 0.408584,
+      "high": 0.638583
+    },
+    "rootrankMinusFacesAc1": {
+      "value": 0.109868,
+      "low": -0.011542,
+      "high": 0.214058
+    },
+    "rootrankMinusFacesAc3": {
+      "value": -0.00252,
+      "low": -0.066923,
+      "high": 0.063021
+    },
+    "rootUnwellWithin5Min": 0.481894,
+    "medianDelaySeconds": 30.0,
+    "unwellBeforeFault": 0.040807
+  },
   "files": {
     "ranking": "bench/results/RESULTS-rootrank.md",
     "breakdown": "bench/results/RESULTS-ablation.md",
     "robustness": "bench/results/RESULTS-robustness.md",
-    "anomaly": "bench/results/RESULTS-anomaly.md"
+    "anomaly": "bench/results/RESULTS-anomaly.md",
+    "faces": "bench/results/RESULTS-moods.md"
   }
 } as const;

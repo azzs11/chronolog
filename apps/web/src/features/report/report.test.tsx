@@ -42,3 +42,13 @@ describe('ReportCardPage', () => {
     for (const file of Object.values(REPORT_CARD.files)) expect(screen.getAllByRole('link', { name: file }).length).toBeGreaterThan(0);
   });
 });
+
+describe('faces on the report card', () => {
+  it('compares faces with RootRank on the same incidents and states the paired verdict', () => {
+    render(<ReportCardPage />);
+    const faces = screen.getByRole('region', { name: 'The faces' });
+    expect(within(faces).getByRole('list', { name: 'Faces against RootRank' })).toHaveTextContent(pct(REPORT_CARD.faces.ac3.value));
+    expect(faces).toHaveTextContent(/Top 3: (RootRank is better|The faces are better|They cannot be told apart on these incidents)\./);
+    expect(within(faces).getByRole('link', { name: REPORT_CARD.files.faces })).toBeInTheDocument();
+  });
+});

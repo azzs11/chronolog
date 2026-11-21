@@ -67,7 +67,6 @@ export default function TownPage() {
         <h2 className="text-3xl text-text-primary">Town</h2>
         <p className="text-sm text-text-secondary">Every service, how it is doing right now, and which ones seem to talk to each other.</p>
       </header>
-      <TownGuide />
 
       {moodError && !moods && (
         <p role="alert" className="text-sm text-sev-warning">
@@ -94,6 +93,8 @@ export default function TownPage() {
           {graphError && <p className="px-2 text-xs text-sev-warning">Roads unavailable: {graphError}.</p>}
         </section>
       )}
+
+      <TownGuide />
 
       {moods && moods.length > 0 && (
         <section aria-label="Who is who" className="space-y-2">

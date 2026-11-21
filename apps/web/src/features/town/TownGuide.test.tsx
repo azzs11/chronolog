@@ -1,18 +1,21 @@
 import { MOODS } from '@chronolog/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MOOD_LOOK } from '../../app/critters/looks';
+import { pct } from '../report/grades';
+import { REPORT_CARD } from '../report/reportCard';
 import TownGuide from './TownGuide';
 
 describe('TownGuide', () => {
   beforeEach(() => localStorage.clear());
 
-  it('explains every face, the roads, and that faces are symptoms', () => {
+  it('explains every face, the roads, and how far faces can be trusted, with measured numbers', () => {
     render(<TownGuide />);
     const faces = within(screen.getByRole('list', { name: 'What the faces mean' })).getAllByRole('listitem');
     expect(faces).toHaveLength(MOODS.length);
     for (const [i, mood] of MOODS.entries()) expect(faces[i]).toHaveTextContent(MOOD_LOOK[mood].meaning);
     expect(screen.getByText('Roads')).toBeInTheDocument();
-    expect(screen.getByText(/Faces are symptoms, not causes\./)).toBeInTheDocument();
+    expect(screen.getByText('How far can you trust a face?')).toBeInTheDocument();
+    expect(screen.getByText(/of the time, about as often as RootRank/)).toHaveTextContent(pct(REPORT_CARD.faces.ac3.value));
   });
 
   it('is open at first and remembers being closed', () => {

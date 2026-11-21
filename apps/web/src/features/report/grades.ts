@@ -27,3 +27,10 @@ export function tockSummary(card: typeof REPORT_CARD = REPORT_CARD): string {
     `My weakest subject is ${weakest.name.toLowerCase()} faults: ${pct(weakest.rootrank)}.`
   );
 }
+
+/** Plain verdict for a paired difference: only an interval that excludes zero counts as a difference. */
+export function pairedVerdict(gap: { low: number; high: number }, better: string, worse: string): string {
+  if (gap.low > 0) return `${better} is better.`;
+  if (gap.high < 0) return `${worse} is better.`;
+  return 'They cannot be told apart on these incidents.';
+}

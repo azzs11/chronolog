@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Tock from '../../app/critters/Tock';
 import { MOOD_LOOK } from '../../app/critters/looks';
 
+import { type Spread, spreadsAlong } from './layout';
 import { defaultRoadOptions, type GraphData, priorRoads, townRoads } from './roads';
 import RoadToggles from './RoadToggles';
 import TownMap from './TownMap';
@@ -31,6 +32,23 @@ export function firstSignSentence(rewind: ReturnType<typeof rewindMoods>, event 
   return `First signs: ${list} turned unwell within the same 30 s, ${describeOffset(sign.seconds, event)}. Counts cannot tell which came first.`;
 }
 
+/** The step at which each service first looks unwell, from the start of the replay. */
+export function firstUnwellFrames(frames: ReturnType<typeof rewindMoods>['frames']): Map<string, number> {
+  const out = new Map<string, number>();
+  frames.forEach((frame, i) => {
+    for (const [service, mood] of Object.entries(frame)) if (mood !== 'fine' && !out.has(service)) out.set(service, i);
+  });
+  return out;
+}
+
+/** "Along the roads, trouble reached catalog after db, then gateway." Time order only, never called a cause. */
+export function spreadSentence(spreads: readonly Spread[]): string | null {
+  if (spreads.length === 0) return null;
+  const order: string[] = [];
+  for (const s of spreads) for (const name of [s.from, s.to]) if (!order.includes(name)) order.push(name);
+  return `Along the roads, services turned unwell in this order: ${order.join(', then ')}. That is order in time on roads guessed from the logs, not proof of cause.`;
+}
+
 interface RewindProps {
   timeline: RewindTimeline;
   graph: GraphData;
@@ -53,6 +71,7 @@ export default function Rewind({ timeline, graph, selected, event = 'the burst',
   const [roadOptions, setRoadOptions] = useState(() => defaultRoadOptions(graph));
   const hasPrior = priorRoads(graph.services).length > 0;
   const roads = useMemo(() => townRoads(graph, roadOptions), [graph, roadOptions]);
+  const spreads = useMemo(() => spreadsAlong(roads, firstUnwellFrames(rewind.frames)), [roads, rewind.frames]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -96,6 +115,7 @@ export default function Rewind({ timeline, graph, selected, event = 'the burst',
           roads={roads}
           moods={moods}
           firstSign={isSignVisible ? sign?.service : undefined}
+          spread={spreads.filter((sp) => sp.frame <= frame).map((sp) => ({ from: sp.from, to: sp.to, isNew: sp.frame === frame }))}
           selected={selected}
           label={`Town map ${describeOffset(seconds, event)}: ${Object.entries(moods)
             .map(([name, mood]) => `${name} ${MOOD_LOOK[mood].label}`)
@@ -126,6 +146,9 @@ export default function Rewind({ timeline, graph, selected, event = 'the burst',
           {describeOffset(seconds, event)}
         </span>
       </div>
+      {spreadSentence(spreads.filter((sp) => sp.frame <= frame)) && (
+        <p className="text-sm text-text-secondary">{spreadSentence(spreads.filter((sp) => sp.frame <= frame))}</p>
+      )}
       <RoadToggles options={roadOptions} onChange={setRoadOptions} hasPrior={hasPrior} hasCorrelations={graph.correlations.length > 0} />
       <p className="text-xs text-text-muted">Roads are learned from these logs only, not the real architecture.</p>
     </div>

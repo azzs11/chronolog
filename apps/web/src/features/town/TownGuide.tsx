@@ -1,6 +1,8 @@
 import { MOODS } from '@chronolog/engine';
 import { useState } from 'react';
 import Critter from '../../app/critters/Critter';
+import { pct } from '../report/grades';
+import { REPORT_CARD } from '../report/reportCard';
 import { MOOD_LOOK } from '../../app/critters/looks';
 
 const STORAGE_KEY = 'chronolog.townGuide.v1';
@@ -55,9 +57,11 @@ export default function TownGuide() {
           the same time. Roads are guessed from the logs, so they are a hint, not your real architecture.
         </p>
         <p>
-          <b className="text-text-primary">Faces are symptoms, not causes.</b> A slow database can look fine while the services calling it get sick. When something
-          breaks, open <b className="text-text-primary">Incidents</b>: the case file ranks the suspects, shows the log lines behind each claim, and lets you
-          replay it with Rewind.
+          <b className="text-text-primary">How far can you trust a face?</b> On {REPORT_CARD.dataset}, the first service to look unwell was in the top 3 suspects{' '}
+          {pct(REPORT_CARD.faces.ac3.value)} of the time, about as often as RootRank. RootRank is better at naming the single culprit. And some faults fool
+          faces: a slow database can look fine while the services calling it get sick. So read the faces first, then open{' '}
+          <b className="text-text-primary">Incidents</b>: the case file ranks the suspects, shows the log lines behind each claim, and lets you replay it with
+          Rewind.
         </p>
       </div>
     </details>
