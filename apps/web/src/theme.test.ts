@@ -46,7 +46,7 @@ const contrast = (a: string, b: string): number => {
 
 const SURFACES = ['bg-base', 'bg-surface', 'bg-elevated'] as const;
 const PASTELS = [
-  'pastel-mint', 'pastel-peach', 'pastel-butter', 'pastel-sky', 'pastel-pink', 'pastel-lilac',
+  'pastel-mint', 'pastel-peach', 'pastel-butter', 'pastel-sky', 'pastel-pink', 'pastel-lilac', 'pastel-seafoam', 'pastel-apricot',
   'sev-critical-bg', 'sev-error-bg', 'sev-warning-bg', 'sev-info-bg', 'sev-debug-bg', 'accent-solid',
 ] as const;
 const TEXT = ['text-primary', 'text-secondary', 'text-muted', 'accent', 'sev-critical', 'sev-error', 'sev-warning', 'sev-info', 'sev-debug'] as const;

@@ -5,7 +5,7 @@
  *
  * "ChronoTown", a pastel sticker book: soft lavender paper, white stickers with thick ink outlines
  * and hard offset shadows (no blur), pastel fills for moods and severities, ONE loud pink for the
- * thing to press. Day (light) is the brand default; night is a deep indigo town with the same stickers.
+ * thing to press. Day (light) is the brand default; night is a deep ocean-blue town with the same stickers.
  *
  * Rules the tests enforce (src/theme.test.ts reads this file):
  *  - text and severity-text tokens reach 4.5:1 on all three surfaces, in both themes;
@@ -49,6 +49,8 @@
   --pastel-sky: #c8e2ff;
   --pastel-pink: #ffc6de;
   --pastel-lilac: #dccfff;
+  --pastel-seafoam: #c4f1ea;
+  --pastel-apricot: #ffe2b8;
   --on-pastel: #2a2340;
   /* Chart series (validated with the dataviz palette checker): ours, and the comparison. */
   --chart-ours: #ff7fb0;
@@ -57,25 +59,25 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg-base: #1a1630;
-  --bg-surface: #241e3f;
-  --bg-elevated: #2f2852;
-  --border-dim: #3d3566;
-  --border-strong: #c4bce0;
-  --ink: #c4bce0;
-  --shadow-ink: #0b0918;
-  --dot-grid: #2a2449;
-  --text-primary: #f4f0ff;
-  --text-secondary: #c9c1e6;
-  --text-muted: #aaa1cc;
-  --accent: #ff9cc4;
-  --accent-solid: #ff7fb0;
+  --bg-base: #0f2e4a;
+  --bg-surface: #173a5c;
+  --bg-elevated: #1f4a72;
+  --border-dim: #2d5e8a;
+  --border-strong: #bfe0ff;
+  --ink: #bfe0ff;
+  --shadow-ink: #061827;
+  --dot-grid: #1b4469;
+  --text-primary: #f2f9ff;
+  --text-secondary: #cde4f7;
+  --text-muted: #abcbe7;
+  --accent: #ffb3d1;
+  --accent-solid: #ff8fbd;
   --accent-fg: #2a2340;
-  --sev-critical: #ff8fa0;
-  --sev-error: #ffad85;
-  --sev-warning: #ffe066;
-  --sev-info: #9cc8ff;
-  --sev-debug: #aaa1cc;
+  --sev-critical: #ffa8b5;
+  --sev-error: #ffc4a3;
+  --sev-warning: #ffe27a;
+  --sev-info: #b8ddff;
+  --sev-debug: #abcbe7;
   --sev-critical-bg: #ffb3c0;
   --sev-error-bg: #ffc9ad;
   --sev-warning-bg: #ffec8f;
@@ -87,6 +89,8 @@
   --pastel-sky: #b6d7ff;
   --pastel-pink: #ffb6d4;
   --pastel-lilac: #cdbdff;
+  --pastel-seafoam: #a9e6dc;
+  --pastel-apricot: #ffd39c;
   --on-pastel: #2a2340;
   --chart-ours: #e0609a;
   --chart-other: #8a7fd6;
@@ -96,25 +100,25 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --bg-base: #1a1630;
-    --bg-surface: #241e3f;
-    --bg-elevated: #2f2852;
-    --border-dim: #3d3566;
-    --border-strong: #c4bce0;
-    --ink: #c4bce0;
-    --shadow-ink: #0b0918;
-    --dot-grid: #2a2449;
-    --text-primary: #f4f0ff;
-    --text-secondary: #c9c1e6;
-    --text-muted: #aaa1cc;
-    --accent: #ff9cc4;
-    --accent-solid: #ff7fb0;
+    --bg-base: #0f2e4a;
+    --bg-surface: #173a5c;
+    --bg-elevated: #1f4a72;
+    --border-dim: #2d5e8a;
+    --border-strong: #bfe0ff;
+    --ink: #bfe0ff;
+    --shadow-ink: #061827;
+    --dot-grid: #1b4469;
+    --text-primary: #f2f9ff;
+    --text-secondary: #cde4f7;
+    --text-muted: #abcbe7;
+    --accent: #ffb3d1;
+    --accent-solid: #ff8fbd;
     --accent-fg: #2a2340;
-    --sev-critical: #ff8fa0;
-    --sev-error: #ffad85;
-    --sev-warning: #ffe066;
-    --sev-info: #9cc8ff;
-    --sev-debug: #aaa1cc;
+    --sev-critical: #ffa8b5;
+    --sev-error: #ffc4a3;
+    --sev-warning: #ffe27a;
+    --sev-info: #b8ddff;
+    --sev-debug: #abcbe7;
     --sev-critical-bg: #ffb3c0;
     --sev-error-bg: #ffc9ad;
     --sev-warning-bg: #ffec8f;
@@ -126,6 +130,8 @@
     --pastel-sky: #b6d7ff;
     --pastel-pink: #ffb6d4;
     --pastel-lilac: #cdbdff;
+    --pastel-seafoam: #a9e6dc;
+    --pastel-apricot: #ffd39c;
     --on-pastel: #2a2340;
     --chart-ours: #e0609a;
     --chart-other: #8a7fd6;
@@ -175,17 +181,12 @@
   --color-pastel-sky: var(--pastel-sky);
   --color-pastel-pink: var(--pastel-pink);
   --color-pastel-lilac: var(--pastel-lilac);
+  --color-pastel-seafoam: var(--pastel-seafoam);
+  --color-pastel-apricot: var(--pastel-apricot);
   --color-on-pastel: var(--on-pastel);
   --color-chart-ours: var(--chart-ours);
   --color-chart-other: var(--chart-other);
 
-  /* Names the older views use, mapped onto the same tokens. */
-  --color-accent-primary: var(--accent);
-  --color-accent-secondary: var(--accent);
-  --color-accent-success: var(--accent);
-  --color-accent-warning: var(--sev-warning);
-  --color-accent-danger: var(--sev-error);
-  --color-accent-critical: var(--sev-critical);
 
   --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Mochiy Pop One", "Arial Rounded MT Bold", ui-rounded, system-ui, sans-serif;
@@ -202,23 +203,9 @@
   --shadow-sticker: 4px 4px 0 var(--shadow-ink);
   --shadow-sticker-sm: 2px 2px 0 var(--shadow-ink);
 
-  --animate-log-slide: logSlide 150ms ease-out;
-  --animate-pulse-dot: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-bob: bob 2.4s ease-in-out infinite;
-  /* Legacy names, kept so the older views still build; they now draw sticker shadows. */
-  --shadow-glow-teal: 3px 3px 0 var(--shadow-ink);
-  --shadow-glow-red: 3px 3px 0 var(--shadow-ink);
-  --shadow-glow-green: 3px 3px 0 var(--shadow-ink);
 }
 
-@keyframes logSlide {
-  from { opacity: 0; transform: translateX(8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
-}
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-3px); }
