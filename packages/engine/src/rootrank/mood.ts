@@ -77,17 +77,30 @@ const idsOf = (lines: readonly MoodLine[]): string[] =>
 const plural = (n: number, word: string): string => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 /** Lines in [now - RECENT_S - BASELINE_S, now], tagged with their Drain template, split per service. */
-function windowsByService(lines: readonly MoodLine[], now: number): { byService: Map<string, Window>; texts: Map<number, string> } {
+/** A line that already carries its template id (the benchmark mines templates once per incident). */
+export interface TaggedMoodLine {
+  id?: string;
+  timestamp: number;
+  service: string;
+  severity: string;
+  template: number;
+}
+
+/** Split tagged lines in [now - RECENT_S - BASELINE_S, now] into each service's baseline and recent lines. */
+function windowsOf(lines: readonly TaggedMoodLine[], now: number): Map<string, Window> {
   const from = now - RECENT_S - BASELINE_S;
-  const inRange = lines.filter((l) => l.timestamp >= from && l.timestamp <= now).sort((a, b) => a.timestamp - b.timestamp);
-  const table = assignTemplates(inRange.map((l) => l.message));
   const byService = new Map<string, Window>();
-  inRange.forEach((line, i) => {
+  for (const line of lines) {
+    if (line.timestamp < from || line.timestamp > now) continue;
     const w = byService.get(line.service) ?? { baseline: [], recent: [] };
     byService.set(line.service, w);
-    (line.timestamp > now - RECENT_S ? w.recent : w.baseline).push({ ...line, template: table.ids[i] as number });
-  });
-  return { byService, texts: table.texts };
+    (line.timestamp > now - RECENT_S ? w.recent : w.baseline).push({ ...line, message: '' });
+  }
+  for (const w of byService.values()) {
+    w.baseline.sort((a, b) => a.timestamp - b.timestamp);
+    w.recent.sort((a, b) => a.timestamp - b.timestamp);
+  }
+  return byService;
 }
 
 /** First line of each template the service did not log in the baseline, oldest first. */
@@ -163,10 +176,22 @@ function judge(w: Window, texts: Map<number, string>): Verdict {
 
 /** The mood of every service that logged in the last RECENT_S + BASELINE_S seconds, worst first, then by name. */
 export function serviceMoods(lines: readonly MoodLine[], now: number): ServiceMood[] {
-  const { byService, texts } = windowsByService(lines, now);
+  const from = now - RECENT_S - BASELINE_S;
+  const inRange = lines.filter((l) => l.timestamp >= from && l.timestamp <= now).sort((a, b) => a.timestamp - b.timestamp);
+  const table = assignTemplates(inRange.map((l) => l.message));
+  const tagged = inRange.map((l, i) => ({ id: l.id, timestamp: l.timestamp, service: l.service, severity: l.severity, template: table.ids[i] as number }));
+  return moodsFromTagged(tagged, table.texts, now);
+}
+
+/**
+ * Moods from lines whose templates are already known (`texts` maps template id to text, used to spot
+ * restart messages). serviceMoods mines the templates itself and then calls this.
+ */
+export function moodsFromTagged(lines: readonly TaggedMoodLine[], texts: ReadonlyMap<number, string>, now: number): ServiceMood[] {
+  const byService = windowsOf(lines, now);
   const moods = [...byService].map(([service, w]) => ({
     service,
-    ...judge(w, texts),
+    ...judge(w, texts as Map<number, string>),
     recentLines: w.recent.length,
     recentProblems: w.recent.filter((l) => isProblem(l.severity)).length,
     baselineLines: w.baseline.length,

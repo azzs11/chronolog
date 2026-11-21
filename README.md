@@ -71,6 +71,12 @@ What to know before quoting these:
   Sock Shop (Train Ticket is not scored), "A's logs name B" edges have 93% precision on Sock Shop but 2% on Online
   Boutique, whose logs never name other services; volume-correlation edges reach F1 51% there. Neither wins everywhere
   ([RESULTS-graph.md](bench/results/RESULTS-graph.md), `uv run bench graph`; served by `GET /api/rca/graph`).
+- **The creatures' faces are as good as RootRank at top 3, not at top 1.** The app draws each service with a face
+  from its recent logs (`mood.ts`, no training). Ranking services by when they first look unwell after the fault
+  gives AC@3 52.9% (41–64%), statistically tied with RootRank on the same cases (−0.3 points, −6.7 to +6.3), but
+  AC@1 26.2% against RootRank's 37.2%. The broken service looks unwell within 5 minutes in 48% of incidents (median
+  30 s), and 4% of services look unwell before anything broke. The "new phrase" face reuses RootRank's best signal,
+  which was found on these incidents ([RESULTS-moods.md](bench/results/RESULTS-moods.md), `uv run bench moods`).
 - **Anomaly detection is weak.** On Loghub HDFS and BGL the current rules score F1 1.5% and 19.1%, and a plain
   "flag error lines" rule gets 67.9% on BGL.
 - **RootRank is in the app** (the Root Cause view, and `POST /api/rca/rank`, below). Given the true incident start it
@@ -83,6 +89,7 @@ Details: [RESULTS-rootrank.md](bench/results/RESULTS-rootrank.md) (`uv run bench
 [RESULTS-ablation.md](bench/results/RESULTS-ablation.md) (`uv run bench ablate`),
 [RESULTS-robustness.md](bench/results/RESULTS-robustness.md) (`uv run bench robustness`),
 [RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md) (`uv run bench anomaly`),
+[RESULTS-moods.md](bench/results/RESULTS-moods.md) (`uv run bench moods`),
 [RESULTS-full.md](bench/results/RESULTS-full.md) and [RESULTS.md](RESULTS.md) (`uv run bench all`).
 
 ---

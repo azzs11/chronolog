@@ -120,6 +120,20 @@ def _anomaly(anomaly: dict) -> list[dict]:
     ]
 
 
+def _faces(moods: dict) -> dict:
+    """The creatures' moods as a ranking (bench moods): measured like every other method."""
+    pick = lambda row: {k: _r(row[k]) for k in ("value", "low", "high")}  # noqa: E731
+    return {
+        "ac1": pick(moods["ac1"]),
+        "ac3": pick(moods["ac3"]),
+        "rootrankMinusFacesAc1": pick(moods["rootrank_minus_faces"]["ac1"]),
+        "rootrankMinusFacesAc3": pick(moods["rootrank_minus_faces"]["ac3"]),
+        "rootUnwellWithin5Min": _r(moods["root_unwell_within_5min"]),
+        "medianDelaySeconds": moods["median_delay_s"],
+        "unwellBeforeFault": _r(moods["unwell_before_fault"]),
+    }
+
+
 def build_report_card(results_dir: Path = RESULTS_DIR) -> dict:
     rank = json.loads((results_dir / "rootrank.json").read_text())
     full = json.loads((results_dir / "rcaeval-full.json").read_text())
@@ -138,11 +152,13 @@ def build_report_card(results_dir: Path = RESULTS_DIR) -> dict:
         "robustness": _robustness(json.loads((results_dir / "robustness.json").read_text())),
         "anomaly": _anomaly(json.loads((results_dir / "loghub-anomaly.json").read_text())),
         "anomalyDataset": "Loghub HDFS and BGL, first 2M lines each",
+        "faces": _faces(json.loads((results_dir / "moods.json").read_text())),
         "files": {
             "ranking": "bench/results/RESULTS-rootrank.md",
             "breakdown": "bench/results/RESULTS-ablation.md",
             "robustness": "bench/results/RESULTS-robustness.md",
             "anomaly": "bench/results/RESULTS-anomaly.md",
+            "faces": "bench/results/RESULTS-moods.md",
         },
     }
 

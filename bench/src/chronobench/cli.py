@@ -19,6 +19,8 @@ from .download import download_cases
 from .evaluate import DEFAULT_WORKERS, build_results, evaluate_cases
 from .facts import write_facts
 from .hscores import compute_hscores, load_hscores
+from .moodeval import compute_moods, evaluate_moods
+from .moods_report import render_moods_report
 from .playground import render_playground_report, run_playground
 from .replays import export_replays
 from .report import render_report
@@ -191,6 +193,65 @@ def _cmd_facts(_args: argparse.Namespace) -> None:
     print(f"Wrote the Report card: {len(card['headline'])} methods, {len(card['byFault'])} faults")
 
 
+def _context_rows(per_case: dict[str, dict]) -> tuple[dict[str, dict], dict[str, dict]]:
+    """AC@1/AC@3 of RootRank and the simple rules on the same cases, with the same intervals, and
+    the PAIRED difference RootRank minus faces (same incidents: shared difficulty cancels)."""
+    import numpy as np
+
+    from .metrics import cluster_bootstrap, group_of, paired_difference_ci
+
+    rank = json.loads((RESULTS_DIR / "rootrank.json").read_text())["service"]
+    runs = json.loads((RESULTS_DIR / "rcaeval-full.json").read_text())["cases"]
+    full = {c["case_id"]: c for c in runs}
+    ids = rank["case_ids"]
+    groups = [group_of(i) for i in ids]
+
+    def hit(r, k):
+        return r is not None and r <= k
+
+    seeds = list(rank["ranks_by_seed"].values())
+    vectors = {
+        "RootRank (unseen services, 5 seeds)": lambda k: np.array(
+            [[hit(r, k) for r in s] for s in seeds], dtype=float
+        ).mean(axis=0),
+        "First error": lambda k: np.array(
+            [hit(full[i]["methods"]["first_error"]["rank"], k) for i in ids], dtype=float
+        ),
+        "ChronoLog-H (old rules)": lambda k: np.array(
+            [hit(full[i]["methods"]["chronolog_h"]["rank"], k) for i in ids], dtype=float
+        ),
+    }
+    faces = {k: np.array([per_case[i][k] for i in ids]) for k in (1, 3)}
+    rows, paired = {}, {}
+    for name, vector in vectors.items():
+        rows[name] = {}
+        for k in (1, 3):
+            h = vector(k)
+            low, high = cluster_bootstrap(h, groups)
+            rows[name][f"ac{k}"] = {"value": float(h.mean()), "low": low, "high": high}
+    rootrank = vectors["RootRank (unseen services, 5 seeds)"]
+    for k in (1, 3):
+        low, high = paired_difference_ci(rootrank(k), faces[k], groups)
+        gap = float(rootrank(k).mean() - faces[k].mean())
+        paired[f"ac{k}"] = {"value": gap, "low": low, "high": high}
+    return rows, paired
+
+
+def _cmd_moods(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    cases = load_subset("full")
+    moods = compute_moods(cases, args.workers)
+    result = evaluate_moods(moods, cases)
+    context, paired = _context_rows(result["per_case"])
+    result["rootrank_minus_faces"] = paired
+    (RESULTS_DIR / "moods.json").write_text(json.dumps(result, indent=1, sort_keys=True) + "\n")
+    (RESULTS_DIR / "RESULTS-moods.md").write_text(render_moods_report(result, context))
+    print(
+        f"Moods done in {time.perf_counter() - started:.0f}s:"
+        f" AC@3 {100 * result['ac3']['value']:.1f}%"
+    )
+
+
 def _cmd_graph(_args: argparse.Namespace) -> None:
     from .templates import template_case
 
@@ -298,6 +359,10 @@ def main() -> None:
 
     facts = sub.add_parser("export-facts", help="write the benchmark numbers the web app shows")
     facts.set_defaults(func=_cmd_facts)
+
+    moods = sub.add_parser("moods", help="score the creatures' moods on every RCAEval incident")
+    moods.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    moods.set_defaults(func=_cmd_moods)
 
     graph = sub.add_parser("graph", help="score the learned service graph vs the real one")
     graph.set_defaults(func=_cmd_graph)

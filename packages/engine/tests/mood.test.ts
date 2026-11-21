@@ -108,3 +108,18 @@ describe('serviceMoods on simulated incidents', () => {
     }
   });
 });
+
+describe('moodsFromTagged', () => {
+  it('gives the same moods as serviceMoods when handed the same templates', async () => {
+    const { assignTemplates, moodsFromTagged } = await import('../src');
+    const sim = simulateIncident({ seed: 4, service: 'catalog', fault: 'crash' });
+    const now = sim.incidentStart + 60;
+    const lines = sim.lines.map((l, i) => ({ ...l, id: `l${i}`, severity: l.severity ?? 'info' }));
+    const from = now - RECENT_S - BASELINE_S;
+    const inRange = lines.filter((l) => l.timestamp >= from && l.timestamp <= now).sort((a, b) => a.timestamp - b.timestamp);
+    const table = assignTemplates(inRange.map((l) => l.message));
+    const tagged = inRange.map((l, i) => ({ id: l.id, timestamp: l.timestamp, service: l.service, severity: l.severity, template: table.ids[i] as number }));
+    expect(moodsFromTagged(tagged, table.texts, now)).toEqual(serviceMoods(lines, now));
+    expect(moodsFromTagged(tagged, table.texts, now).find((m) => m.service === 'catalog')?.mood).toBe('restarted');
+  });
+});

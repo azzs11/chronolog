@@ -88,6 +88,11 @@ FINGERPRINT_FILES = {
         *(RUNNER_SRC / n for n in ("ranker.ts", "replay.ts")),
         Path(__file__).with_name("adapt.py"),
     ],
+    "moods": [
+        ENGINE_SRC / "rootrank" / "mood.ts",
+        ENGINE_SRC / "rootrank" / "bursts.ts",
+        RUNNER_SRC / "moodcase.ts",
+    ],
     "anomaly": [
         *(ENGINE_SRC / n for n in ("anomalyDetector.ts", "constants.ts", "sha256.ts", "types.ts")),
         *(RUNNER_SRC / n for n in ("anomaly.ts", "anomaly-replay.ts")),
