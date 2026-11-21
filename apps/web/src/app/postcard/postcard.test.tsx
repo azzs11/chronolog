@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { casePostcard, dailyPostcard } from './builders';
-import { resolveVars } from './draw';
+import { resolveVars } from '../critters/raster';
 import PostcardButton from './PostcardButton';
 
 vi.mock('./draw', async (importOriginal) => ({

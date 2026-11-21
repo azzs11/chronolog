@@ -1,4 +1,4 @@
-import { FlaskConical, GraduationCap, History, House, Inbox, Radio, Target, type LucideIcon } from 'lucide-react';
+import { Gamepad2, GraduationCap, House, Inbox, Radio, Target, type LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   path: string;
@@ -16,7 +16,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/town', label: 'Town', icon: House },
   { path: '/live', label: 'Live', icon: Radio },
   { path: '/root-cause', label: 'Root cause', icon: Target, hideOnPhone: true },
-  { path: '/playground', label: 'Playground', icon: FlaskConical },
+  { path: '/arcade', label: 'Arcade', icon: Gamepad2 },
   { path: '/report', label: 'Report card', shortLabel: 'Report', icon: GraduationCap },
-  { path: '/legacy', label: 'Previous UI', icon: History, hideOnPhone: true },
 ];

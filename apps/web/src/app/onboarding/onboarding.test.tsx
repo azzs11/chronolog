@@ -11,7 +11,7 @@ describe('Onboarding', () => {
     expect(shouldShowIntro()).toBe(false);
   });
 
-  it('walks three steps and ends by offering today’s case', () => {
+  it('walks three steps and ends by offering Training Town', () => {
     const onFinish = vi.fn();
     render(<Onboarding onFinish={onFinish} />);
     expect(screen.getByRole('dialog', { name: 'Hi, I am Tock' })).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe('Onboarding', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(screen.getByText('Step 3 of 3')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Play today’s case' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start training' }));
     expect(onFinish).toHaveBeenCalledWith(true);
     expect(shouldShowIntro()).toBe(false);
   });

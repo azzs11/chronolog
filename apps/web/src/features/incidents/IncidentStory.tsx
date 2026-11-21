@@ -2,7 +2,7 @@ import { suspectMood } from '@chronolog/engine';
 import { useEffect, useState } from 'react';
 import Critter from '../../app/critters/Critter';
 import Tock from '../../app/critters/Tock';
-import Timeline from '../playground/Timeline';
+import Timeline from './Timeline';
 import Rewind from '../town/Rewind';
 import { confidenceWord } from '../rootrank/format';
 import { ApiError, type IncidentDetail, fetchIncident } from './api';

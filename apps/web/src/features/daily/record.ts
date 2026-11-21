@@ -8,6 +8,8 @@ export const SHARE_URL = 'chronolog.akchhya.xyz';
 export interface DayResult {
   number: number;
   guesses: string[];
+  /** Clue items used (Arcade); absent in results saved before clues were items. */
+  clues?: Array<'said' | 'talk'>;
   isSolved: boolean;
   /** Whether Tock (RootRank, top-1) named the right service. */
   isTockRight: boolean;

@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { API_URL } from '../../env';
-import type { TimelineData } from '../playground/replays';
 import type { RankedCause } from '../rootrank/api';
+
+/** Log volume per service over time, in fixed-width buckets. */
+export interface TimelineData {
+  bucketSeconds: number;
+  /** Seconds from the incident start to the first bucket (negative: the window starts before it). */
+  startOffset: number;
+  services: Array<{ name: string; lines: number[]; errors: number[] }>;
+}
 
 export type ReviewStatus = 'unreviewed' | 'confirmed' | 'rejected';
 
@@ -72,7 +79,8 @@ async function call<T>(request: Promise<{ data: { data: T } }>): Promise<T> {
   }
 }
 
-export const fetchIncidents = (): Promise<IncidentSummary[]> => call(axios.get(`${API_URL}/api/incidents`));
+export const fetchIncidents = (lookbackMinutes?: number): Promise<IncidentSummary[]> =>
+  call(axios.get(`${API_URL}/api/incidents`, lookbackMinutes ? { params: { lookback_minutes: lookbackMinutes } } : undefined));
 export const fetchIncident = (id: string): Promise<IncidentDetail> => call(axios.get(`${API_URL}/api/incidents/${encodeURIComponent(id)}`));
 export const fetchFeedbackSummary = (): Promise<FeedbackSummary> => call(axios.get(`${API_URL}/api/incidents/feedback/summary`));
 export const sendFeedback = (id: string, input: FeedbackInput): Promise<{ verdict: string; correctService: string; rankOfCorrect: number | null }> =>

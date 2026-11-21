@@ -1,4 +1,4 @@
-import type { TimelineData } from './replays';
+import type { TimelineData } from './api';
 
 const LABEL_WIDTH = 150;
 /** Rows and cells grow when there are few services or time buckets, and shrink for 45 services. */

@@ -16,3 +16,7 @@ if (typeof globalThis.localStorage?.getItem !== 'function') {
   };
   Object.defineProperty(globalThis, 'localStorage', { value: memoryStorage, configurable: true });
 }
+
+// jsdom has no canvas. Return null like a browser without canvas support, so pixel sprites fall back
+// to the vector drawing quietly instead of logging "not implemented" for every creature.
+HTMLCanvasElement.prototype.getContext = (() => null) as unknown as HTMLCanvasElement['getContext'];

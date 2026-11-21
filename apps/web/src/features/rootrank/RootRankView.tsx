@@ -3,6 +3,7 @@ import { type InjectedIncident, type RankData, RankError, injectIncident, rankRo
 import { BENCHMARK } from './benchmarkFacts';
 import CandidateCard from './CandidateCard';
 import { startSourceText } from './format';
+import DropZone from '../dropzone/DropZone';
 
 const WINDOWS = [5, 15, 60] as const;
 const SHOWN_AT_FIRST = 5;
@@ -86,7 +87,7 @@ export default function RootRankView() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-bold text-text-primary">Root cause</h2>
+        <h2 className="text-3xl text-text-primary">Root cause</h2>
         <p className="text-sm text-text-secondary">
           Something went wrong. Which service most likely broke first? ChronoLog compares the recent logs of every
           service with how it normally behaves and ranks them. If you know when it began, say so; otherwise it estimates.
@@ -140,6 +141,9 @@ export default function RootRankView() {
         </p>
       )}
       {data && <Result data={data} />}
+      <section id="files" aria-label="Analyse log files" className="border-t-2 border-dashed border-border-dim pt-6">
+        <DropZone />
+      </section>
     </div>
   );
 }

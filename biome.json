@@ -7,11 +7,10 @@
       "!**/dist", "!**/dist-demo",
       "!**/.venv",
       "!**/coverage",
+      "!bench/data",
       "!apps/ml",
       "!package-lock.json",
-      "!**/*.css",
-      "!apps/web/src/App.jsx",
-      "!apps/web/src/components"
+      "!**/*.css"
     ]
   },
   "formatter": { "enabled": false },

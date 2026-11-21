@@ -5,8 +5,7 @@ import { vi } from 'vitest';
 vi.mock('../features/incidents/InboxView', () => ({ default: () => <h2>Incidents view</h2> }));
 vi.mock('../features/live/LiveView', () => ({ default: () => <h2>Live view</h2> }));
 vi.mock('../features/rootrank/RootRankView', () => ({ default: () => <h2>Root cause view</h2> }));
-vi.mock('../features/playground/PlaygroundPage', () => ({ default: () => <h2>Playground view</h2> }));
-vi.mock('../LegacyApp', () => ({ default: () => <h2>Legacy view</h2> }));
+vi.mock('../features/arcade/ArcadePage', () => ({ default: () => <h2>Arcade view</h2> }));
 vi.mock('../features/incidents/api', () => ({ fetchIncidents: () => Promise.resolve([]) }));
 
 import AppRoutes from './AppRoutes';
@@ -38,15 +37,15 @@ describe('AppRoutes and Shell', () => {
 
   it('gives every view its own URL and marks the current one', async () => {
     at('/playground');
-    expect(await screen.findByRole('heading', { name: 'Playground view' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /playground/i })).toHaveAttribute('aria-current', 'page');
+    expect(await screen.findByRole('heading', { name: 'Arcade view' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /arcade/i })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: /root cause/i })).not.toHaveAttribute('aria-current');
   });
 
-  it('opens the previous UI without the shell, and falls back to home for unknown URLs', async () => {
+  it('has no previous UI any more, and falls back to home for unknown URLs (old /legacy links included)', () => {
     const { unmount } = at('/legacy');
-    expect(await screen.findByRole('heading', { name: 'Legacy view' })).toBeInTheDocument();
-    expect(screen.queryByRole('navigation', { name: 'Main' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Incidents view' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /previous ui/i })).not.toBeInTheDocument();
     unmount();
     at('/nope/not/here');
     expect(screen.getByRole('heading', { name: 'Incidents view' })).toBeInTheDocument();
@@ -75,10 +74,10 @@ describe('AppRoutes and Shell', () => {
     fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
     const box = screen.getByRole('combobox', { name: /Ask Tock/ });
     expect(box).toHaveFocus();
-    fireEvent.change(box, { target: { value: 'play' } });
-    expect(screen.getAllByRole('option')[0]).toHaveTextContent('Playground');
+    fireEvent.change(box, { target: { value: 'arca' } });
+    expect(screen.getAllByRole('option')[0]).toHaveTextContent('Arcade');
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(await screen.findByRole('heading', { name: 'Playground view' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Arcade view' })).toBeInTheDocument();
     expect(screen.queryByRole('dialog', { name: 'Ask Tock' })).not.toBeInTheDocument();
   });
 

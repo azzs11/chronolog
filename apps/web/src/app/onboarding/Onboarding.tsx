@@ -39,10 +39,10 @@ const STEPS = [
     title: 'When something breaks',
     body: 'I rank the suspects and show the log lines behind every claim. I am right about half the time on real incidents, so I show my work and my report card.',
   },
-  { title: 'Try it', body: 'Today’s Daily Case is a simulated incident. Find the culprit in three guesses and see if you beat me.' },
+  { title: 'Learn by playing', body: 'Training Town is three short cases. In a few minutes you will read ChronoLog like an on-call engineer, and see where I get fooled.' },
 ] as const;
 
-/** Three short steps into the Arcade. Skippable at any point; Escape closes it. */
+/** Three short steps into Training Town. Skippable at any point; Escape closes it. */
 export default function Onboarding({ onFinish }: { onFinish: (play: boolean) => void }) {
   const [step, setStep] = useState(0);
   const done = (play: boolean) => {
@@ -87,7 +87,7 @@ export default function Onboarding({ onFinish }: { onFinish: (play: boolean) => 
           </button>
           {/* Keyed by step so it re-mounts and takes focus on every step. */}
           <button key={step} ref={(el) => el?.focus()} type="button" className="btn btn-primary" onClick={() => (isLast ? done(true) : setStep(step + 1))}>
-            {isLast ? 'Play today’s case' : 'Next'}
+            {isLast ? 'Start training' : 'Next'}
           </button>
         </div>
       </div>

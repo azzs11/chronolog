@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import Critter from '../critters/Critter';
 import Tock from '../critters/Tock';
+import { svgImage } from '../critters/raster';
 import type { PostcardSpec } from './spec';
 
 /** Open Graph size, so the image previews well wherever the link or file is posted. */
@@ -18,26 +19,6 @@ function markupOf(element: ReactElement): string {
   const html = host.innerHTML;
   root.unmount();
   return html;
-}
-
-/** An SVG drawn as an image cannot see the page's CSS variables, so their values are written in. */
-export function resolveVars(markup: string, read: (name: string) => string): string {
-  return markup.replace(/var\((--[a-z0-9-]+)\)/g, (_, name: string) => read(name).trim() || read('--ink').trim());
-}
-
-function svgImage(markup: string): Promise<HTMLImageElement> {
-  const css = getComputedStyle(document.documentElement);
-  const svg = resolveVars(markup, (n) => css.getPropertyValue(n)).replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
 }
 
 const token = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();

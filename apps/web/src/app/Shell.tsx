@@ -38,10 +38,11 @@ function Wordmark() {
  * detail pane.
  */
 const ARCADE_TABS = [
+  ['training', 'Training Town', 'learn tutorial how to'],
   ['daily', 'Daily case', 'puzzle game today'],
-  ['simulated', 'Break something', 'simulated faults playground'],
-  ['real', 'Replay a real incident', 'rcaeval'],
-  ['yours', 'Analyse my log files', 'drop upload files local'],
+  ['real', 'Real systems', 'rcaeval real incidents'],
+  ['team', 'Team drills', 'practice on-call our incidents'],
+  ['sandbox', 'Break something', 'simulated faults sandbox playground'],
 ] as const;
 const RECENT_INCIDENTS = 5;
 
@@ -55,7 +56,8 @@ function useCommands(isOpen: boolean, setPreferences: (p: { theme?: Theme; densi
   return useMemo(
     () => [
       ...NAV_ITEMS.map((item) => ({ id: `go${item.path}`, label: item.label, group: 'Go to', run: () => navigate(item.path) })),
-      ...ARCADE_TABS.map(([tab, label, keywords]) => ({ id: `arcade-${tab}`, label, group: 'Arcade', keywords, run: () => navigate(`/playground?tab=${tab}`) })),
+      ...ARCADE_TABS.map(([tab, label, keywords]) => ({ id: `arcade-${tab}`, label, group: 'Arcade', keywords, run: () => navigate(`/arcade?mode=${tab}`) })),
+      { id: 'analyse-files', label: 'Analyse my log files', group: 'Go to', keywords: 'drop upload files local', run: () => navigate('/root-cause#files') },
       ...incidents.map((i) => ({ id: `inc-${i.id}`, label: `${i.services.map((s) => s.service).join(', ')} · ${new Date(i.start).toLocaleTimeString()}`, group: 'Incidents', keywords: i.id, run: () => navigate(`/incidents/${i.id}`) })),
       ...THEMES.map(({ value, label }) => ({ id: `theme-${value}`, label, group: 'Display', keywords: value === 'dark' ? 'night' : value === 'light' ? 'day' : '', run: () => setPreferences({ theme: value }) })),
       { id: 'density-compact', label: 'Compact rows', group: 'Display', keywords: 'density pro', run: () => setPreferences({ density: 'compact' }) },
@@ -149,7 +151,7 @@ export default function Shell() {
           <Onboarding
             onFinish={(play) => {
               setIntroOpen(false);
-              if (play) navigate('/playground?tab=daily');
+              if (play) navigate('/arcade?mode=training');
             }}
           />
         )}
