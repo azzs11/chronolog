@@ -1,6 +1,6 @@
 # Deploying the demo
 
-The Fault Playground is a static site (`npm run build:demo -w chronolog-web` writes `apps/web/dist-demo`). It has no
+The Arcade demo is a static site (`npm run build:demo -w chronolog-web` writes `apps/web/dist-demo`). It has no
 backend: the engine runs in the visitor's browser.
 
 ## One-time setup (Cloudflare Pages, free tier)

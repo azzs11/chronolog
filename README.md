@@ -16,9 +16,12 @@
 
 ## Try it
 
-- **Fault Playground** (no install): break a simulated system, or replay five real incidents, and see whether ChronoLog
-  finds the broken service. It runs entirely in your browser: `npm run build:demo -w chronolog-web`, and
-  [docs/DEPLOY.md](docs/DEPLOY.md) explains hosting it. Locally, open the **Playground** view of the app.
+- **The Arcade** (no install): ChronoLog's training mode. Training Town teaches you to read the app in three short
+  cases; then a Daily Case, 30 real incidents from RCAEval (Real Systems), a sandbox where you break things yourself,
+  and, in the self-hosted app, drills built from your own reviewed incidents. Every case ends with what gave it away
+  and field notes on what to check in production. It runs entirely in your browser: `npm run build:demo -w
+  chronolog-web`, and [docs/DEPLOY.md](docs/DEPLOY.md) explains hosting it. Locally, open the **Arcade** view; the
+  Real Systems cases are written by `uv run bench export-puzzles`.
 - **Your own logs** from the command line, one file per service:
 
   ```bash
