@@ -8,7 +8,7 @@ the exact log lines behind every claim, and publishes how often it is right.
 [![Node](https://img.shields.io/badge/Node.js-22-339933?logo=node.js)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org/)
 
-**[▶ Try the live demo](https://azzs11.github.io/chronolog/)**: the Arcade and the log-file analyser run entirely in
+**[▶ Try the live demo](https://chronolog.akchhya.xyz/)**: the Arcade and the log-file analyser run entirely in
 your browser (no backend, nothing uploaded).
 
 <p align="center">
@@ -20,8 +20,8 @@ happens, ChronoLog opens a **case file**: a lineup of suspects ranked by **RootR
 evidence for each one with the log ids it came from, a replay of how the trouble spread, and a button to confirm or
 correct the answer so the ranker can learn from your system.
 
-> **Status:** ChronoLog 2.0 is close to done: the engine, benchmark, redesigned app and Arcade are built; the public
-> demo, a user study and the technical report are next ([roadmap](docs/ROADMAP.md)). Every number on this page links
+> **Status:** ChronoLog 2.0 is close to done: the engine, benchmark, redesigned app and Arcade are built, and the
+> [demo is live](https://chronolog.akchhya.xyz/); a user study and the technical report are next ([roadmap](docs/ROADMAP.md)). Every number on this page links
 > to the script that produced it.
 
 ---

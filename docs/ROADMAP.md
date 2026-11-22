@@ -14,8 +14,9 @@ The current rules stay in the repo as the baseline, **ChronoLog-H**.
 
 - **Phases 0 to 3 are done.** The benchmark, RootRank, its ablation, robustness checks, learned service graph and an
   end-to-end test with an estimated incident start are published in [`bench/results/`](../bench/results/).
-- **Phase 7 is in progress.** The Arcade (a training game with real RCAEval incidents) and a command-line tool exist; hosting
-  at `chronolog.akchhya.xyz` needs a Cloudflare Pages project (see [DEPLOY.md](DEPLOY.md)).
+- **Phase 7 is nearly done.** The Arcade (a training game with real RCAEval incidents) and a command-line tool exist, and
+  the demo is live at [chronolog.akchhya.xyz](https://chronolog.akchhya.xyz/) (GitHub Pages, see [DEPLOY.md](DEPLOY.md)).
+  The demo video is still to do.
 - Counterfactual blast radius was dropped for real incidents (RCAEval has no affected-service labels to score it
   against); it can be measured in the simulator, where affected services are known by construction.
 - Phases 6, 4, 5 and 8 have not started.

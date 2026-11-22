@@ -1,7 +1,8 @@
 name: GitHub Pages
 
-# Publishes the backend-free demo (Arcade + log-file analyser) to https://azzs11.github.io/chronolog/
-# on every push to main. One-time setup: Settings -> Pages -> Source: "GitHub Actions".
+# Publishes the backend-free demo (Arcade + log-file analyser) to https://chronolog.akchhya.xyz/
+# on every push to main. One-time setup: Settings -> Pages -> Source: "GitHub Actions", and the custom
+# domain set under Settings -> Pages (a CNAME record chronolog -> azzs11.github.io at the DNS provider).
 on:
   push:
     branches: [main]
@@ -27,10 +28,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Build with the /chronolog/ base path
+      # The custom domain serves the site from the root. Without a custom domain it would be
+      # https://azzs11.github.io/chronolog/ and this would need VITE_BASE=/chronolog/.
+      - name: Build the demo
         run: npm run build:demo -w chronolog-web
         env:
-          VITE_BASE: /chronolog/
+          VITE_BASE: /
       # The demo has no router, but a 404 page keeps mistyped links inside the app.
       - run: cp apps/web/dist-demo/index.html apps/web/dist-demo/404.html
       - uses: actions/upload-pages-artifact@v5

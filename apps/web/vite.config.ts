@@ -26,8 +26,8 @@ function preloadFonts(base: string): Plugin {
 // The engine is pure TypeScript with no dependencies, so the app builds it from source.
 const engine = fileURLToPath(new URL('../../packages/engine/src/index.ts', import.meta.url));
 
-// GitHub Pages serves the demo from https://<user>.github.io/chronolog/, so the Pages build sets
-// VITE_BASE=/chronolog/. Everything else (Docker, local dev, a custom domain) is served from the root.
+// The demo lives at https://chronolog.akchhya.xyz/ (the root). A GitHub Pages site WITHOUT a custom domain
+// is served from https://<user>.github.io/chronolog/ and would need VITE_BASE=/chronolog/.
 const base = process.env.VITE_BASE ?? '/';
 
 export default defineConfig({

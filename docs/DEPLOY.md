@@ -5,10 +5,16 @@ backend: the engine runs in the visitor's browser.
 
 ## GitHub Pages (the default)
 
-`.github/workflows/pages.yml` builds the demo with `VITE_BASE=/chronolog/` and publishes it to
-https://azzs11.github.io/chronolog/ on every push to `main`. One-time setup: in the repository, Settings -> Pages ->
-Build and deployment -> Source: **GitHub Actions**. To build the same thing locally:
-`VITE_BASE=/chronolog/ npm run build:demo -w chronolog-web`.
+`.github/workflows/pages.yml` builds the demo and publishes it to https://chronolog.akchhya.xyz/ on
+every push to `main`. One-time setup (done 2026-11-22):
+
+1. Repository Settings -> Pages -> Build and deployment -> Source: **GitHub Actions**.
+2. At the DNS provider (Namecheap, Advanced DNS): a `CNAME` record, host `chronolog`, value `azzs11.github.io.`.
+3. Settings -> Pages -> Custom domain: `chronolog.akchhya.xyz`, then **Enforce HTTPS**.
+
+The custom domain serves the site from the root, so the build uses `VITE_BASE=/`. Without a custom domain the site
+would be https://azzs11.github.io/chronolog/ and the build would need `VITE_BASE=/chronolog/`. The domain is set in
+the repository settings, not by a `CNAME` file, because the site is deployed by Actions.
 
 ## Optional: Cloudflare Pages (free tier, PR previews)
 
