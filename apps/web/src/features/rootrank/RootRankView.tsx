@@ -131,7 +131,7 @@ export default function RootRankView() {
       )}
       {!data && !error && !isLoading && (
         <p className="text-sm text-text-muted">
-          Nothing ranked yet. Start the log generator or send logs, wait for some errors, then rank.
+          Nothing ranked yet. {import.meta.env.VITE_DEMO === 'true' ? 'Inject a test incident: the simulated shop gets a fault with a known cause, and ChronoLog ranks it.' : 'Start the log generator or send logs, wait for some errors, then rank.'}
         </p>
       )}
       {injected && data && (

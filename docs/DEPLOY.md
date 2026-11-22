@@ -1,7 +1,10 @@
 # Deploying the demo
 
-The Arcade demo is a static site (`npm run build:demo -w chronolog-web` writes `apps/web/dist-demo`). It has no
-backend: the engine runs in the visitor's browser.
+The demo is a static site (`npm run build:demo -w chronolog-web` writes `apps/web/dist-demo`). It is the whole app
+with no backend: `apps/web/src/demo/` answers every API call in the browser, with the same engine functions as
+`apps/api`, over a seeded simulated six-service shop (an incident 25 minutes before the page opened, one in progress,
+and a test-incident button). The build swaps the socket.io client for a stand-in that streams the simulated lines.
+A reload starts a fresh simulated world.
 
 ## GitHub Pages (the default)
 

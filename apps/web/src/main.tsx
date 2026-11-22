@@ -9,8 +9,8 @@ import { BrowserRouter } from 'react-router-dom';
 const container = document.getElementById('root');
 if (!container) throw new Error('Missing #root element in index.html');
 
-// `VITE_DEMO=true npm run build:demo` builds the backend-free, playground-only site. The choice is
-// made at build time, so the demo does not ship the dashboard's charts or socket client.
+// `VITE_DEMO=true npm run build:demo` builds the backend-free site: the whole app, answered by an
+// in-browser backend over simulated logs (src/demo). The choice is made at build time.
 const isDemo = import.meta.env.VITE_DEMO === 'true';
 const load = isDemo ? import('./DemoApp') : import('./app/AppRoutes');
 

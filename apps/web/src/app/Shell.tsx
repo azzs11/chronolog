@@ -6,6 +6,7 @@ import Onboarding, { shouldShowIntro } from './onboarding/Onboarding';
 import CommandPalette from './palette/CommandPalette';
 import { type Command, isLensShortcut, isPaletteShortcut } from './palette/commands';
 import Tock from './critters/Tock';
+import DemoNotice from '../demo/DemoNotice';
 import { NAV_ITEMS } from './nav';
 import { type Density, type Lens, type Theme, usePreferences } from './preferences';
 
@@ -171,6 +172,7 @@ export default function Shell() {
             <span className="sr-only sm:hidden">Pro lens</span>
           </button>
         </header>
+        {import.meta.env.VITE_DEMO === 'true' && <DemoNotice />}
         {isIntroOpen && (
           <Onboarding
             onFinish={(play) => {

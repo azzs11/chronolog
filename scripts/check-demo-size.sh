@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Fail if the static demo's JavaScript grows past its budget (gzipped bytes).
 # The demo has to load fast on a phone, so the budget is a CI check, not a hope.
+# 150 KB while the demo was the Arcade only; 200 KB since 2026-11-22, when it became the whole app
+# answered by an in-browser backend (~180 KB). Lighthouse (lighthouserc.json) still gates LCP < 3 s.
 set -euo pipefail
 
 DIR="${1:-apps/web/dist-demo}"
-BUDGET="${BUDGET:-150000}"
+BUDGET="${BUDGET:-200000}"
 
 total=0
 for file in "$DIR"/assets/*.js; do
