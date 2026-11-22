@@ -1,0 +1,49 @@
+name: GitHub Pages
+
+# Publishes the backend-free demo (Arcade + log-file analyser) to https://azzs11.github.io/chronolog/
+# on every push to main. One-time setup: Settings -> Pages -> Source: "GitHub Actions".
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build with the /chronolog/ base path
+        run: npm run build:demo -w chronolog-web
+        env:
+          VITE_BASE: /chronolog/
+      # The demo has no router, but a 404 page keeps mistyped links inside the app.
+      - run: cp apps/web/dist-demo/index.html apps/web/dist-demo/404.html
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: apps/web/dist-demo
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

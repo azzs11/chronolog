@@ -9,14 +9,14 @@ import { defineConfig } from 'vitest/config';
  * after first paint. Without this, swapping from the fallback font reflowed the page (CLS 0.11).
  */
 const PRELOAD_FONTS = [/^assets\/nunito-latin-wght-normal-[\w-]+\.woff2$/, /^assets\/mochiy-pop-one-latin-400-normal-[\w-]+\.woff2$/];
-function preloadFonts(): Plugin {
+function preloadFonts(base: string): Plugin {
   return {
     name: 'chronolog-preload-fonts',
     transformIndexHtml(_html, ctx) {
       const files = Object.keys(ctx.bundle ?? {}).filter((name) => PRELOAD_FONTS.some((re) => re.test(name)));
       return files.map((file) => ({
         tag: 'link',
-        attrs: { rel: 'preload', as: 'font', type: 'font/woff2', href: `/${file}`, crossorigin: '' },
+        attrs: { rel: 'preload', as: 'font', type: 'font/woff2', href: `${base}${file}`, crossorigin: '' },
         injectTo: 'head-prepend' as const,
       }));
     },
@@ -26,8 +26,13 @@ function preloadFonts(): Plugin {
 // The engine is pure TypeScript with no dependencies, so the app builds it from source.
 const engine = fileURLToPath(new URL('../../packages/engine/src/index.ts', import.meta.url));
 
+// GitHub Pages serves the demo from https://<user>.github.io/chronolog/, so the Pages build sets
+// VITE_BASE=/chronolog/. Everything else (Docker, local dev, a custom domain) is served from the root.
+const base = process.env.VITE_BASE ?? '/';
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), preloadFonts()],
+  base,
+  plugins: [react(), tailwindcss(), preloadFonts(base)],
   resolve: { alias: { '@chronolog/engine': engine } },
   server: { port: 3000 },
   test: {

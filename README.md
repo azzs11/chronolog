@@ -8,6 +8,9 @@ the exact log lines behind every claim, and publishes how often it is right.
 [![Node](https://img.shields.io/badge/Node.js-22-339933?logo=node.js)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org/)
 
+**[▶ Try the live demo](https://azzs11.github.io/chronolog/)**: the Arcade and the log-file analyser run entirely in
+your browser (no backend, nothing uploaded).
+
 <p align="center">
   <img src="./images/case-file.png" alt="A ChronoLog case file: the suspect lineup with catalog ranked first, and evidence bubbles citing log ids" width="900"/>
 </p>

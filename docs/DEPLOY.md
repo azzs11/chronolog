@@ -3,7 +3,14 @@
 The Arcade demo is a static site (`npm run build:demo -w chronolog-web` writes `apps/web/dist-demo`). It has no
 backend: the engine runs in the visitor's browser.
 
-## One-time setup (Cloudflare Pages, free tier)
+## GitHub Pages (the default)
+
+`.github/workflows/pages.yml` builds the demo with `VITE_BASE=/chronolog/` and publishes it to
+https://azzs11.github.io/chronolog/ on every push to `main`. One-time setup: in the repository, Settings -> Pages ->
+Build and deployment -> Source: **GitHub Actions**. To build the same thing locally:
+`VITE_BASE=/chronolog/ npm run build:demo -w chronolog-web`.
+
+## Optional: Cloudflare Pages (free tier, PR previews)
 
 1. In Cloudflare, create a Pages project named `chronolog` (direct upload, no Git integration).
 2. Create an API token with the "Cloudflare Pages: Edit" permission, and note your account id.
