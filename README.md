@@ -8,11 +8,13 @@ the exact log lines behind every claim, and publishes how often it is right.
 [![Node](https://img.shields.io/badge/Node.js-22-339933?logo=node.js)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)](https://python.org/)
 
-**[▶ Try the live demo](https://chronolog.akchhya.xyz/)**: the Arcade and the log-file analyser run entirely in
-your browser (no backend, nothing uploaded).
+**[▶ Try the live demo](https://chronolog.akchhya.xyz/)**: the whole app (incidents, case files, town, live stream,
+root cause, Arcade, report card) runs in your browser on a simulated six-service shop. No backend, nothing uploaded;
+you can also drop your own log files on the Root cause page.
 
 <p align="center">
   <img src="./images/case-file.png" alt="A ChronoLog case file: the suspect lineup with catalog ranked first, and evidence bubbles citing log ids" width="900"/>
+  <br/><sub>A case file from the live demo: a disk fault in <code>catalog</code>, with every claim citing the log lines it came from.</sub>
 </p>
 
 Every service in your system is drawn as a small creature whose face comes from its own logs. When an incident
@@ -52,6 +54,9 @@ faults (CPU, memory, disk, network, sockets), RootRank gets **36.8%**. The full 
 
 ## A tour
 
+Every screenshot below is from the [live demo](https://chronolog.akchhya.xyz/), so the data is simulated. The
+self-hosted app shows the same views over your own logs.
+
 <table>
   <tr>
     <td width="50%"><img src="./images/town-night.png" alt="Town view at night: services as creatures, sick ones on the left, roads learned from the logs"/></td>
@@ -81,6 +86,15 @@ faults (CPU, memory, disk, network, sockets), RootRank gets **36.8%**. The full 
     <td><b>Pro lens</b> (Shift+P). The same data as dense, keyboard-friendly tables, for when you want facts, not
     creatures.</td>
     <td><b>Live.</b> Incoming logs grouped by message template, with messages nobody has seen before flagged.</td>
+  </tr>
+  <tr>
+    <td><img src="./images/root-cause.png" alt="Root cause view after injecting a test incident: a crash in cart, ranked first of six, with cited evidence for each service"/></td>
+    <td align="center"><img src="./images/phone-case.png" alt="The case file on a phone: the suspect lineup as stacked cards with a bottom tab bar" width="300"/></td>
+  </tr>
+  <tr>
+    <td><b>Root cause.</b> Rank any window on demand, or inject a test incident with a known cause and see where
+    ChronoLog puts it. Misses are shown the same way as hits.</td>
+    <td><b>On a phone.</b> Every view works at phone width, with the lineup as stacked cards.</td>
   </tr>
 </table>
 
