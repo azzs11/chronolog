@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import * as logRepository from '../db/logRepository';
 import * as anomalyDetector from '../services/anomalyDetector';
+import { currentUnusual } from '../services/unusual';
 import { validateQueryLimit } from '../middleware/validation';
 import { errorMessage, queryString } from './http';
 
@@ -13,6 +14,15 @@ router.get('/', validateQueryLimit, async (req: Request, res: Response) => {
     const limit = parseInt(queryString(req.query.limit) ?? '', 10) || DEFAULT_ANOMALY_LIMIT;
     const anomalies = await logRepository.getRecentAnomalies(limit);
     res.json({ status: 'success', data: anomalies, count: anomalies.length });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: errorMessage(err) });
+  }
+});
+
+/** GET /api/anomalies/unusual: messages that are rare or new versus the hour before (anomaly v2) */
+router.get('/unusual', async (_req: Request, res: Response) => {
+  try {
+    res.json({ status: 'success', data: await currentUnusual() });
   } catch (err) {
     res.status(500).json({ status: 'error', message: errorMessage(err) });
   }
