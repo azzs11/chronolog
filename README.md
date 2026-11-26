@@ -22,9 +22,7 @@ happens, ChronoLog opens a **case file**: a lineup of suspects ranked by **RootR
 evidence for each one with the log ids it came from, a replay of how the trouble spread, and a button to confirm or
 correct the answer so the ranker can learn from your system.
 
-> **Status:** ChronoLog 2.0 is close to done: the engine, benchmark, redesigned app and Arcade are built, and the
-> [demo is live](https://chronolog.akchhya.xyz/); a user study and the technical report are next ([roadmap](docs/ROADMAP.md)). Every number on this page links
-> to the script that produced it.
+> The [demo is live](https://chronolog.akchhya.xyz/). Every number on this page links to the script that produced it.
 
 ---
 
@@ -238,9 +236,11 @@ What to know before quoting the numbers:
 - **The service graph can be learned from logs, unevenly:** "A's logs name B" edges have 93% precision on Sock Shop
   but 2% on Online Boutique, whose logs never name other services
   ([RESULTS-graph.md](bench/results/RESULTS-graph.md)).
-- **Anomaly detection is weak.** On Loghub HDFS and BGL the current detector scores F1 1.5% and 19.1%, and a plain
-  "flag error lines" rule gets 67.9% on BGL ([RESULTS-anomaly.md](bench/results/RESULTS-anomaly.md)). A new detector
-  is the next phase.
+- **Anomaly detection is weak.** On the later half of Loghub BGL, the new template-based signals score F1 22.2%
+  (unusual messages) and 26.7% (Isolation Forest), above the old rules (15.9%) but below a plain "flag error lines"
+  rule (30.8%). On HDFS the best new signal (11.4%) barely beats flagging everything (10.7%)
+  ([RESULTS-anomaly-v2.md](bench/results/RESULTS-anomaly-v2.md), `uv run bench anomaly-v2`). The app shows unusual
+  messages as clues, not alerts.
 - In 26 of the 359 cases the faulty service writes no logs, so no log-based method can name it.
 
 ---
@@ -279,6 +279,7 @@ All endpoints return `{ status, data }`. In Docker the API is on port 5050; `npm
 | `GET` | `/api/moods` | Each service's mood right now, with a reason and the log ids behind it |
 | `GET` | `/api/causal/chains` | ChronoLog-H's causal chains (the old engine) |
 | `GET` | `/api/anomalies` | Detected anomalies |
+| `GET` | `/api/anomalies/unusual` | Messages rare or new in the last 5 min versus the hour before, with log ids |
 | `GET` | `/metrics` | Prometheus metrics |
 
 `POST /api/rca/rank` takes, all optional: `incident_start` (Unix seconds or ISO time; estimated if left out),
@@ -314,13 +315,6 @@ npm test && npm run lint && npm run typecheck
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
-
-## Roadmap
-
-Done: honest housekeeping, the TypeScript monorepo, ChronoBench, RootRank, the redesign and the Arcade. Next: a
-public demo, a new anomaly detector, evidence-locked incident stories (optional AI write-ups where every sentence
-cites log ids, plus an MCP server for AI agents), a user study of the old and new UI, and a technical report.
-Details in [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Citation
 

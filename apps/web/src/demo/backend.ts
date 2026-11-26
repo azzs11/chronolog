@@ -14,6 +14,9 @@ import {
   learnServiceGraph,
   rankRootCauses,
   serviceMoods,
+  UNUSUAL_BASELINE_S,
+  UNUSUAL_RECENT_S,
+  unusualTemplates,
   timelineOf,
 } from '@chronolog/engine';
 import { type DemoLine, DemoWorld } from './world';
@@ -74,6 +77,7 @@ export class DemoBackend {
     const incident = /^\/api\/incidents\/(inc-\d+)(\/feedback)?$/.exec(path);
     if (method === 'GET' && path === '/api/logs') return ok(this.world.latest(Number(query.get('limit') ?? 100), this.now()).map(toRaw));
     if (method === 'GET' && path === '/api/moods') return ok(this.moods());
+    if (method === 'GET' && path === '/api/anomalies/unusual') return ok(this.unusual());
     if (method === 'GET' && path === '/api/rca/graph') return this.graph(minutes(query, RANK_LOOKBACK_MIN));
     if (method === 'POST' && path === '/api/rca/rank') return this.rank(body);
     if (method === 'POST' && path === '/api/rca/incident') return this.inject(body);
@@ -87,6 +91,12 @@ export class DemoBackend {
   private since(minutesBack: number): DemoLine[] {
     const now = this.now();
     return this.world.linesBetween(now - minutesBack * 60, now, now);
+  }
+
+  private unusual() {
+    const now = this.now();
+    const lines = this.world.linesBetween(now - UNUSUAL_RECENT_S - UNUSUAL_BASELINE_S, now, now);
+    return { at: iso(now), recentSeconds: UNUSUAL_RECENT_S, baselineSeconds: UNUSUAL_BASELINE_S, isTruncated: false, ...unusualTemplates(lines, now) };
   }
 
   private moods() {

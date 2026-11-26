@@ -166,19 +166,31 @@ export const REPORT_CARD = {
       "methods": [
         {
           "name": "Flag everything",
-          "f1": 0.211352
+          "f1": 0.064368
         },
         {
           "name": "ChronoLog-H (old rules)",
-          "f1": 0.190893
+          "f1": 0.159251
         },
         {
           "name": "Random",
-          "f1": 0.374751
+          "f1": 0.056299
         },
         {
           "name": "Severity rule",
-          "f1": 0.679179
+          "f1": 0.307692
+        },
+        {
+          "name": "Both new signals",
+          "f1": 0.222222
+        },
+        {
+          "name": "Isolation Forest (new)",
+          "f1": 0.267284
+        },
+        {
+          "name": "Unusual messages (new)",
+          "f1": 0.222222
         }
       ]
     },
@@ -187,24 +199,36 @@ export const REPORT_CARD = {
       "methods": [
         {
           "name": "Flag everything",
-          "f1": 0.094359
+          "f1": 0.106783
         },
         {
           "name": "ChronoLog-H (old rules)",
-          "f1": 0.01505
+          "f1": 0.012636
         },
         {
           "name": "Random",
-          "f1": 0.006543
+          "f1": 0.006385
         },
         {
           "name": "Severity rule",
           "f1": 0.0
+        },
+        {
+          "name": "Both new signals",
+          "f1": 0.114444
+        },
+        {
+          "name": "Isolation Forest (new)",
+          "f1": 0.114444
+        },
+        {
+          "name": "Unusual messages (new)",
+          "f1": 0.05004
         }
       ]
     }
   ],
-  "anomalyDataset": "Loghub HDFS and BGL, first 2M lines each",
+  "anomalyDataset": "Loghub HDFS and BGL (first 2M lines each), later half of each log",
   "faces": {
     "ac1": {
       "value": 0.262277,
@@ -234,7 +258,7 @@ export const REPORT_CARD = {
     "ranking": "bench/results/RESULTS-rootrank.md",
     "breakdown": "bench/results/RESULTS-ablation.md",
     "robustness": "bench/results/RESULTS-robustness.md",
-    "anomaly": "bench/results/RESULTS-anomaly.md",
+    "anomaly": "bench/results/RESULTS-anomaly-v2.md",
     "faces": "bench/results/RESULTS-moods.md"
   }
 } as const;

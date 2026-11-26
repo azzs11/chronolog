@@ -127,8 +127,8 @@ export default function ReportCardPage() {
       </Subject>
 
       <Subject
-        title="Spotting trouble at all (old detector)"
-        note={`F1 on ${card.anomalyDataset}. This is the old rule-based detector, and a plain severity rule beats it on BGL; a new detector is planned.`}
+        title="Spotting trouble at all"
+        note={`F1 on ${card.anomalyDataset}; the new detectors learn from the first half without labels. The new signals beat the old rules, but on BGL a plain severity rule still beats them all.`}
         file={card.files.anomaly}
       >
         {card.anomaly.map((d) => (

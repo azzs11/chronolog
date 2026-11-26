@@ -11,6 +11,8 @@ import { filterGroups, filterLogs, NO_FILTERS, servicesOf } from './filters';
 import { computeStats } from './stats';
 import { useLiveLogs } from './useLiveLogs';
 import { useMoods } from '../moods/useMoods';
+import UnusualPanel from '../unusual/UnusualPanel';
+import { useUnusual } from '../unusual/useUnusual';
 
 const CLOCK_EVERY_MS = 1000;
 
@@ -27,6 +29,7 @@ function useNow(): number {
 export default function LiveView() {
   const live = useLiveLogs();
   const town = useMoods();
+  const unusual = useUnusual();
   const now = useNow();
   const [filters, setFilters] = useState(NO_FILTERS);
   const [mode, setMode] = useState<Mode>('grouped');
@@ -55,6 +58,7 @@ export default function LiveView() {
       </div>
       <StatsStrip stats={stats} />
       {town.moods && town.moods.length > 0 && <TownStrip moods={town.moods} selected={filters.service} onSelect={(service) => setFilters({ ...filters, service })} />}
+      {unusual.templates && <UnusualPanel templates={unusual.templates} isOnlyNewTemplates={unusual.isOnlyNewTemplates} />}
       <FilterBar filters={filters} onChange={setFilters} services={services} mode={mode} onMode={setMode} />
       {live.loadError && (
         <p role="alert" className="text-sm text-sev-warning">
