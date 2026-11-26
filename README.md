@@ -160,10 +160,11 @@ cp .env.example .env          # set your own passwords, including GRAFANA_PASSWO
 docker compose up -d          # the app: 4 containers, about 1.1 GB of memory at most
 ```
 
-Open **http://localhost:3000**. To see a case straight away, inject a simulated incident with a known cause:
+Open the app on **port 3000**. To see a case straight away, inject a simulated incident with a known cause
+(set `API` to the API's address; it listens on port 5050 by default):
 
 ```bash
-curl -X POST localhost:5050/api/rca/incident -H 'Content-Type: application/json' \
+curl -X POST "$API/api/rca/incident" -H 'Content-Type: application/json' \
   -H 'X-API-Key: dev_key_change_in_prod' -d '{"service":"catalog","fault":"disk"}'
 ```
 
@@ -187,12 +188,12 @@ the browser under **Root cause → Analyse log files**; nothing is uploaded.
 npm run build:demo -w chronolog-web     # writes apps/web/dist-demo
 ```
 
-| Service | URL |
+| Service | Host port |
 |---|---|
-| App | http://localhost:3000 |
-| API | http://localhost:5050 (`BACKEND_PORT`) |
-| ML service | http://localhost:5001 |
-| Grafana, Prometheus (`docker compose --profile monitoring up -d`) | http://localhost:3001, http://localhost:9090 |
+| App | 3000 |
+| API | 5050 (`BACKEND_PORT`) |
+| ML service | 5001 |
+| Grafana, Prometheus (`docker compose --profile monitoring up -d`) | 3001, 9090 |
 
 ---
 
@@ -285,7 +286,7 @@ All endpoints return `{ status, data }`. In Docker the API is on port 5050; `npm
 It answers `422` if the logs span under 4 minutes or there are none.
 
 ```bash
-curl -X POST localhost:5050/api/rca/rank -H 'Content-Type: application/json' -d '{"lookback_minutes": 15}'
+curl -X POST "$API/api/rca/rank" -H 'Content-Type: application/json' -d '{"lookback_minutes": 15}'
 ```
 
 WebSocket events (server to client): `new-log`, `log-stats`, `causal-event`, `connection-success`.
