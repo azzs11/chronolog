@@ -1,0 +1,391 @@
+{
+ "datasets": {
+  "BGL": {
+   "fit_units": 2795,
+   "forest_flag_rate": {
+    "fit": 0.008944543828264758,
+    "test": 0.005225653206650831
+   },
+   "lines": 2000000,
+   "methods": {
+    "always_anomalous": {
+     "episodes": 60,
+     "episodes_detected": 60,
+     "f1": 0.06436781609195402,
+     "fn": 0,
+     "fp": 2035,
+     "median_delay_s": 0.0,
+     "precision": 0.0332541567695962,
+     "recall": 1.0,
+     "tp": 70
+    },
+    "chronolog_h": {
+     "episodes": 60,
+     "episodes_detected": 29,
+     "f1": 0.1592505854800937,
+     "fn": 36,
+     "fp": 323,
+     "median_delay_s": 0.0,
+     "precision": 0.09523809523809523,
+     "recall": 0.4857142857142857,
+     "tp": 34
+    },
+    "random_same_budget": {
+     "episodes": 60.0,
+     "episodes_detected": 19.6,
+     "f1": 0.05629873076438248,
+     "f1_max": 0.0632111251580278,
+     "f1_min": 0.0469361147327249,
+     "fn": 48.2,
+     "fp": 682.2,
+     "median_delay_s": 1.1,
+     "precision": 0.030947074055448588,
+     "recall": 0.3114285714285714,
+     "tp": 21.8
+    },
+    "severity_rule": {
+     "episodes": 60,
+     "episodes_detected": 60,
+     "f1": 0.3076923076923077,
+     "fn": 0,
+     "fp": 315,
+     "median_delay_s": 0.0,
+     "precision": 0.18181818181818182,
+     "recall": 1.0,
+     "tp": 70
+    },
+    "v2_combined": {
+     "episodes": 60.0,
+     "episodes_detected": 53.0,
+     "f1": 0.22222222222222224,
+     "f1_max": 0.22222222222222224,
+     "f1_min": 0.22222222222222224,
+     "fn": 9.0,
+     "fp": 418.0,
+     "median_delay_s": 0.0,
+     "precision": 0.12734864300626306,
+     "recall": 0.8714285714285716,
+     "tp": 61.0
+    },
+    "v2_forest": {
+     "episodes": 60.0,
+     "episodes_detected": 10.8,
+     "f1": 0.267283950617284,
+     "f1_max": 0.271604938271605,
+     "f1_min": 0.25,
+     "fn": 59.2,
+     "fp": 0.0,
+     "median_delay_s": 23.2,
+     "precision": 1.0,
+     "recall": 0.15428571428571428,
+     "tp": 10.8
+    },
+    "v2_surprise": {
+     "episodes": 60,
+     "episodes_detected": 53,
+     "f1": 0.22222222222222224,
+     "fn": 9,
+     "fp": 418,
+     "median_delay_s": 0.0,
+     "precision": 0.12734864300626306,
+     "recall": 0.8714285714285714,
+     "tp": 61
+    }
+   },
+   "rare_share_sensitivity": {
+    "0.0001": {
+     "episodes": 60,
+     "episodes_detected": 53,
+     "f1": 0.22222222222222224,
+     "fn": 9,
+     "fp": 418,
+     "median_delay_s": 0.0,
+     "precision": 0.12734864300626306,
+     "recall": 0.8714285714285714,
+     "tp": 61
+    },
+    "0.001": {
+     "episodes": 60,
+     "episodes_detected": 60,
+     "f1": 0.12797074954296161,
+     "fn": 0,
+     "fp": 954,
+     "median_delay_s": 0.0,
+     "precision": 0.068359375,
+     "recall": 1.0,
+     "tp": 70
+    },
+    "1e-05": {
+     "episodes": 60,
+     "episodes_detected": 50,
+     "f1": 0.23157894736842102,
+     "fn": 15,
+     "fp": 350,
+     "median_delay_s": 0.0,
+     "precision": 0.13580246913580246,
+     "recall": 0.7857142857142857,
+     "tp": 55
+    },
+    "1e-06": {
+     "episodes": 60,
+     "episodes_detected": 46,
+     "f1": 0.4322033898305085,
+     "fn": 19,
+     "fp": 115,
+     "median_delay_s": 0.0,
+     "precision": 0.3072289156626506,
+     "recall": 0.7285714285714285,
+     "tp": 51
+    }
+   },
+   "severity_from_text": {
+    "error_precision": 0.41453596796054176,
+    "error_recall": 0.36156679537228636,
+    "exact_level_accuracy": 0.5736845,
+    "guessed_error_share": 0.2453225,
+    "true_error_share": 0.281262
+   },
+   "templates": 363,
+   "test_anomalous_units": 70,
+   "test_base_rate": 0.0332541567695962,
+   "test_units": 2105,
+   "top_rare_templates": [
+    {
+     "template": "program interrupt",
+     "test_lines": 3662
+    },
+    {
+     "template": "Node card VPD check: U<*> node in processor card slot J<*> do not match. VPD ecid <*>, found <*>",
+     "test_lines": 1526
+    },
+    {
+     "template": "rts: kernel terminated for reason <*>rts: bad message header: invalid cpu, type=<*>, cpu=<*>, index=<*>, total=<*>",
+     "test_lines": 1148
+    },
+    {
+     "template": "ciod: Error opening node map file /p/gb<*>/welcome<*>/<*>k_<*>x<*>x<*>_<*>x<*>x<*>.map, No such file or directory",
+     "test_lines": 1024
+    },
+    {
+     "template": "ciod: Missing or invalid fields on line <*> of node map file /home/auselton/bgl/<*>mps.sequential.mapfile",
+     "test_lines": 1024
+    },
+    {
+     "template": "PrepareForService shutting down <*> mCardSernum(<*>), <*> mIp(<*>), mType(<*>)) as part of Service Action <*>",
+     "test_lines": 861
+    },
+    {
+     "template": "Ido chip status changed: <*> ip=<*> v=<*> t=<*> status=M <*> <*> <*> <*>:<*>:<*> PDT <*>",
+     "test_lines": 807
+    },
+    {
+     "template": "rts: kernel terminated for reason <*>rts: bad message header: <*> <*> <*> type=<*>, cpu=<*>, index=<*>, <*>",
+     "test_lines": 604
+    }
+   ]
+  },
+  "HDFS": {
+   "fit_units": 64645,
+   "forest_flag_rate": {
+    "fit": 0.11485807100317116,
+    "test": 0.8540389843786
+   },
+   "lines": 2000000,
+   "methods": {
+    "always_anomalous": {
+     "episodes": 2448,
+     "episodes_detected": 2448,
+     "f1": 0.10678298800436205,
+     "fn": 0,
+     "fp": 40954,
+     "median_delay_s": 0.0,
+     "precision": 0.05640293074051887,
+     "recall": 1.0,
+     "tp": 2448
+    },
+    "chronolog_h": {
+     "episodes": 2448,
+     "episodes_detected": 18,
+     "f1": 0.012636012636012635,
+     "fn": 2430,
+     "fp": 383,
+     "median_delay_s": 1.0,
+     "precision": 0.04488778054862843,
+     "recall": 0.007352941176470588,
+     "tp": 18
+    },
+    "random_same_budget": {
+     "episodes": 2448.0,
+     "episodes_detected": 8.8,
+     "f1": 0.00638452778382458,
+     "f1_max": 0.007953723788864787,
+     "f1_min": 0.0028954035468693453,
+     "fn": 2439.2,
+     "fp": 300.4,
+     "median_delay_s": 2.5,
+     "precision": 0.028522744178778536,
+     "recall": 0.003594771241830065,
+     "tp": 8.8
+    },
+    "severity_rule": {
+     "episodes": 2448,
+     "episodes_detected": 0,
+     "f1": 0.0,
+     "fn": 2448,
+     "fp": 0,
+     "median_delay_s": null,
+     "precision": 0.0,
+     "recall": 0.0,
+     "tp": 0
+    },
+    "v2_combined": {
+     "episodes": 2448.0,
+     "episodes_detected": 2290.6,
+     "f1": 0.11444439162231639,
+     "f1_max": 0.1148930785777553,
+     "f1_min": 0.11413003095975231,
+     "fn": 157.4,
+     "fp": 35292.6,
+     "median_delay_s": 0.0,
+     "precision": 0.06094999063046478,
+     "recall": 0.9357026143790851,
+     "tp": 2290.6
+    },
+    "v2_forest": {
+     "episodes": 2448.0,
+     "episodes_detected": 2290.6,
+     "f1": 0.11444439162231639,
+     "f1_max": 0.1148930785777553,
+     "f1_min": 0.11413003095975231,
+     "fn": 157.4,
+     "fp": 35292.6,
+     "median_delay_s": 0.0,
+     "precision": 0.06094999063046478,
+     "recall": 0.9357026143790851,
+     "tp": 2290.6
+    },
+    "v2_surprise": {
+     "episodes": 2448,
+     "episodes_detected": 63,
+     "f1": 0.05003971405877681,
+     "fn": 2385,
+     "fp": 7,
+     "median_delay_s": 0.0,
+     "precision": 0.9,
+     "recall": 0.025735294117647058,
+     "tp": 63
+    }
+   },
+   "rare_share_sensitivity": {
+    "0.0001": {
+     "episodes": 2448,
+     "episodes_detected": 63,
+     "f1": 0.05003971405877681,
+     "fn": 2385,
+     "fp": 7,
+     "median_delay_s": 0.0,
+     "precision": 0.9,
+     "recall": 0.025735294117647058,
+     "tp": 63
+    },
+    "0.001": {
+     "episodes": 2448,
+     "episodes_detected": 864,
+     "f1": 0.5204819277108435,
+     "fn": 1584,
+     "fp": 8,
+     "median_delay_s": 0.0,
+     "precision": 0.9908256880733946,
+     "recall": 0.35294117647058826,
+     "tp": 864
+    },
+    "1e-05": {
+     "episodes": 2448,
+     "episodes_detected": 5,
+     "f1": 0.0040766408479412965,
+     "fn": 2443,
+     "fp": 0,
+     "median_delay_s": 0.0,
+     "precision": 1.0,
+     "recall": 0.002042483660130719,
+     "tp": 5
+    },
+    "1e-06": {
+     "episodes": 2448,
+     "episodes_detected": 1,
+     "f1": 0.0008166598611678236,
+     "fn": 2447,
+     "fp": 0,
+     "median_delay_s": 1.0,
+     "precision": 1.0,
+     "recall": 0.0004084967320261438,
+     "tp": 1
+    }
+   },
+   "severity_from_text": {
+    "error_precision": 0.0,
+    "error_recall": 0.0,
+    "exact_level_accuracy": 0.8962755,
+    "guessed_error_share": 0.1036335,
+    "true_error_share": 0.0
+   },
+   "templates": 39,
+   "test_anomalous_units": 2448,
+   "test_base_rate": 0.05640293074051887,
+   "test_units": 43402,
+   "top_rare_templates": [
+    {
+     "template": "Unexpected error trying to delete block <*> BlockInfo not found in volumeMap.",
+     "test_lines": 55
+    },
+    {
+     "template": "BLOCK* ask <*> to replicate <*> to datanode(s) <*> <*>",
+     "test_lines": 26
+    },
+    {
+     "template": "<*> Starting thread to transfer block <*> to <*>, <*>",
+     "test_lines": 26
+    },
+    {
+     "template": "PacketResponder blk_<*> <*> Exception java.io.InterruptedIOException: Interruped while waiting for IO on channel java.nio.channels.SocketChannel[connected local=/<*> remote=/<*>]. <*> millis timeout left.",
+     "test_lines": 4
+    },
+    {
+     "template": "Exception in receiveBlock for block <*> <*>",
+     "test_lines": 4
+    },
+    {
+     "template": "writeBlock <*> received exception <*>",
+     "test_lines": 4
+    },
+    {
+     "template": "Exception in receiveBlock for block <*> java.io.IOException: Connection reset by peer",
+     "test_lines": 4
+    },
+    {
+     "template": "writeBlock <*> received exception java.io.IOException: Connection reset by peer",
+     "test_lines": 4
+    }
+   ]
+  }
+ },
+ "setup": {
+  "bgl_window_s": 60,
+  "chronolog_h_fingerprint": "cf431ae7b378ba2a",
+  "code_fingerprint": "f2d8ac7c26c4d7f7",
+  "dataset": "Loghub HDFS_v1 and BGL (Zenodo record 8196385)",
+  "fit_share": 0.5,
+  "if_sample": 256,
+  "if_threshold": 0.5,
+  "if_trees": 100,
+  "prefix_lines": 2000000,
+  "rare_share": 0.0001,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ }
+}

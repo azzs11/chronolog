@@ -39,6 +39,7 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 # Long prose strings in the report template.
 "src/chronobench/report.py" = ["E501"]
 "src/chronobench/anomaly_report.py" = ["E501"]
+"src/chronobench/anomaly_v2_report.py" = ["E501"]
 "src/chronobench/rootrank_report.py" = ["E501"]
 "src/chronobench/ablation_report.py" = ["E501"]
 "src/chronobench/robustness_report.py" = ["E501"]

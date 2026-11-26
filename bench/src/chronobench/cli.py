@@ -10,6 +10,8 @@ from .ablation_report import render_ablation_report
 from .adapt import load_case_logs
 from .anomaly_eval import build_anomaly_results
 from .anomaly_report import render_anomaly_report
+from .anomaly_v2_eval import build_anomaly_v2_results
+from .anomaly_v2_report import render_anomaly_v2_report
 from .autostart import run_autostart
 from .autostart_report import render_autostart_report
 from .baselines import complete_ranking
@@ -101,6 +103,17 @@ def _cmd_anomaly(args: argparse.Namespace) -> None:
     )
     (RESULTS_DIR / "RESULTS-anomaly.md").write_text(render_anomaly_report(results))
     print(f"Anomaly benchmark done in {time.perf_counter() - started:.0f}s")
+
+
+def _cmd_anomaly_v2(args: argparse.Namespace) -> None:
+    started = time.perf_counter()
+    results = build_anomaly_v2_results()
+    RESULTS_DIR.mkdir(exist_ok=True)
+    (RESULTS_DIR / "anomaly-v2.json").write_text(
+        json.dumps(results, indent=1, sort_keys=True) + "\n"
+    )
+    (RESULTS_DIR / "RESULTS-anomaly-v2.md").write_text(render_anomaly_v2_report(results))
+    print(f"Anomaly v2 benchmark done in {time.perf_counter() - started:.0f}s")
 
 
 def _cmd_templates(args: argparse.Namespace) -> None:
@@ -324,6 +337,8 @@ def main() -> None:
 
     anomaly = sub.add_parser("anomaly", help="score the anomaly detector on Loghub HDFS and BGL")
     anomaly.set_defaults(func=_cmd_anomaly)
+    anomaly_v2 = sub.add_parser("anomaly-v2", help="score the template-based detector (v2)")
+    anomaly_v2.set_defaults(func=_cmd_anomaly_v2)
 
     templates = sub.add_parser("templates", help="mine and cache Drain3 templates for a subset")
     templates.add_argument("--subset", choices=["small", "full"], default="small")
