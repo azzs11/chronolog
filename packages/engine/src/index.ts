@@ -9,3 +9,4 @@ export * from './types';
 export * from './rootrank';
 export * from './sim';
 export { type ParsedFile, parseLog, serviceFromPath, toUnixSeconds } from './parse/logs';
+export * from './anomaly/unusual';

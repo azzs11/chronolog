@@ -34,6 +34,8 @@ SYSTEM_LABELS = {"ob": "Online Boutique", "ss": "Sock Shop", "tt": "Train Ticket
 ANOMALY_LABELS = {
     "chronolog_h": "ChronoLog-H (old rules)", "severity_rule": "Severity rule",
     "always_anomalous": "Flag everything", "random_same_budget": "Random",
+    "v2_surprise": "Unusual messages (new)", "v2_forest": "Isolation Forest (new)",
+    "v2_combined": "Both new signals",
 }  # fmt: skip
 
 
@@ -150,14 +152,14 @@ def build_report_card(results_dir: Path = RESULTS_DIR) -> dict:
         "byKind": _breakdown(rank, cases, fault_kind, KIND_LABELS),
         "bySystem": _breakdown(rank, cases, lambda c: c["system"], SYSTEM_LABELS),
         "robustness": _robustness(json.loads((results_dir / "robustness.json").read_text())),
-        "anomaly": _anomaly(json.loads((results_dir / "loghub-anomaly.json").read_text())),
-        "anomalyDataset": "Loghub HDFS and BGL, first 2M lines each",
+        "anomaly": _anomaly(json.loads((results_dir / "anomaly-v2.json").read_text())),
+        "anomalyDataset": "Loghub HDFS and BGL (first 2M lines each), later half of each log",
         "faces": _faces(json.loads((results_dir / "moods.json").read_text())),
         "files": {
             "ranking": "bench/results/RESULTS-rootrank.md",
             "breakdown": "bench/results/RESULTS-ablation.md",
             "robustness": "bench/results/RESULTS-robustness.md",
-            "anomaly": "bench/results/RESULTS-anomaly.md",
+            "anomaly": "bench/results/RESULTS-anomaly-v2.md",
             "faces": "bench/results/RESULTS-moods.md",
         },
     }

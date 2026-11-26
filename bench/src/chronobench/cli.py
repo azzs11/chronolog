@@ -105,6 +105,12 @@ def _cmd_anomaly(args: argparse.Namespace) -> None:
     print(f"Anomaly benchmark done in {time.perf_counter() - started:.0f}s")
 
 
+def _cmd_anomaly_golden(args: argparse.Namespace) -> None:
+    from .anomaly_golden import GOLDEN, export_golden
+
+    print(f"Wrote {export_golden()} lines to {GOLDEN}")
+
+
 def _cmd_anomaly_v2(args: argparse.Namespace) -> None:
     started = time.perf_counter()
     results = build_anomaly_v2_results()
@@ -339,6 +345,10 @@ def main() -> None:
     anomaly.set_defaults(func=_cmd_anomaly)
     anomaly_v2 = sub.add_parser("anomaly-v2", help="score the template-based detector (v2)")
     anomaly_v2.set_defaults(func=_cmd_anomaly_v2)
+    golden = sub.add_parser(
+        "export-anomaly-golden", help="write the engine's rare-template parity file"
+    )
+    golden.set_defaults(func=_cmd_anomaly_golden)
 
     templates = sub.add_parser("templates", help="mine and cache Drain3 templates for a subset")
     templates.add_argument("--subset", choices=["small", "full"], default="small")
