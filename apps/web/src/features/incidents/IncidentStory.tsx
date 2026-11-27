@@ -10,6 +10,7 @@ import CaseStamp from './CaseStamp';
 import EvidenceBubbles from './EvidenceBubbles';
 import FeedbackForm from './FeedbackForm';
 import SuspectLineup, { LINEUP_SIZE } from './SuspectLineup';
+import StoryPanel from './StoryPanel';
 import SuspectTable from './SuspectTable';
 import { formatDuration, formatRange } from './format';
 
@@ -135,6 +136,8 @@ export default function IncidentStory({ id, onReviewed }: { id: string; onReview
           <EvidenceBubbles cause={chosen} />
         </section>
       )}
+
+      <StoryPanel key={incident.id} incidentId={incident.id} />
 
       <section aria-label="Rewind" className="lens-cute space-y-2">
         <h4 className="text-base text-text-primary">Rewind</h4>

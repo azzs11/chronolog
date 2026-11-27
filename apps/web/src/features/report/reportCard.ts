@@ -254,11 +254,20 @@ export const REPORT_CARD = {
     "medianDelaySeconds": 30.0,
     "unwellBeforeFault": 0.040807
   },
+  "stories": {
+    "model": "qwen2.5:3b",
+    "cases": 30,
+    "runs": 3,
+    "citationPrecision": 0.892086,
+    "keptRate": 0.90625,
+    "medianSeconds": 2.644
+  },
   "files": {
     "ranking": "bench/results/RESULTS-rootrank.md",
     "breakdown": "bench/results/RESULTS-ablation.md",
     "robustness": "bench/results/RESULTS-robustness.md",
     "anomaly": "bench/results/RESULTS-anomaly-v2.md",
-    "faces": "bench/results/RESULTS-moods.md"
+    "faces": "bench/results/RESULTS-moods.md",
+    "stories": "bench/results/RESULTS-stories.md"
   }
 } as const;

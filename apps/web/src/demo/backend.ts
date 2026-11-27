@@ -83,6 +83,8 @@ export class DemoBackend {
     if (method === 'POST' && path === '/api/rca/incident') return this.inject(body);
     if (method === 'GET' && path === '/api/incidents') return ok(this.bursts(minutes(query, INCIDENT_LOOKBACK_MIN)).map((b) => this.summarise(b)));
     if (method === 'GET' && path === '/api/incidents/feedback/summary') return ok(this.summary());
+    // The demo has no story model: stories stay off, as they are by default on a server.
+    if (method === 'GET' && path === '/api/incidents/story/status') return ok({ isEnabled: false, provider: null });
     if (method === 'GET' && incident && !incident[2]) return this.detail(incident[1] as string);
     if (method === 'POST' && incident?.[2]) return this.recordFeedback(incident[1] as string, body);
     return fail(404, `The demo has no ${method} ${path}: it needs the self-hosted app.`);

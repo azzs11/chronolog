@@ -85,3 +85,22 @@ export const fetchIncident = (id: string): Promise<IncidentDetail> => call(axios
 export const fetchFeedbackSummary = (): Promise<FeedbackSummary> => call(axios.get(`${API_URL}/api/incidents/feedback/summary`));
 export const sendFeedback = (id: string, input: FeedbackInput): Promise<{ verdict: string; correctService: string; rankOfCorrect: number | null }> =>
   call(axios.post(`${API_URL}/api/incidents/${encodeURIComponent(id)}/feedback`, input));
+
+export interface StorySentence {
+  text: string;
+  factKeys: string[];
+  logIds: string[];
+}
+
+export interface IncidentStoryText {
+  provider: string;
+  seconds: number;
+  kept: StorySentence[];
+  dropped: { text: string; reason: string }[];
+  isWellFormed: boolean;
+}
+
+export const fetchStoryStatus = (): Promise<{ isEnabled: boolean; provider: string | null }> =>
+  call(axios.get(`${API_URL}/api/incidents/story/status`));
+export const writeStory = (id: string): Promise<IncidentStoryText> =>
+  call(axios.post(`${API_URL}/api/incidents/${encodeURIComponent(id)}/story`));
