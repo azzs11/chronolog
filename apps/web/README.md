@@ -1,7 +1,6 @@
 # ChronoLog web
 
-React 19 + Vite + TypeScript. The entry code (`src/main.tsx`, `src/env.ts`, `src/services/`) is
-strict TypeScript; the dashboard components are still `.jsx` and are rewritten in roadmap Phase 6.
+React 19 + Vite + TypeScript. All code is strict TypeScript.
 
 ```bash
 npm run dev -w chronolog-web         # from the repo root; http://localhost:3000

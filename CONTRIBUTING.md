@@ -1,7 +1,6 @@
 # Contributing to ChronoLog
 
-Thanks for your interest. ChronoLog is being upgraded in phases (see [docs/ROADMAP.md](docs/ROADMAP.md)),
-so please open an issue before starting a large change. That way we can check it fits the current phase.
+Thanks for your interest. Please open an issue before starting a large change, so we can check it fits.
 
 ## Getting started
 

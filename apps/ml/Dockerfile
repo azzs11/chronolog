@@ -10,7 +10,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY src ./src
 RUN uv sync --frozen --no-dev
 
-# Train at build time. The model is synthetic-data only; see the roadmap (Phase 2).
+# Train at build time. The model is synthetic-data only.
 RUN python -m chronolog_ml.train_model
 
 EXPOSE 5001

@@ -1,6 +1,6 @@
 # User test: does the new UI find the root cause faster than the old one?
 
-This is the Phase 6 success check: **"New UI finds the root cause faster than the old one (6-8 people)."**
+The question: **does the new UI find the root cause faster than the old one (6-8 people)?**
 You (the facilitator) run it; this folder has everything needed. Plan about 40 minutes per person.
 
 ## What is measured (decide nothing after seeing the data)

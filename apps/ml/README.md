@@ -2,7 +2,7 @@
 
 FastAPI service that predicts a log's severity from its message text
 (TF-IDF 1-3 grams + Random Forest). It is trained on synthetic logs only; no accuracy
-number is reported until it is measured on real, labelled data (roadmap Phase 2).
+number is reported until it is measured on real, labelled data.
 
 ## Run
 

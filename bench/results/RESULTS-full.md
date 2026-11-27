@@ -21,7 +21,7 @@ How often does each method name the true root-cause service in its top 1, 3 and 
 
 ## Held-out test cases only (n=131)
 
-The frozen split (`sha256(case_id) % 100 < 30`). No method here was tuned on any case. This is the table a learned method has to be compared on in Phase 3.
+The frozen split (`sha256(case_id) % 100 < 30`). No method here was tuned on any case. This is the table a learned method has to be compared on.
 
 | Method | AC@1 | AC@3 | AC@5 | Avg@5 | MRR |
 |---|---|---|---|---|---|

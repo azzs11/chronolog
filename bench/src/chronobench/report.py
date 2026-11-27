@@ -167,7 +167,7 @@ def render_report(results: dict) -> str:
         f"## Held-out test cases only (n={len(test_cases)})",
         "",
         "The frozen split (`sha256(case_id) % 100 < 30`). No method here was tuned on any case. "
-        "This is the table a learned method has to be compared on in Phase 3.",
+        "This is the table a learned method has to be compared on.",
         "",
         _main_table(test_cases, methods, seeds),
         "",

@@ -8,7 +8,7 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.ts'],
       exclude: ['src/index.ts', 'src/types.ts'],
-      // Quality gate from the roadmap: 80%+ on the engine.
+      // Quality gate: 80%+ on the engine.
       thresholds: { lines: 80, functions: 80, statements: 80, branches: 80 },
     },
   },
