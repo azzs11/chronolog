@@ -98,6 +98,12 @@ FINGERPRINT_FILES = {
         *(RUNNER_SRC / n for n in ("anomaly.ts", "anomaly-replay.ts")),
         Path(__file__).with_name("loghub.py"),
     ],
+    "stories": [
+        ENGINE_SRC / "story" / "story.ts",
+        ENGINE_SRC / "rootrank" / "explain.ts",
+        RUNNER_SRC / "storybench.ts",
+        Path(__file__).with_name("stories.py"),
+    ],
     "anomaly-v2": [
         *(Path(__file__).with_name(n) for n in (
             "anomaly_v2.py", "anomaly_v2_eval.py", "loghub.py", "loghub_text.py", "templates.py",

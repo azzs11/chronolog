@@ -136,6 +136,19 @@ def _faces(moods: dict) -> dict:
     }
 
 
+def _stories(stories: dict) -> dict:
+    """Evidence-locked stories (bench stories): how much of a local model's story survives."""
+    spread = stories["spread"]
+    return {
+        "model": stories["setup"]["model"],
+        "cases": stories["setup"]["cases"],
+        "runs": len(stories["runs"]),
+        "citationPrecision": _r(spread["citation_precision"]["mean"]),
+        "keptRate": _r(spread["kept_rate"]["mean"]),
+        "medianSeconds": stories["runs"][0]["median_seconds"],
+    }
+
+
 def build_report_card(results_dir: Path = RESULTS_DIR) -> dict:
     rank = json.loads((results_dir / "rootrank.json").read_text())
     full = json.loads((results_dir / "rcaeval-full.json").read_text())
@@ -155,12 +168,14 @@ def build_report_card(results_dir: Path = RESULTS_DIR) -> dict:
         "anomaly": _anomaly(json.loads((results_dir / "anomaly-v2.json").read_text())),
         "anomalyDataset": "Loghub HDFS and BGL (first 2M lines each), later half of each log",
         "faces": _faces(json.loads((results_dir / "moods.json").read_text())),
+        "stories": _stories(json.loads((results_dir / "stories.json").read_text())),
         "files": {
             "ranking": "bench/results/RESULTS-rootrank.md",
             "breakdown": "bench/results/RESULTS-ablation.md",
             "robustness": "bench/results/RESULTS-robustness.md",
             "anomaly": "bench/results/RESULTS-anomaly-v2.md",
             "faces": "bench/results/RESULTS-moods.md",
+            "stories": "bench/results/RESULTS-stories.md",
         },
     }
 

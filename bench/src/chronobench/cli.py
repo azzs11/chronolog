@@ -105,6 +105,17 @@ def _cmd_anomaly(args: argparse.Namespace) -> None:
     print(f"Anomaly benchmark done in {time.perf_counter() - started:.0f}s")
 
 
+def _cmd_stories(args: argparse.Namespace) -> None:
+    from .stories import render_stories_report, run_stories
+
+    started = time.perf_counter()
+    results = run_stories()
+    RESULTS_DIR.mkdir(exist_ok=True)
+    (RESULTS_DIR / "stories.json").write_text(json.dumps(results, indent=1, sort_keys=True) + "\n")
+    (RESULTS_DIR / "RESULTS-stories.md").write_text(render_stories_report(results))
+    print(f"Story benchmark done in {time.perf_counter() - started:.0f}s")
+
+
 def _cmd_anomaly_golden(args: argparse.Namespace) -> None:
     from .anomaly_golden import GOLDEN, export_golden
 
@@ -345,6 +356,8 @@ def main() -> None:
     anomaly.set_defaults(func=_cmd_anomaly)
     anomaly_v2 = sub.add_parser("anomaly-v2", help="score the template-based detector (v2)")
     anomaly_v2.set_defaults(func=_cmd_anomaly_v2)
+    stories = sub.add_parser("stories", help="measure evidence-locked stories (needs Ollama)")
+    stories.set_defaults(func=_cmd_stories)
     golden = sub.add_parser(
         "export-anomaly-golden", help="write the engine's rare-template parity file"
     )

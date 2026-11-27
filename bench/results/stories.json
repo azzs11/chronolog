@@ -1,0 +1,161 @@
+{
+ "examples": [
+  {
+   "case": "crash/gateway/6",
+   "dropped": [
+    {
+     "reason": "unsupported_cause",
+     "text": "The gateway service received a message indicating it was shutting down due to receiving SIGTERM, which was not logged before."
+    }
+   ],
+   "kept": [
+    "The gateway service started with a message stating it was version <*>.<*> and ready to start.",
+    "The gateway service began listening on a port indicated by the message."
+   ]
+  },
+  {
+   "case": "disk/auth/7",
+   "dropped": [],
+   "kept": [
+    "The incident started with the auth service logging its first 502 error lines, and a new message indicating 'no space left on device while writing /var/lib/auth/wal-<*>.log'.",
+    "The gateway service also logged its first 502 error lines, along with a new message stating 'auth returned <*>'."
+   ]
+  },
+  {
+   "case": "memory/catalog/8",
+   "dropped": [],
+   "kept": [
+    "The catalog service logged a message indicating a garbage collection pause lasting more than the threshold of <*>ms, which is a new occurrence.",
+    "The cart service did not log any error lines, new messages, or mention issues from other services."
+   ]
+  },
+  {
+   "case": "cpu/cart/9",
+   "dropped": [],
+   "kept": [
+    "The gateway service first logged an error at the start of the incident (E1).",
+    "The gateway service also logged a new message: 'timeout calling cart after <*>ms' (E2)."
+   ]
+  },
+  {
+   "case": "delay/db/10",
+   "dropped": [
+    {
+     "reason": "unknown_service",
+     "text": "Other services mentioned the issue in 596 log lines during the incident."
+    }
+   ],
+   "kept": [
+    "The cart service logged a message indicating slow response from the db service (195\u00d7).",
+    "The catalog service also logged a message indicating slow response from the db service (217\u00d7)."
+   ]
+  }
+ ],
+ "runs": [
+  {
+   "cases_with_a_kept_sentence": 30,
+   "citation_precision": 0.8920863309352518,
+   "cites": 139,
+   "dropped_by_reason": {
+    "malformed": 0,
+    "off_topic_cite": 4,
+    "uncited": 0,
+    "unknown_fact": 0,
+    "unknown_service": 2,
+    "unsupported_cause": 6,
+    "unsupported_number": 0
+   },
+   "kept": 116,
+   "kept_rate": 0.90625,
+   "mean_output_tokens": 142.63333333333333,
+   "mean_prompt_tokens": 313.7,
+   "median_seconds": 2.644,
+   "sentences": 128,
+   "template_kept": 140,
+   "template_sentences": 140,
+   "uncited_rate": 0.0,
+   "valid_cites": 124,
+   "well_formed": 30
+  },
+  {
+   "cases_with_a_kept_sentence": 30,
+   "citation_precision": 0.8920863309352518,
+   "cites": 139,
+   "dropped_by_reason": {
+    "malformed": 0,
+    "off_topic_cite": 4,
+    "uncited": 0,
+    "unknown_fact": 0,
+    "unknown_service": 2,
+    "unsupported_cause": 6,
+    "unsupported_number": 0
+   },
+   "kept": 116,
+   "kept_rate": 0.90625,
+   "mean_output_tokens": 142.63333333333333,
+   "mean_prompt_tokens": 313.7,
+   "median_seconds": 2.681,
+   "sentences": 128,
+   "template_kept": 140,
+   "template_sentences": 140,
+   "uncited_rate": 0.0,
+   "valid_cites": 124,
+   "well_formed": 30
+  },
+  {
+   "cases_with_a_kept_sentence": 30,
+   "citation_precision": 0.8920863309352518,
+   "cites": 139,
+   "dropped_by_reason": {
+    "malformed": 0,
+    "off_topic_cite": 4,
+    "uncited": 0,
+    "unknown_fact": 0,
+    "unknown_service": 2,
+    "unsupported_cause": 6,
+    "unsupported_number": 0
+   },
+   "kept": 116,
+   "kept_rate": 0.90625,
+   "mean_output_tokens": 142.63333333333333,
+   "mean_prompt_tokens": 313.7,
+   "median_seconds": 3.764,
+   "sentences": 128,
+   "template_kept": 140,
+   "template_sentences": 140,
+   "uncited_rate": 0.0,
+   "valid_cites": 124,
+   "well_formed": 30
+  }
+ ],
+ "setup": {
+  "cases": 30,
+  "code_fingerprint": "fc03ca6c698ea14b",
+  "model": "qwen2.5:3b",
+  "model_seeds": [
+   0,
+   1,
+   2
+  ],
+  "ollama_version": "0.40.17",
+  "split": "test",
+  "temperature": 0
+ },
+ "spread": {
+  "citation_precision": {
+   "max": 0.8920863309352518,
+   "mean": 0.8920863309352519,
+   "min": 0.8920863309352518
+  },
+  "kept_rate": {
+   "max": 0.90625,
+   "mean": 0.90625,
+   "min": 0.90625
+  },
+  "uncited_rate": {
+   "max": 0.0,
+   "mean": 0.0,
+   "min": 0.0
+  }
+ }
+}
