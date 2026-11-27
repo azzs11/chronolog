@@ -51,6 +51,12 @@ services:
       CORS_ORIGIN: http://localhost:3000
       ADMIN_API_KEY: ${ADMIN_API_KEY:-dev_key_change_in_prod}
       NODE_ENV: production
+      # Incident stories are OFF unless STORY_PROVIDER=ollama; the model runs on your machine.
+      STORY_PROVIDER: ${STORY_PROVIDER:-off}
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       postgres:
         condition: service_healthy

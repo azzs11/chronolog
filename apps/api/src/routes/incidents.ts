@@ -11,6 +11,7 @@ import {
   listIncidents,
   recordFeedback,
 } from '../services/incidents';
+import { incidentStory, StoriesOffError, storyStatus } from '../services/story';
 import { errorMessage } from './http';
 
 const router = Router();
@@ -18,6 +19,8 @@ const router = Router();
 function failure(res: Response, err: unknown): void {
   if (err instanceof IncidentNotFoundError) {
     res.status(404).json({ status: 'error', message: err.message });
+  } else if (err instanceof StoriesOffError) {
+    res.status(503).json({ status: 'error', code: 'story_off', message: err.message });
   } else if (err instanceof NoCandidatesError) {
     res.status(422).json({ status: 'error', message: err.message });
   } else {
@@ -59,10 +62,27 @@ router.get('/feedback/summary', async (_req: Request, res: Response) => {
   }
 });
 
+/** GET /api/incidents/story/status: is a story model configured? (Stories are off by default.) */
+router.get('/story/status', (_req: Request, res: Response) => {
+  res.json({ status: 'success', data: storyStatus() });
+});
+
 /** GET /api/incidents/:id: the incident with its ranking, timeline and learned service graph. */
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     res.json({ status: 'success', data: await incidentDetail(req.params.id as string) });
+  } catch (err) {
+    failure(res, err);
+  }
+});
+
+/**
+ * POST /api/incidents/:id/story: a short story written by the configured model, where every kept
+ * sentence passed the engine's checker and carries the log ids behind it. 503 story_off if no model.
+ */
+router.post('/:id/story', rcaLimiter, async (req: Request, res: Response) => {
+  try {
+    res.json({ status: 'success', data: await incidentStory(req.params.id as string) });
   } catch (err) {
     failure(res, err);
   }
