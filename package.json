@@ -6,12 +6,13 @@
     "apps/api",
     "apps/web",
     "bench/runner",
-    "apps/cli"
+    "apps/cli",
+    "apps/mcp"
   ],
   "scripts": {
-    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web && npm run build -w @chronolog/bench-runner && npm run build -w chronolog-cli",
-    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web && npm run typecheck -w @chronolog/bench-runner && npm run typecheck -w chronolog-cli",
-    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web && npm test -w @chronolog/bench-runner && npm test -w chronolog-cli",
+    "build": "npm run build -w @chronolog/engine && npm run build -w chronolog-backend && npm run build -w chronolog-web && npm run build -w @chronolog/bench-runner && npm run build -w chronolog-cli && npm run build -w chronolog-mcp",
+    "typecheck": "npm run build -w @chronolog/engine && npm run typecheck -w @chronolog/engine && npm run typecheck -w chronolog-backend && npm run typecheck -w chronolog-web && npm run typecheck -w @chronolog/bench-runner && npm run typecheck -w chronolog-cli && npm run typecheck -w chronolog-mcp",
+    "test": "npm run build -w @chronolog/engine && npm test -w @chronolog/engine && npm test -w chronolog-backend && npm test -w chronolog-web && npm test -w @chronolog/bench-runner && npm test -w chronolog-cli && npm test -w chronolog-mcp",
     "lint": "biome lint .",
     "test:coverage": "npm run build -w @chronolog/engine && npm run test:coverage -w @chronolog/engine",
     "build:demo": "npm run build:demo -w chronolog-web"
